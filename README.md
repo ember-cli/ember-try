@@ -46,6 +46,54 @@ or
 This command checks out `bower.json` from git, `rm -rf`s `bower_components` and runs `bower install`. 
 For use if any of the other commands fail to clean up after (they run this by default on completion).
 
+### Config
+
+Configuration will be read from a file in your ember app in `config/ember-try.js`. It should look like: 
+
+```js
+module.exports = {
+  scenarios: [
+    {
+      name: "Ember 1.10 with ember-data",
+      dependencies: {
+        "ember": "1.10.0",
+        "ember-data": "1.0.0-beta.15"
+      }
+    },
+    {
+      name: "Ember 1.11.0-beta.5",
+      dependencies: {
+        "ember": "1.11.0-beta.5"
+      }
+    }
+  ]
+};
+```
+
+Scenarios are sets of dependencies (`bower` only). They can be specified exactly as in the `bower.json`
+The `name` can be used to try just one scenario using the `ember try` command.
+ 
+If no `config/ember-try.js` file is present, the default config will be used. This is the current default config:
+
+```js
+{
+  scenarios: [
+    {
+      name: 'ember-1.10',
+      dependencies: {
+        "ember": "1.10.0"
+      }
+    },
+    {
+      name: 'ember-1.11.0-beta.5',
+      dependencies: {
+        "ember": "1.11.0-beta.5"
+      }
+    }
+  ]
+}
+```
+
 ### Special Thanks
 
 - Much credit is due to [Edward Faulkner](https://github.com/ef4) The scripts in [liquid-fire](https://github.com/ef4/liquid-fire) that test against multiple ember versions were the inspriation for this project.
