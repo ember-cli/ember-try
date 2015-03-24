@@ -1,7 +1,7 @@
 {
   "name": "ember-try",
   "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "description": "An ember-cli addon to test against multiple bower dependencies, such as ember and ember-data.",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -11,11 +11,11 @@
     "build": "ember build",
     "test": "ember test"
   },
-  "repository": "",
+  "repository": "https://github.com/kategengler/ember-try",
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
+  "author": "Katie Gengler",
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.0.0",
@@ -32,7 +32,8 @@
     "ember-export-application-global": "^1.0.2"
   },
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "testing"
   ],
   "ember-addon": {
     "configPath": "tests/dummy/config"
