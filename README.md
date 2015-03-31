@@ -65,6 +65,12 @@ module.exports = {
       dependencies: {
         'ember': '1.11.0-beta.5'
       }
+    },
+    {
+      name: 'Ember canary',
+      dependencies: {
+        'ember': 'canary'
+      }
     }
   ]
 };
@@ -79,15 +85,21 @@ If no `config/ember-try.js` file is present, the default config will be used. Th
 {
   scenarios: [
     {
-      name: 'ember-1.10',
+      name: "ember-1.10",
       dependencies: {
-        'ember': '1.10.0'
+        "ember": "1.10.0"
       }
     },
     {
-      name: 'ember-1.11.0-beta.5',
+      name: "ember-1.11.0",
       dependencies: {
-        'ember': '1.11.0-beta.5'
+        "ember": "1.11.0"
+      }
+    },
+    {
+      name: "ember-1.12.0-beta.1",
+      dependencies: {
+        "ember": "1.12.0-beta.1"
       }
     }
   ]
