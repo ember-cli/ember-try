@@ -54,16 +54,16 @@ Configuration will be read from a file in your ember app in `config/ember-try.js
 module.exports = {
   scenarios: [
     {
-      name: "Ember 1.10 with ember-data",
+      name: 'Ember 1.10 with ember-data',
       dependencies: {
-        "ember": "1.10.0",
-        "ember-data": "1.0.0-beta.15"
+        'ember': '1.10.0',
+        'ember-data': '1.0.0-beta.15'
       }
     },
     {
-      name: "Ember 1.11.0-beta.5",
+      name: 'Ember 1.11.0-beta.5',
       dependencies: {
-        "ember": "1.11.0-beta.5"
+        'ember': '1.11.0-beta.5'
       }
     }
   ]
@@ -81,13 +81,13 @@ If no `config/ember-try.js` file is present, the default config will be used. Th
     {
       name: 'ember-1.10',
       dependencies: {
-        "ember": "1.10.0"
+        'ember': '1.10.0'
       }
     },
     {
       name: 'ember-1.11.0-beta.5',
       dependencies: {
-        "ember": "1.11.0-beta.5"
+        'ember': '1.11.0-beta.5'
       }
     }
   ]
