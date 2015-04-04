@@ -41,6 +41,7 @@
   "dependencies": {
     "chalk": "^1.0.0",
     "core-object": "^1.1.0",
+    "fs-extra": "^0.18.0",
     "promise-map-series": "^0.2.1",
     "rimraf": "^2.3.2",
     "rsvp": "^3.0.17",
