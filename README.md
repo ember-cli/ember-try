@@ -66,6 +66,15 @@ module.exports = {
       dependencies: {
         'ember': 'canary'
       }
+    },
+    {
+      name: 'Ember beta',
+      dependencies: {
+        'ember': 'components/ember#beta'
+      },
+      resolutions: { // Resolutions are only necessary when they do not match the version specified in `dependencies`
+        'ember': 'canary'
+      }
     }
   ]
 };
