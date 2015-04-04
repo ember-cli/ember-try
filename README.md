@@ -12,10 +12,6 @@ ember install:addon ember-try
 
 Can only change versions for Ember 1.10+ due to template compiler changes that this addon does not attempt to handle.
 
-### Requirements
-
-- Git
-
 ### Usage
 
 This addon provides a few commands:
@@ -43,8 +39,7 @@ or
 
 #### `ember try:reset`
 
-This command checks out `bower.json` from git, `rm -rf`s `bower_components` and runs `bower install`. 
-For use if any of the other commands fail to clean up after (they run this by default on completion).
+This command restores the original `bower.json` from `bower.json.ember-try`, `rm -rf`s `bower_components` and runs `bower install`. For use if any of the other commands fail to clean up after (they run this by default on completion).
 
 ### Config
 
@@ -115,5 +110,4 @@ See an example of using `ember-try` for CI [here](https://github.com/kategengler
 ### TODO
 - [ ] Add tests
 - [ ] Add a blueprint for the config
-- [ ] Add 'force' option to commands to proceed even if bower.json is dirty
 - [ ] Look into `SilentError` as seen on other `ember-cli` addons to see if its preferable to `throw new Error` for preconditions.
