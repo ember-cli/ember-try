@@ -43,6 +43,7 @@
     "core-object": "^1.1.0",
     "fs-extra": "^0.18.0",
     "promise-map-series": "^0.2.1",
+    "resolve": "^1.1.6",
     "rimraf": "^2.3.2",
     "rsvp": "^3.0.17",
     "sync-exec": "^0.5.0"
