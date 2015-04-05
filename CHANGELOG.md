@@ -1,3 +1,6 @@
+#v0.0.4
+- Do not require global `bower` or `ember` commands.
+
 #v0.0.3
 - Bugfix: `ember try` was always returning non-zero
 - Can now specify resolutions under each scenario
