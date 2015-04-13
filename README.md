@@ -5,7 +5,7 @@ An ember-cli addon to test against multiple bower dependencies, such as `ember` 
 ### Installation
 
 ```
-ember install:addon ember-try
+ember install ember-try
 ```
 
 ### Limitations
