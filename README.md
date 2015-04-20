@@ -96,21 +96,27 @@ If no `config/ember-try.js` file is present, the default config will be used. Th
 {
   scenarios: [
     {
-      name: "ember-1.10",
+      name: "default",
+      dependencies: { } // no dependencies needed as the
+                        // default is already specified in
+                        // the consuming app's bower.json
+    },
+    {
+      name: "ember-release",
       dependencies: {
-        "ember": "1.10.0"
+        "ember": "release"
       }
     },
     {
-      name: "ember-1.11.0",
+      name: "ember-beta",
       dependencies: {
-        "ember": "1.11.0"
+        "ember": "beta"
       }
     },
     {
-      name: "ember-1.12.0-beta.1",
+      name: "ember-canary",
       dependencies: {
-        "ember": "1.12.0-beta.1"
+        "ember": "canary"
       }
     }
   ]
