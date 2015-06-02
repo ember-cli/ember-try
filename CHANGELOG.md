@@ -1,3 +1,7 @@
+#v0.0.6
+- npmignore /tmp
+- Upgrade ember-cli
+
 #v0.0.5
 - Pass through arguments to commands (allows `ember try ember-canary test --server`)
 - `--skip-cleanup` option for commands `try` and `try:testall` to not restore the default bower dependency set. This is useful in CI environments when the build is being thrown out and not deployed.
