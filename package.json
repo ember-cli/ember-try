@@ -1,6 +1,6 @@
 {
   "name": "ember-try",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An ember-cli addon to test against multiple bower dependencies, such as ember and ember-data.",
   "directories": {
     "doc": "doc",
