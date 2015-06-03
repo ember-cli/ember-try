@@ -1,3 +1,6 @@
+#v0.0.7
+- Bugfix: Configure bower to be interactive:false
+
 #v0.0.6
 - npmignore /tmp
 - Upgrade ember-cli
