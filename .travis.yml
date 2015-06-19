@@ -16,6 +16,10 @@ env:
   - NPM_SCRIPT=node-test
   - NPM_SCRIPT=client-test
 
+matrix:
+  allow_failures:
+    - node_js: "0.10"
+
 before_install:
   - mkdir travis-phantomjs
   - wget https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2
