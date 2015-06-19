@@ -3,11 +3,24 @@ language: node_js
 
 sudo: false
 
+node_js:
+  - "0.10"
+  - "0.12"
+  - "iojs"
+
 cache:
   directories:
     - node_modules
 
+env:
+  - NPM_SCRIPT=node-test
+  - NPM_SCRIPT=client-test
+
 before_install:
+  - mkdir travis-phantomjs
+  - wget https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -O $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2
+  - tar -xvf $PWD/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2 -C $PWD/travis-phantomjs
+  - export PATH=$PWD/travis-phantomjs:$PATH
   - "npm config set spin false"
   - "npm install -g npm@^2"
 
@@ -17,4 +30,4 @@ install:
   - bower install
 
 script:
-  - npm test
+  - npm run-script $NPM_SCRIPT
