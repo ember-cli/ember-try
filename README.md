@@ -72,7 +72,9 @@ module.exports = {
       name: 'Ember canary',
       dependencies: {
         'ember': 'canary'
-      }
+      },
+      // Optionally capture test stdout in testall to a file
+      stdoutTestall: 'canary-test-output.tap'
     },
     {
       name: 'Ember beta',
