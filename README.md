@@ -131,5 +131,4 @@ See an example of using `ember-try` for CI [here](https://github.com/kategengler
 
 ### TODO
 - [ ] Add tests
-- [ ] Add a blueprint for the config
 - [ ] Look into `SilentError` as seen on other `ember-cli` addons to see if its preferable to `throw new Error` for preconditions.
