@@ -1,0 +1,3 @@
+test/**/*.js
+--require should
+--ui bdd
