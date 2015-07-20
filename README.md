@@ -60,6 +60,9 @@ module.exports = {
       dependencies: {
         'ember': '1.10.0',
         'ember-data': '1.0.0-beta.15'
+      },
+      testem: {
+        report_file: 'Ember-1.10-with-ember-data.tap'
       }
     },
     {
@@ -89,6 +92,11 @@ module.exports = {
 
 Scenarios are sets of dependencies (`bower` only). They can be specified exactly as in the `bower.json`
 The `name` can be used to try just one scenario using the `ember try` command.
+
+Optionally testem configurations may be given that will be merged into 
+testem.json. If the used scenario (or in case of `ember try:testall` any of the 
+scenarios) uses the optional testem configuration, there has to be a 
+testem.json, otherwise it may be missing.
 
 If no `config/ember-try.js` file is present, the default config will be used. This is the current default config:
 
