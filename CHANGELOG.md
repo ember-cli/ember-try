@@ -1,3 +1,6 @@
+#v0.0.8
+- Feature: Support devDependencies in scenarios (Thanks @martndemus)
+ 
 #v0.0.7
 - Bugfix: Configure bower to be interactive:false
 
