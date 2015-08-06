@@ -1,16 +1,12 @@
 # ember-try
 
-An ember-cli addon to test against multiple bower dependencies, such as `ember` and `ember-data`.
+An ember-cli addon to test against multiple bower and npm dependencies, such as `ember` and `ember-data`.
 
 ### Installation
 
 ```
 ember install ember-try
 ```
-
-### Limitations
-
-Can only change versions for Ember 1.10+ due to template compiler changes that this addon does not attempt to handle.
 
 ### Usage
 
@@ -46,7 +42,14 @@ When running in a CI environment where changes are discarded you can skip reseti
 
 #### `ember try:reset`
 
-This command restores the original `bower.json` from `bower.json.ember-try`, `rm -rf`s `bower_components` and runs `bower install`. For use if any of the other commands fail to clean up after (they run this by default on completion).
+This command...
+
+* restores the original `bower.json` and `package.json` from `bower.json.ember-try` and `package.json.ember-try`
+* `rm -rf`s `bower_components`
+* Removes any packages from `node_modules` that related to the scenario you just ran
+* runs `npm install` and `bower install`
+
+For use if any of the other commands fail to clean up after (they run this by default on completion).
 
 ### Config
 
@@ -54,40 +57,64 @@ Configuration will be read from a file in your ember app in `config/ember-try.js
 
 ```js
 module.exports = {
-  scenarios: [
-    {
-      name: 'Ember 1.10 with ember-data',
+  scenarios: [{
+    name: 'Ember 1.10 with ember-data',
+    bower: {
       dependencies: {
         'ember': '1.10.0',
         'ember-data': '1.0.0-beta.15'
       }
     },
-    {
-      name: 'Ember 1.11.0-beta.5',
+    npm: {
+      dependencies: {
+        'ember-data': '1.0.0-beta.15',
+        'ember-new-computed': '^1.0.0'
+      }
+    }
+  }, {
+    name: 'Ember 1.11.0-beta.5',
+    bower: {
       dependencies: {
         'ember': '1.11.0-beta.5'
       }
     },
-    {
-      name: 'Ember canary',
+    npm: {
+      dependencies: {
+        'ember-new-computed': '^1.0.0'
+      }
+    }
+  }, {
+    name: 'Ember canary',
+    bower: {
       dependencies: {
         'ember': 'canary'
       }
     },
-    {
-      name: 'Ember beta',
+    npm: {
+      dependencies: {
+        'ember-legacy-views': '^1.0.0'
+      }
+    }
+  }, {
+    name: 'Ember beta',
+    bower: {
       dependencies: {
         'ember': 'components/ember#beta'
       },
       resolutions: { // Resolutions are only necessary when they do not match the version specified in `dependencies`
         'ember': 'canary'
       }
+    },
+    npm: {
+      dependencies: {
+        'ember-legacy-views': '^1.0.0'
+      }
     }
-  ]
+  }]
 };
 ```
 
-Scenarios are sets of dependencies (`bower` only). They can be specified exactly as in the `bower.json`
+Scenarios are sets of dependencies (`bower` and `npm`). They can be specified exactly as in the `bower.json` or `package.json` manifests.
 The `name` can be used to try just one scenario using the `ember try` command.
 
 If no `config/ember-try.js` file is present, the default config will be used. This is the current default config:
@@ -97,26 +124,34 @@ If no `config/ember-try.js` file is present, the default config will be used. Th
   scenarios: [
     {
       name: "default",
-      dependencies: { } // no dependencies needed as the
+      bower: {
+        dependencies: { } // no dependencies needed as the
                         // default is already specified in
                         // the consuming app's bower.json
+      }
     },
     {
       name: "ember-release",
-      dependencies: {
-        "ember": "release"
+      bower: {
+        dependencies: {
+          "ember": "release"
+        }
       }
     },
     {
       name: "ember-beta",
-      dependencies: {
-        "ember": "beta"
+      bower: {
+        dependencies: {
+          "ember": "beta"
+        }
       }
     },
     {
       name: "ember-canary",
-      dependencies: {
-        "ember": "canary"
+      bower: {
+        dependencies: {
+          "ember": "canary"
+        }
       }
     }
   ]
