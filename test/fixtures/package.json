@@ -1,0 +1,21 @@
+{
+  "name": "module-name",
+  "version": "10.3.1",
+  "description": "An example module to illustrate the usage of a package.json",
+  "main": "lib/foo.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodejitsu/browsenpm.org"
+  },
+  "bugs": {
+    "url": "https://github.com/nodejitsu/browsenpm.org/issues"
+  },
+  "dependencies": {
+    "express": "^4.0.0"
+  },
+  "devDependencies": {
+    "lodash": "^2.0.0",
+    "qs": "^4.0.0"
+  },
+  "license": "MIT"
+}
