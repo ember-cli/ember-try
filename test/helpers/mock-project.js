@@ -35,29 +35,29 @@ function MockProject(root) {
 
 */
 MockProject.prototype = {
-  _writeFixtureDataToProject: function (fixture, filename) {
+  _writeFixtureDataToProject: function(fixture, filename) {
     return writeFile(this.projectRoot + '/' + filename, JSON.stringify(fixture, null, 2));
   },
 
-  _setupBower: function () {
-    this._writeFixtureDataToProject(fixtureBower, 'bower.json').then(function () {
+  _setupBower: function() {
+    this._writeFixtureDataToProject(fixtureBower, 'bower.json').then(function() {
       return spawnSync('bower', ['install'], {
         cwd: this.projectRoot
       }.bind(this));
     });
   },
-  _setupNpm: function () {
-    this._writeFixtureDataToProject(fixtureNpm, 'package.json').then(function () {
+  _setupNpm: function() {
+    this._writeFixtureDataToProject(fixtureNpm, 'package.json').then(function() {
       return spawnSync('npm', ['install'], {
         cwd: this.projectRoot
       }.bind(this));
     });
   },
 
-  setup: function () {
+  setup: function() {
     var mockProj = this;
-    return rimraf(mockProj.projectRoot).then(function () {
-      return mkdir(mockProj.projectRoot).then(function () {
+    return rimraf(mockProj.projectRoot).then(function() {
+      return mkdir(mockProj.projectRoot).then(function() {
         return RSVP.all([
           this._setupNpm(),
           this._setupBower()
@@ -66,11 +66,11 @@ MockProject.prototype = {
     }.bind(this));
   },
 
-  destroy: function () {
+  destroy: function() {
     return rimraf(this.projectRoot);
   },
 
-  _jsonFileData: function (filename) {
+  _jsonFileData: function(filename) {
     return readFile(path.join(this.projectRoot, filename)).then(function(fileData) {
       return JSON.parse(fileData);
     });
@@ -84,23 +84,23 @@ MockProject.prototype = {
     return this._jsonFileData('package.json');
   },
 
-  backupBowerData: function () {
+  backupBowerData: function() {
     return this._jsonFileData('bower.json.ember-try');
   },
 
-  backupNpmData: function () {
+  backupNpmData: function() {
     return this._jsonFileData('package.json.ember-try');
   },
 
-  createBowerBackup: function (scenario) {
+  createBowerBackup: function(scenario) {
     var mockProj = this;
-    return this.bowerData().then(function(data){
+    return this.bowerData().then(function(data) {
 
       var bowerJson = JSON.parse(JSON.stringify(data));
       var depTypes = ['dependencies', 'devDependencies'];
-      depTypes.forEach(function (depType) {
+      depTypes.forEach(function(depType) {
         var vers = scenario[depType] || {};
-        for(var k in vers) {
+        for (var k in vers) {
           bowerJson[depType][k] = vers[k];
         }
       });
@@ -108,13 +108,13 @@ MockProject.prototype = {
     });
   },
 
-  createNpmBackup: function (scenario) {
+  createNpmBackup: function(scenario) {
     var mockProj = this;
-    return this.npmData().then(function(packageJson){
+    return this.npmData().then(function(packageJson) {
       var depTypes = ['dependencies', 'devDependencies'];
       depTypes.forEach(function(depType) {
         var vers = scenario.npm[depType] || {};
-        for(var k in vers) {
+        for (var k in vers) {
           packageJson[depType][k] = vers[k];
         }
       });

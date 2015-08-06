@@ -1,5 +1,5 @@
 var ScenarioManager = require('../lib/utils/scenario-manager');
-var should = require("should");
+var should = require('should');
 
 describe('scenarioManager', function() {
   describe('#_manifestJSONForScenario', function() {
@@ -68,12 +68,12 @@ describe('scenarioManager', function() {
       var scenarioManager = new ScenarioManager();
       var packageJSON = {
         dependencies: {
-          'jQuery': '1.11.1'
+          jquery: '1.11.1'
         }
       };
       var scenario = {
         dependencies: {
-          'jQuery': '2.1.3'
+          jquery: '2.1.3'
         },
         npm: {
           dependencies: {
@@ -127,15 +127,15 @@ describe('scenarioManager', function() {
       var scenarioManager = new ScenarioManager();
       var bowerJSON = {
         dependencies: {
-          'ember': '1.13.5'
+          ember: '1.13.5'
         }
       };
       var scenario = {
         dependencies: {
-          'ember': 'components/ember#canary'
+          ember: 'components/ember#canary'
         },
         resolutions: {
-          'ember': 'canary'
+          ember: 'canary'
         }
       };
 
