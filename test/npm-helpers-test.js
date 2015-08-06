@@ -14,7 +14,7 @@ describe('npmHelpers', function(){
   afterEach(function() {
     return proj.destroy();
   });
-  
+
   describe('#resetNpmFile()', function() {
     // actual npm install could take a while
     this.timeout(60000);
@@ -164,7 +164,7 @@ describe('npmHelpers', function(){
         npmHelpers.install(proj.projectRoot, {}).then(function () {
             fs.existsSync(path.join(proj.projectRoot, 'node_modules', 'qs')).should.equal(true);
             fs.existsSync(path.join(proj.projectRoot, 'node_modules', 'lodash')).should.equal(true);
-            fs.existsSync(path.join(proj.projectRoot, 'node_modules', 'express')).should.equal(true);          
+            fs.existsSync(path.join(proj.projectRoot, 'node_modules', 'express')).should.equal(true);
             done();
         });
     });
@@ -215,5 +215,4 @@ describe('npmHelpers', function(){
       });
     });
   });
-
-})
+});

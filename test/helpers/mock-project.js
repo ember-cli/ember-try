@@ -25,7 +25,7 @@ function MockProject(root) {
 
  It aims to make the following things easy:
  * project setup/teardown
- * seeding the project with fixture data (i.e., a package.json and/or bower.json) 
+ * seeding the project with fixture data (i.e., a package.json and/or bower.json)
  * running "npm install"
  * running "bower install"
 
@@ -97,9 +97,9 @@ MockProject.prototype = {
     return this.bowerData().then(function(data){
 
       var bowerJson = JSON.parse(JSON.stringify(data));
-      const depTypes = ['dependencies', 'devDependencies'];
+      var depTypes = ['dependencies', 'devDependencies'];
       depTypes.forEach(function (depType) {
-        const vers = scenario[depType] || {};  
+        var vers = scenario[depType] || {};
         for(var k in vers) {
           bowerJson[depType][k] = vers[k];
         }
@@ -111,9 +111,9 @@ MockProject.prototype = {
   createNpmBackup: function (scenario) {
     var mockProj = this;
     return this.npmData().then(function(packageJson){
-      const depTypes = ['dependencies', 'devDependencies'];
+      var depTypes = ['dependencies', 'devDependencies'];
       depTypes.forEach(function(depType) {
-        const vers = scenario.npm[depType] || {};  
+        var vers = scenario.npm[depType] || {};
         for(var k in vers) {
           packageJson[depType][k] = vers[k];
         }

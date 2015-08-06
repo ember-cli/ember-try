@@ -7,18 +7,18 @@ describe('scenarioManager', function() {
       var scenarioManager = new ScenarioManager();
       var bowerJSON = {
         dependencies: {
-          'jQuery': '1.11.1'
+          jquery: '1.11.1'
         }
       };
       var scenario = {
         dependencies: {
-          'jQuery': '2.1.3'
+          jquery: '2.1.3'
         }
       };
 
       var newBowerJSON = scenarioManager
         ._manifestJSONForScenario(bowerJSON, scenario);
-      newBowerJSON.dependencies['jQuery'].should.equal('2.1.3');
+      newBowerJSON.dependencies.jquery.should.equal('2.1.3');
     });
 
     it('should change specified bower dependency versions (1.0 config schema)', function() {
@@ -38,7 +38,7 @@ describe('scenarioManager', function() {
 
       var newBowerJSON = scenarioManager
         ._manifestJSONForScenario(bowerJSON, scenario);
-      newBowerJSON.dependencies['jquery'].should.equal('2.1.3');
+      newBowerJSON.dependencies.jquery.should.equal('2.1.3');
     });
 
     it('should change favor 1.0 config schema over legacy schema for bower scenario deps', function() {
@@ -61,7 +61,7 @@ describe('scenarioManager', function() {
 
       var newBowerJSON = scenarioManager
         ._manifestJSONForScenario(bowerJSON, scenario);
-      newBowerJSON.dependencies['jquery'].should.equal('2.1.3');
+      newBowerJSON.dependencies.jquery.should.equal('2.1.3');
     });
 
     it('should respect other root keys in the scenario (i.e., for npm)', function() {
@@ -84,43 +84,43 @@ describe('scenarioManager', function() {
 
       var newPackageJSON = scenarioManager
         ._manifestJSONForScenario(packageJSON, scenario, 'npm');
-      newPackageJSON.dependencies['lodash'].should.equal('^2.0.0');
+      newPackageJSON.dependencies.lodash.should.equal('^2.0.0');
     });
 
     it('should change specified bower dev dependency versions', function() {
       var scenarioManager = new ScenarioManager();
       var bowerJSON = {
         devDependencies: {
-          'jQuery': '1.11.1'
+          jquery: '1.11.1'
         }
       };
       var scenario = {
         devDependencies: {
-          'jQuery': '2.1.3'
+          jquery: '2.1.3'
         }
       };
 
       bowerJSON = scenarioManager
         ._manifestJSONForScenario(bowerJSON, scenario);
-      bowerJSON.devDependencies['jQuery'].should.equal('2.1.3');
+      bowerJSON.devDependencies.jquery.should.equal('2.1.3');
     });
 
     it('should add to resolutions', function() {
       var scenarioManager = new ScenarioManager();
       var bowerJSON = {
         dependencies: {
-          'jQuery': '1.11.1'
+          jquery: '1.11.1'
         }
       };
       var scenario = {
         dependencies: {
-          'jQuery': '2.1.3'
+          jquery: '2.1.3'
         }
       };
 
       bowerJSON = scenarioManager
         ._manifestJSONForScenario(bowerJSON, scenario);
-      bowerJSON.resolutions['jQuery'].should.equal('2.1.3');
+      bowerJSON.resolutions.jquery.should.equal('2.1.3');
     });
 
     it('should set custom resolutions', function() {
@@ -141,7 +141,7 @@ describe('scenarioManager', function() {
 
       bowerJSON = scenarioManager
         ._manifestJSONForScenario(bowerJSON, scenario);
-      bowerJSON.resolutions['ember'].should.equal('canary');
+      bowerJSON.resolutions.ember.should.equal('canary');
     });
   });
 });

@@ -8,5 +8,5 @@ describe('findEmberPath()', function(){
       emberPath.indexOf('/node_modules/ember-cli/bin/ember').should.be.above(0);
       done();
     });
-  })
-})
+  });
+});
