@@ -18,20 +18,22 @@ function MockProject(root) {
 }
 
 MockProject.prototype = {
-  setup: function () {
+  setup: function() {
     var mockProj = this;
-    return rimraf(mockProj.projectRoot).then(function () {
-      return mkdir(mockProj.projectRoot).then(function () {
-        return writeFile(mockProj.projectRoot + '/bower.json', JSON.stringify(fixtureBower)).then(function () {
-          return spawnSync('bower', ['install'], {
-            cwd: mockProj.projectRoot
-          });
-        });
+    return rimraf(mockProj.projectRoot).then(function() {
+      return mkdir(mockProj.projectRoot).then(function() {
+        return writeFile(mockProj.projectRoot + '/bower.json', JSON.stringify(fixtureBower))
+          .then(function() {
+            return spawnSync('bower', ['install'], {
+              cwd: mockProj.projectRoot
+            });
+          }
+        );
       });
     });
   },
 
-  destroy: function () {
+  destroy: function() {
     return rimraf(this.projectRoot);
   },
 
@@ -41,17 +43,17 @@ MockProject.prototype = {
     });
   },
 
-  backupBowerData: function () {
+  backupBowerData: function() {
     return readFile(this.projectRoot + '/bower.json.ember-try').then(function(fileData) {
       return JSON.parse(fileData);
     });
   },
 
-  createBowerBackup: function (packageVersions) {
+  createBowerBackup: function(packageVersions) {
     var vers = packageVersions || {};
     var mockProj = this;
-    return this.bowerData().then(function(bowerJson){
-      for(var k in vers) {
+    return this.bowerData().then(function(bowerJson) {
+      for (var k in vers) {
         bowerJson.dependencies[k] = vers[k];
       }
       return writeFile(mockProj.projectRoot + '/bower.json.ember-try', JSON.stringify(bowerJson));
