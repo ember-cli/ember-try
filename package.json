@@ -21,17 +21,20 @@
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.0.2",
-    "ember-cli": "1.13.6",
-    "ember-cli-app-version": "0.3.3",
-    "ember-cli-babel": "^5.0.0",
+    "ember-cli": "1.13.7",
+    "ember-cli-app-version": "0.4.0",
     "ember-cli-content-security-policy": "0.4.0",
     "ember-cli-dependency-checker": "^1.0.0",
-    "ember-cli-htmlbars": "0.7.6",
-    "ember-cli-ic-ajax": "0.1.1",
+    "ember-cli-htmlbars": "0.7.9",
+    "ember-cli-htmlbars-inline-precompile": "^0.1.1",
+    "ember-cli-ic-ajax": "0.2.1",
     "ember-cli-inject-live-reload": "^1.3.0",
-    "ember-cli-qunit": "0.3.13",
+    "ember-cli-qunit": "0.3.20",
+    "ember-cli-release": "0.2.3",
+    "ember-cli-sri": "^1.0.1",
     "ember-cli-uglify": "^1.0.1",
-    "ember-export-application-global": "^1.0.2",
+    "ember-export-application-global": "^1.0.3",
+    "ember-disable-prototype-extensions": "^1.0.0",
     "mocha": "^2.2.5",
     "should": "^7.0.1"
   },
@@ -39,10 +42,8 @@
     "ember-addon",
     "testing"
   ],
-  "ember-addon": {
-    "configPath": "tests/dummy/config"
-  },
   "dependencies": {
+    "ember-cli-babel": "^5.0.0",
     "chalk": "^1.0.0",
     "core-object": "^1.1.0",
     "fs-extra": "^0.18.0",
@@ -51,5 +52,8 @@
     "rimraf": "^2.3.2",
     "rsvp": "^3.0.17",
     "sync-exec": "^0.5.0"
+  },
+  "ember-addon": {
+    "configPath": "tests/dummy/config"
   }
 }
