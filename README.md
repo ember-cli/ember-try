@@ -1,4 +1,4 @@
-# ember-try
+# ember-try [![Build Status](https://travis-ci.org/kategengler/ember-try.svg?branch=master)](https://travis-ci.org/kategengler/ember-try)
 
 An ember-cli addon to test against multiple bower dependencies, such as `ember` and `ember-data`.
 
