@@ -10,8 +10,10 @@
     "start": "ember server",
     "build": "ember build",
     "client-test": "ember test",
-    "node-test": "node_modules/mocha/bin/mocha .",
-    "test": "npm run-script node-test && npm run-script client-test"
+    "node-test": "node_modules/.bin/mocha .",
+    "lint": "node_modules/.bin/jshint lib test",
+    "jscs": "node_modules/.bin/jscs lib test",
+    "test": "npm run-script jscs && npm run-script lint && npm run-script node-test && npm run-script client-test"
   },
   "repository": "https://github.com/kategengler/ember-try",
   "engines": {
@@ -33,6 +35,8 @@
     "ember-cli-release": "0.2.3",
     "ember-cli-sri": "^1.0.1",
     "ember-cli-uglify": "^1.0.1",
+    "jscs": "^2.0.0",
+    "jshint": "^2.8.0",
     "ember-export-application-global": "^1.0.3",
     "ember-disable-prototype-extensions": "^1.0.0",
     "mocha": "^2.2.5",
