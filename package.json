@@ -41,7 +41,8 @@
     "jscs": "^2.0.0",
     "jshint": "^2.8.0",
     "mocha": "^2.2.5",
-    "should": "^7.0.1"
+    "should": "^7.0.1",
+    "tmp-sync": "^1.1.0"
   },
   "keywords": [
     "ember-addon",
