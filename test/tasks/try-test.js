@@ -11,7 +11,7 @@ var root = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 
-describe('testall', function() {
+describe('try', function() {
   beforeEach(function() {
     tmpdir = tmp.in(tmproot);
     process.chdir(tmpdir);
@@ -29,7 +29,7 @@ describe('testall', function() {
     return remove(tmproot);
   });
 
-  it('succeeds scenario\'s tests succeed', function() {
+  it('succeeds scenarios when the command succeeds for that scenario', function() {
     this.timeout(5000);
 
     var config = {
@@ -48,7 +48,7 @@ describe('testall', function() {
 
     var mockedRun = function(_, args) {
       if (args[1].indexOf('test') > -1) {
-        return RSVP.resolve(0);
+        return RSVP.resolve();
       } else {
         var regularRun = require('../../lib/utils/run');
         return regularRun.apply(this, arguments);
@@ -63,11 +63,11 @@ describe('testall', function() {
     };
 
     var mockedExit = function(code) {
-      code.should.equal(0, 'exits 0 when all scenarios succeed');
+      code.should.equal(0, 'Should exit 0 when command succeeds');
     };
 
-    var TestallTask = require('../../lib/tasks/testall');
-    var testallTask = new TestallTask({
+    var TryTask = require('../../lib/tasks/try');
+    var tryTask = new TryTask({
       ui: {writeLine: outputFn},
       project: {root: tmpdir},
       config: config,
@@ -75,18 +75,16 @@ describe('testall', function() {
     });
 
     writeJSONFile('bower.json', fixtureBower);
-    return testallTask.run({}).then(function() {
+    return tryTask.run(config.scenarios[0], ['test'], {}).then(function() {
       output.should.containEql('Scenario first: SUCCESS');
-      output.should.containEql('Scenario second: SUCCESS');
-      output.should.containEql('All 2 scenarios succeeded');
+      output.should.containEql('All 1 scenarios succeeded');
     }).catch(function(err) {
       console.log(err);
       true.should.equal(false, 'Assertions should run');
     });
   });
 
-
-  it('fails scenarios when scenario\'s tests fail', function() {
+  it('fails scenarios when the command fails for that scenario', function() {
     this.timeout(5000);
 
     var config = {
@@ -102,15 +100,10 @@ describe('testall', function() {
         }
       }]
     };
-    var runTestCount = 0;
+
     var mockedRun = function(_, args) {
       if (args[1].indexOf('test') > -1) {
-        runTestCount++;
-        if (runTestCount == 1) {
-          return RSVP.reject(1);
-        } else {
-          return RSVP.resolve(0);
-        }
+        return RSVP.reject(1);
       } else {
         var regularRun = require('../../lib/utils/run');
         return regularRun.apply(this, arguments);
@@ -128,8 +121,8 @@ describe('testall', function() {
       code.should.equal(1);
     };
 
-    var TestallTask = require('../../lib/tasks/testall');
-    var testallTask = new TestallTask({
+    var TryTask = require('../../lib/tasks/try');
+    var tryTask = new TryTask({
       ui: {writeLine: outputFn},
       project: {root: tmpdir},
       config: config,
@@ -137,12 +130,11 @@ describe('testall', function() {
     });
 
     writeJSONFile('bower.json', fixtureBower);
-    return testallTask.run({}).then(function() {
+    return tryTask.run(config.scenarios[0], ['test'], {}).then(function() {
       output.should.containEql('Scenario first : FAIL');
-      output.should.containEql('Scenario second: SUCCESS');
       output.should.containEql('1 scenarios failed');
-      output.should.containEql('1 scenarios succeeded');
-      output.should.containEql('2 scenarios run');
+      output.should.containEql('0 scenarios succeeded');
+      output.should.containEql('1 scenarios run');
     }).catch(function(err) {
       console.log(err);
       true.should.equal(false, 'Assertions should run');
