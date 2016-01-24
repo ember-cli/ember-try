@@ -135,11 +135,13 @@ describe('bowerAdapter', function() {
   });
 
   describe('#_findBowerPath()', function() {
-    it('should return the correct bower path', function(done) {
-      new BowerAdapter({cwd: tmpdir})._findBowerPath().then(function(path) {
-        path.indexOf('node_modules/ember-cli/node_modules/bower/bin/bower').should.be.above(0);
-        done();
-      }, function(err) {console.log('err', err); });
+    it('should return the correct bower path', function() {
+      return new BowerAdapter({cwd: tmpdir})._findBowerPath().then(function(path) {
+        path.should.containEql('node_modules/bower/bin/bower');
+      }).catch(function(err) {
+        console.log(err);
+        true.should.equal(false, 'Error should not happen');
+      });
     });
   });
 });
