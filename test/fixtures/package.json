@@ -1,0 +1,6 @@
+{
+  "name": "a-test-project",
+  "devDependencies": {
+    "ember-data": "2.3.3"
+  }
+}

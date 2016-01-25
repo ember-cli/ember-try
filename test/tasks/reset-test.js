@@ -22,9 +22,19 @@ describe('reset', function() {
   });
 
   it('runs without blowing up', function() {
+    var config = {
+      scenarios: [{
+        name: 'first',
+        dependencies: {
+          ember: '1.13.0'
+        }
+      }]
+    };
+
     var ResetTask = require('../../lib/tasks/reset');
     var resetTask = new ResetTask({
-      project: {root: tmpdir}
+      project: {root: tmpdir},
+      config: config
     });
 
     writeJSONFile('bower.json', fixtureBower);
