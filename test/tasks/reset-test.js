@@ -22,6 +22,7 @@ describe('reset', function() {
   });
 
   it('runs without blowing up', function() {
+    this.timeout(15000);
     var config = {
       scenarios: [{
         name: 'first',
