@@ -1,6 +1,6 @@
 # ember-try [![Build Status](https://travis-ci.org/kategengler/ember-try.svg?branch=master)](https://travis-ci.org/kategengler/ember-try)
 
-An ember-cli addon to test against multiple bower dependencies, such as `ember` and `ember-data`.
+An ember-cli addon to test against multiple bower and npm dependencies, such as `ember` and `ember-data`.
 
 ### Installation
 
@@ -57,37 +57,53 @@ module.exports = {
   scenarios: [
     {
       name: 'Ember 1.10 with ember-data',
-      dependencies: {
-        'ember': '1.10.0',
-        'ember-data': '1.0.0-beta.15'
+      bower: {
+        dependencies: {
+          'ember': '1.10.0',
+          'ember-data': '1.0.0-beta.15'
+        }
       }
     },
     {
       name: 'Ember 1.11.0-beta.5',
-      dependencies: {
-        'ember': '1.11.0-beta.5'
+      bower: {
+        dependencies: {
+          'ember': '1.11.0-beta.5'
+        }
       }
     },
     {
-      name: 'Ember canary',
-      dependencies: {
-        'ember': 'canary'
+      name: 'Ember canary with Ember-Data 2.3.0',
+      npm: {
+        devDependencies: {
+          'ember-data': '2.3.0'
+        }
+      },
+      bower: {
+        dependencies: {
+          'ember': 'components/ember#canary'
+        },
+        resolutions: {
+          'ember': 'canary' 
+        }
       }
     },
     {
       name: 'Ember beta',
-      dependencies: {
-        'ember': 'components/ember#beta'
-      },
-      resolutions: { // Resolutions are only necessary when they do not match the version specified in `dependencies`
-        'ember': 'canary'
+      bower: {
+        dependencies: {
+          'ember': 'components/ember#beta'
+        },
+        resolutions: { // Resolutions are only necessary when they do not match the version specified in `dependencies`
+          'ember': 'beta'
+        }
       }
     }
   ]
 };
 ```
 
-Scenarios are sets of dependencies (`bower` only). They can be specified exactly as in the `bower.json`
+Scenarios are sets of dependencies (`bower` and `npm` only). They can be specified exactly as in the `bower.json` or `package.json`
 The `name` can be used to try just one scenario using the `ember try` command.
 
 If no `config/ember-try.js` file is present, the default config will be used. This is the current default config:
@@ -96,27 +112,35 @@ If no `config/ember-try.js` file is present, the default config will be used. Th
 {
   scenarios: [
     {
-      name: "default",
-      dependencies: { } // no dependencies needed as the
-                        // default is already specified in
-                        // the consuming app's bower.json
-    },
-    {
-      name: "ember-release",
-      dependencies: {
-        "ember": "release"
+      name: 'default',
+      bower: {
+        dependencies: { } /* No dependencies needed as the
+                             default is already specified in
+                             the consuming app's bower.json */
       }
     },
     {
-      name: "ember-beta",
-      dependencies: {
-        "ember": "beta"
+      name: 'ember-release',
+      bower: {
+        dependencies: {
+          ember: 'release'
+        }
       }
     },
     {
-      name: "ember-canary",
-      dependencies: {
-        "ember": "canary"
+      name: 'ember-beta',
+      bower: {
+        dependencies: {
+          ember: 'beta'
+        }
+      }
+    },
+    {
+      name: 'ember-canary',
+      bower: {
+        dependencies: {
+          ember: 'canary'
+        }
       }
     }
   ]
@@ -128,8 +152,3 @@ See an example of using `ember-try` for CI [here](https://github.com/kategengler
 ### Special Thanks
 
 - Much credit is due to [Edward Faulkner](https://github.com/ef4) The scripts in [liquid-fire](https://github.com/ef4/liquid-fire) that test against multiple ember versions were the inspriation for this project.
-
-### TODO
-- [ ] Add tests
-- [ ] Add a blueprint for the config
-- [ ] Look into `SilentError` as seen on other `ember-cli` addons to see if its preferable to `throw new Error` for preconditions.
