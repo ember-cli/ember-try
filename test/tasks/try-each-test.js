@@ -24,10 +24,29 @@ var legacyConfig = {
     dependencies: {
       ember: '1.13.0'
     }
-  },{
+  },
+  {
     name: 'second',
     dependencies: {
       ember: '2.0.0'
+    }
+  },
+  {
+    name: 'with-dev-deps',
+    dependencies: {
+      ember: '2.0.0'
+    },
+    devDependencies: {
+      jquery: '1.11.3'
+    }
+  },
+  {
+    name: 'with-resolutions',
+    dependencies: {
+      ember: 'components/ember#beta'
+    },
+    resolutions: {
+      ember: 'beta'
     }
   }]
 };
@@ -51,6 +70,25 @@ var config = {
     bower: {
       dependencies: {
         ember: '2.0.0'
+      },
+      devDependencies: {
+        jquery: '1.11.3'
+      }
+    },
+    npm: {
+      devDependencies: {
+        'ember-cli-deploy': '0.5.1'
+      }
+    }
+  },
+  {
+    name: 'with-bower-resolutions',
+    bower: {
+      dependencies: {
+        ember: 'components/ember#beta'
+      },
+      resolutions: {
+        ember: 'beta'
       }
     },
     npm: {
@@ -61,7 +99,7 @@ var config = {
   }]
 };
 
-describe('tryEach', function() {
+describe.only('tryEach', function() {
   beforeEach(function() {
     tmpdir = tmp.in(tmproot);
     process.chdir(tmpdir);
@@ -116,7 +154,10 @@ describe('tryEach', function() {
         output.should.containEql('Scenario default: SUCCESS');
         output.should.containEql('Scenario first: SUCCESS');
         output.should.containEql('Scenario second: SUCCESS');
-        output.should.containEql('All 3 scenarios succeeded');
+        output.should.containEql('Scenario with-dev-deps: SUCCESS');
+        output.should.containEql('Scenario with-resolutions: SUCCESS');
+
+        output.should.containEql('All 5 scenarios succeeded');
       }).catch(function(err) {
         console.log(err);
         true.should.equal(false, 'Assertions should run');
@@ -166,9 +207,11 @@ describe('tryEach', function() {
         output.should.containEql('Scenario default: FAIL');
         output.should.containEql('Scenario first: SUCCESS');
         output.should.containEql('Scenario second: SUCCESS');
+        output.should.containEql('Scenario with-dev-deps: SUCCESS');
+        output.should.containEql('Scenario with-resolutions: SUCCESS');
         output.should.containEql('1 scenarios failed');
-        output.should.containEql('2 scenarios succeeded');
-        output.should.containEql('3 scenarios run');
+        output.should.containEql('4 scenarios succeeded');
+        output.should.containEql('5 scenarios run');
       }).catch(function(err) {
         console.log(err);
         true.should.equal(false, 'Assertions should run');
@@ -214,7 +257,8 @@ describe('tryEach', function() {
       return tryEachTask.run(config.scenarios, {}).then(function() {
         output.should.containEql('Scenario first: SUCCESS');
         output.should.containEql('Scenario second: SUCCESS');
-        output.should.containEql('All 2 scenarios succeeded');
+        output.should.containEql('Scenario with-bower-resolutions: SUCCESS');
+        output.should.containEql('All 3 scenarios succeeded');
       }).catch(function(err) {
         console.log(err);
         true.should.equal(false, 'Assertions should run');
@@ -265,9 +309,10 @@ describe('tryEach', function() {
       return tryEachTask.run(config.scenarios, {}).then(function() {
         output.should.containEql('Scenario first: FAIL');
         output.should.containEql('Scenario second: SUCCESS');
+        output.should.containEql('Scenario with-bower-resolutions: SUCCESS');
         output.should.containEql('1 scenarios failed');
-        output.should.containEql('1 scenarios succeeded');
-        output.should.containEql('2 scenarios run');
+        output.should.containEql('2 scenarios succeeded');
+        output.should.containEql('3 scenarios run');
       }).catch(function(err) {
         console.log(err);
         true.should.equal(false, 'Assertions should run');
