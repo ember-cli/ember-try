@@ -1,3 +1,7 @@
+#v0.1.0
+- Feature: Support npm dependencies as well as bower
+- Feature: Improved results output
+
 #v0.0.8
 - Feature: Support devDependencies in scenarios (Thanks @martndemus)
  
