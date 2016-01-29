@@ -1,49 +1,111 @@
 var ScenarioManager = require('../lib/utils/scenario-manager');
+var CoreObject = require('core-object');
+var RSVP = require('rsvp');
 var should = require('should');
 
 describe('scenarioManager', function() {
-  describe('#_bowerJSONForScenario', function() {
-    it('should change specified bower dependency versions', function() {
-      var scenarioManager = new ScenarioManager();
-      var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: {} };
-      var scenario =  { dependencies: { jquery: '2.1.3' } };
+  describe('new', function() {
+    describe('dependency manager adapter creation', function() {
+      it('creates npm adapter when config has npm key', function() {
+        var manager = new ScenarioManager({ config: { scenarios: [{ npm: {} }]}, project: {root: 'here'}});
+        manager.dependencyManagerAdapters[0].configKey.should.equal('npm');
+        manager.dependencyManagerAdapters.length.should.equal(1);
+      });
 
-      bowerJSON = scenarioManager._bowerJSONForScenario(bowerJSON, scenario);
+      it('creates bower adapter when config has bower key', function() {
+        var manager = new ScenarioManager({ config: { scenarios: [{ bower: {} }]}, project: {root: 'here'}});
+        manager.dependencyManagerAdapters[0].configKey.should.equal('bower');
+        manager.dependencyManagerAdapters.length.should.equal(1);
+      });
 
-      bowerJSON.dependencies.jquery.should.equal('2.1.3');
+      it('creates both adapters when it has both keys', function() {
+        var manager = new ScenarioManager({ config: { scenarios: [{ bower: {}, npm: {}}]}, project: {root: 'here'}});
+        manager.dependencyManagerAdapters[0].configKey.should.equal('npm');
+        manager.dependencyManagerAdapters[1].configKey.should.equal('bower');
+        manager.dependencyManagerAdapters.length.should.equal(2);
+      });
+
+      it('creates bower adapter when legacy dependenies key', function() {
+        var manager = new ScenarioManager({ config: { scenarios: [{ dependencies: {}}]}, project: {root: 'here'}});
+        manager.dependencyManagerAdapters[0].configKey.should.equal('bower');
+        manager.dependencyManagerAdapters.length.should.equal(1);
+      });
+
+      it('creates bower adapter when legacy devDependencies key', function() {
+        var manager = new ScenarioManager({ config: { scenarios: [{ devDependencies: {}}]}, project: {root: 'here'}});
+        manager.dependencyManagerAdapters[0].configKey.should.equal('bower');
+        manager.dependencyManagerAdapters.length.should.equal(1);
+      });
     });
+  });
 
-    it('should change specified bower dev dependency versions', function() {
-      var scenarioManager = new ScenarioManager();
-      var bowerJSON = { devDependencies: { jquery: '1.11.1' }, resolutions: {} };
-      var scenario =  { devDependencies: { jquery: '2.1.3' } };
+  describe('#setup', function() {
+    it('sets up each of the dependency managers', function() {
+      var calledFirstAdapter = false;
+      var calledSecondAdapter = false;
+      var fakeAdapters = [
+        new CoreObject({
+          setup: function() {
+            calledFirstAdapter = true;
+          }
+        }),
+        new CoreObject({
+          setup: function() {
+            calledSecondAdapter = true;
+          }
+        })
+      ];
 
-      bowerJSON = scenarioManager._bowerJSONForScenario(bowerJSON, scenario);
-
-      bowerJSON.devDependencies.jquery.should.equal('2.1.3');
+      return new ScenarioManager({dependencyManagerAdapters: fakeAdapters}).setup().then(function() {
+        calledFirstAdapter.should.equal(true);
+        calledSecondAdapter.should.equal(true);
+      });
     });
+  });
 
-    it('should add to resolutions', function() {
-      var scenarioManager = new ScenarioManager();
-      var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: {} };
-      var scenario =  { dependencies: { jquery: '2.1.3' } };
+  describe('#changeTo', function() {
+    it('changes dependency sets on each of the managers, and concats results', function() {
+      var fakeAdapters = [
+        new CoreObject({
+          changeToDependencySet: function() {
+            return RSVP.resolve(['a', 'b', 'r']);
+          }
+        }),
+        new CoreObject({
+          changeToDependencySet: function() {
+            return RSVP.resolve(['u', 'q', 'a']);
+          }
+        })
+      ];
 
-      bowerJSON = scenarioManager._bowerJSONForScenario(bowerJSON, scenario);
-
-      bowerJSON.resolutions.jquery.should.equal('2.1.3');
+      var manager = new ScenarioManager({dependencyManagerAdapters: fakeAdapters});
+      return manager.changeTo({}).then(function(results) {
+        results.should.containDeepOrdered(['a', 'b', 'r', 'u', 'q', 'a']);
+      });
     });
+  });
 
-    it('should set custom resolutions', function() {
-      var scenarioManager = new ScenarioManager();
-      var bowerJSON = { dependencies: { ember: '1.13.5' }, resolutions: {} };
-      var scenario =  {
-        dependencies: { ember: 'components/ember#canary' },
-        resolutions:  { ember: 'canary' }
-      };
+  describe('#cleanup', function() {
+    it('cleans up each dependency manager', function() {
+      var calledFirstAdapter = false;
+      var calledSecondAdapter = false;
+      var fakeAdapters = [
+        new CoreObject({
+          cleanup: function() {
+            calledFirstAdapter = true;
+          }
+        }),
+        new CoreObject({
+          cleanup: function() {
+            calledSecondAdapter = true;
+          }
+        })
+      ];
 
-      bowerJSON = scenarioManager._bowerJSONForScenario(bowerJSON, scenario);
-
-      bowerJSON.resolutions.ember.should.equal('canary');
+      return new ScenarioManager({dependencyManagerAdapters: fakeAdapters}).cleanup().then(function() {
+        calledFirstAdapter.should.equal(true);
+        calledSecondAdapter.should.equal(true);
+      });
     });
   });
 });

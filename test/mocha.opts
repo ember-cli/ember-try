@@ -1,3 +1,4 @@
 test/**/*.js
 --require should
 --ui bdd
+--timeout 15000
