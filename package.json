@@ -10,9 +10,9 @@
     "build": "ember build",
     "start": "ember server",
     "client-test": "ember try:testall",
-    "node-test": "node_modules/.bin/mocha .",
-    "lint": "node_modules/.bin/jshint lib test",
-    "jscs": "node_modules/.bin/jscs lib test",
+    "node-test": "mocha .",
+    "lint": "jshint lib test",
+    "jscs": "jscs lib test",
     "test": "npm run-script jscs && npm run-script lint && npm run-script node-test && npm run-script client-test"
   },
   "repository": "https://github.com/kategengler/ember-try",
