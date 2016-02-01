@@ -19,7 +19,15 @@ This addon provides a few commands:
 #### `ember try:testall`
 
 This command will run `ember test` with each scenario's specified in the config and exit appropriately.
-Especially useful to use on CI to test against multiple `ember` versions.
+
+This command is especially useful to use on CI to test against multiple `ember` versions.
+
+In order to use an alternate config path or to group various scenarios together in a single `try:testall` run, you can use
+the `--config-path` option.
+
+```
+  ember try:testall --config-path="config/legacy-scenarios.js"
+```
 
 #### `ember try <scenario> <command (Default: test)>`
 
@@ -43,6 +51,13 @@ When running in a CI environment where changes are discarded you can skip reseti
 ```
   ember try ember-1.11 test --skip-cleanup
 ```
+
+In order to use an alternate config path or to group various scenarios, you can use the `--config-path` option.
+
+```
+  ember try ember-1.13 test --config-path="config/legacy-scenarios.js"
+```
+
 
 #### `ember try:reset`
 
@@ -84,7 +99,7 @@ module.exports = {
           'ember': 'components/ember#canary'
         },
         resolutions: {
-          'ember': 'canary' 
+          'ember': 'canary'
         }
       }
     },
