@@ -1,3 +1,6 @@
+#v0.1.1
+- New configuration option `--config-file` courtesy of @rwjblue
+
 #v0.1.0
 - Feature: Support npm dependencies as well as bower
 - Feature: Improved results output
