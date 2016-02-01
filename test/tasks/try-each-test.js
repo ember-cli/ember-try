@@ -99,7 +99,7 @@ var config = {
   }]
 };
 
-describe.only('tryEach', function() {
+describe('tryEach', function() {
   beforeEach(function() {
     tmpdir = tmp.in(tmproot);
     process.chdir(tmpdir);
