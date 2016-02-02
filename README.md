@@ -16,7 +16,7 @@ Can only change versions for Ember 1.10+ due to template compiler changes that t
 
 This addon provides a few commands:
 
-#### `ember try:testall`
+### `ember try:testall`
 
 This command will run `ember test` with each scenario's specified in the config and exit appropriately.
 
@@ -28,6 +28,9 @@ the `--config-path` option.
 ```
   ember try:testall --config-path="config/legacy-scenarios.js"
 ```
+
+If you need to know the scenario that is being ran (i.e. to customize a test output file name) you can use the `EMBER_TRY_CURRENT_SCENARIO`
+environment variable.
 
 #### `ember try <scenario> <command (Default: test)>`
 
