@@ -375,6 +375,57 @@ describe('tryEach', function() {
         true.should.equal(false, 'Assertions should run');
       });
     });
+
+    it('sets EMBER_TRY_CURRENT_SCENARIO', function() {
+      // With stubbed dependency manager, timing out is warning for accidentally not using the stub
+      this.timeout(100);
+
+      var config = {
+        scenarios: [{
+          name: 'first',
+          dependencies: {
+            ember: '1.13.0'
+          }
+        }]
+      };
+
+      var output = [];
+      var outputFn = function(log) {
+        output.push(log);
+      };
+
+      var mockedExit = function(code) {
+        code.should.equal(0, 'exits 0 when all scenarios succeed');
+      };
+
+      var scenarios = [];
+      var mockRunCommand = function() {
+        var currentScenario = process.env.EMBER_TRY_CURRENT_SCENARIO;
+        scenarios.push(currentScenario);
+        return RSVP.resolve(true);
+      };
+
+      var TryEachTask = require('../../lib/tasks/try-each');
+      var tryEachTask = new TryEachTask({
+        ui: {writeLine: outputFn},
+        project: {root: tmpdir},
+        config: config,
+        commandArgs: ['serve'],
+        dependencyManagerAdapters: [new StubDependencyAdapter()],
+        _exit: mockedExit,
+        _runCommand: mockRunCommand
+      });
+
+      writeJSONFile('bower.json', fixtureBower);
+      return tryEachTask.run(config.scenarios, {}).then(function() {
+        scenarios.should.eql(['first']);
+        var currentScenarioIsUndefined = process.env.EMBER_TRY_CURRENT_SCENARIO === undefined;
+        currentScenarioIsUndefined.should.equal(true);
+      }).catch(function(err) {
+        console.log(err);
+        true.should.equal(false, 'Assertions should run');
+      });
+    });
   });
 
 });
