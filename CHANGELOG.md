@@ -1,3 +1,9 @@
+#v0.1.2
+- Exposes which scenario is currently running via  `EMBER_TRY_CURRENT_SCENARIO`
+  env var
+- Bugfix: Sometimes the table for display at the end wouldn't align 
+- Both are thanks to @rwjblue 
+
 #v0.1.1
 - New configuration option `--config-file` courtesy of @rwjblue
 
