@@ -62,6 +62,12 @@ In order to use an alternate config path or to group various scenarios, you can 
 ```
 
 
+#### `ember try:fastboot`
+
+This command installs `ember-cli-fastboot` and attempts to run `ember fastboot`, to determine FastBoot compatibility.
+There is one option, `timeout` (Default: 30000), which is used to determine success. If `ember fastboot` successfully 
+starts up a sever, this command waits until the timeout to declare success.
+
 #### `ember try:reset`
 
 This command restores the original `bower.json` from `bower.json.ember-try`, `rm -rf`s `bower_components` and runs `bower install`. For use if any of the other commands fail to clean up after (they run this by default on completion).
