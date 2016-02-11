@@ -61,7 +61,6 @@ In order to use an alternate config path or to group various scenarios, you can 
   ember try ember-1.13 test --config-path="config/legacy-scenarios.js"
 ```
 
-
 #### `ember try:reset`
 
 This command restores the original `bower.json` from `bower.json.ember-try`, `rm -rf`s `bower_components` and runs `bower install`. For use if any of the other commands fail to clean up after (they run this by default on completion).
