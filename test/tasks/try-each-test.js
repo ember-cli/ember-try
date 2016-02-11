@@ -119,7 +119,7 @@ describe('tryEach', function() {
 
   describe('with legacy config', function() {
     it('succeeds when scenario\'s tests succeed', function() {
-      this.timeout(15000);
+      this.timeout(30000);
 
       var mockedRun = function(_, args) {
         if (args[1].indexOf('test') > -1) {
@@ -166,7 +166,7 @@ describe('tryEach', function() {
 
 
     it('fails scenarios when scenario\'s tests fail', function() {
-      this.timeout(15000);
+      this.timeout(30000);
 
       var runTestCount = 0;
       var mockedRun = function(_, args) {
