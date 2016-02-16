@@ -9,7 +9,7 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "client-test": "ember try:testall",
+    "client-test": "./all-commands.sh",
     "node-test": "mocha .",
     "lint": "jshint lib test",
     "jscs": "jscs lib test",
