@@ -1,3 +1,6 @@
+#v0.1.3
+- Bugfix: Passing options to `ember try <scenario> <command>` was broken.  
+
 #v0.1.2
 - Exposes which scenario is currently running via  `EMBER_TRY_CURRENT_SCENARIO`
   env var
