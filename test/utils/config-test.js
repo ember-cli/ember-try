@@ -56,7 +56,7 @@ describe('utils/config', function() {
 
   it('uses specified options.configFile over project config/ember-try.js', function() {
     generateConfigFile('module.exports = { scenarios: [ { qux: "baz" }] };', 'non-default.js');
-    generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };'); // should not be used
+    generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };'); // Should not be used
 
     var config = getConfig({ project: project, configPath: 'config/non-default.js' });
     config.scenarios.should.have.length(1);

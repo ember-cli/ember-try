@@ -38,13 +38,13 @@ describe('bowerAdapter', function() {
     it('accounts for legacy format', function() {
       var scenarioDepSet = {
         dependencies: {
-          "ember": "components/ember#beta"
+          ember: 'components/ember#beta'
         },
         devDependencies: {
-          "ember-data": "~2.2.0"
+          'ember-data': '~2.2.0'
         },
         resolutions: {
-          "ember": "beta"
+          ember: 'beta'
         }
       };
       var results = new BowerAdapter({cwd: tmpdir})._getDependencySetAccountingForDeprecatedTopLevelKeys(scenarioDepSet);
@@ -55,23 +55,23 @@ describe('bowerAdapter', function() {
       var scenarioDepSet = {
         bower: {
           dependencies: {
-            "ember": "components/ember#release"
+            ember: 'components/ember#release'
           },
           devDependencies: {
-            "ember-data": "~2.1.0"
+            'ember-data': '~2.1.0'
           },
           resolutions: {
-            "ember": "release"
+            ember: 'release'
           }
         },
         dependencies: {
-          "ember": "components/ember#beta"
+          ember: 'components/ember#beta'
         },
         devDependencies: {
-          "ember-data": "~2.2.0"
+          'ember-data': '~2.2.0'
         },
         resolutions: {
-          "ember": "beta"
+          ember: 'beta'
         }
       };
 

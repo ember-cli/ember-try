@@ -1,6 +1,15 @@
 {
   "name": "a-test-project",
   "devDependencies": {
-    "ember-data": "2.3.3"
-  }
+    "ember-feature-flags": "2.0.0"
+  },
+  "repository": "kategengler/ember-try",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A test thing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": ""
 }
