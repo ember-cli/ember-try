@@ -48,11 +48,11 @@ or
   ember try ember-1.11-with-ember-data-beta-16 serve
 ```
 
-When running in a CI environment where changes are discarded you can skip reseting your environment back to its original state by specifying --skip-cleanup as an option to ember try.
+When running in a CI environment where changes are discarded you can skip reseting your environment back to its original state by specifying --skip-cleanup=true as an option to ember try.
 *Warning: If you use this option and, without cleaning up, build and deploy as the result of a passing test suite, it will build with the last set of dependencies ember try was run with.*
 
 ```
-  ember try ember-1.11 test --skip-cleanup
+  ember try ember-1.11 test --skip-cleanup=true
 ```
 
 In order to use an alternate config path or to group various scenarios, you can use the `--config-path` option.
