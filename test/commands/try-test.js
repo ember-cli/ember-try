@@ -9,13 +9,13 @@ describe('commands/try', function() {
     it('removes `--skip-cleanup` from resulting arguments', function() {
       var args = TryCommand.getCommand(['ember', 'try', 'foo-bar-scenario', 'build', '--skip-cleanup']);
 
-      args.should.eql(['build']);
+      args.should.eql(['ember', 'build']);
     });
 
     it('removes `--config-path` from resulting arguments', function() {
       var args = TryCommand.getCommand(['ember', 'try', 'foo-bar-scenario', 'build', '--config-path']);
 
-      args.should.eql(['build']);
+      args.should.eql(['ember', 'build']);
     });
 
     it('removes both `--config-path` and `--skip-cleanup` from resulting arguments', function() {
@@ -23,13 +23,13 @@ describe('commands/try', function() {
         'ember', 'try', 'foo-bar-scenario', 'build', '--config-path', '--skip-cleanup'
       ]);
 
-      args.should.eql(['build']);
+      args.should.eql(['ember', 'build']);
     });
 
     it('adds `test` if no other subcommand arguments were supplied', function() {
       var args = TryCommand.getCommand(['ember', 'try', 'foo-bar-scenario']);
 
-      args.should.eql(['test']);
+      args.should.eql(['ember', 'test']);
     });
   });
 

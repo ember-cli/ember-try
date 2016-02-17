@@ -9,6 +9,7 @@ var mockery       = require('mockery');
 
 /* The first two of the tests in this file intentionally DO NOT stub dependency manager adapter*/
 var StubDependencyAdapter = require('../helpers/stub-dependency-manager-adapter');
+var generateMockRun = require('../helpers/generate-mock-run');
 
 var remove = RSVP.denodeify(fs.remove);
 var root = process.cwd();
@@ -121,15 +122,9 @@ describe('tryEach', function() {
     it('succeeds when scenario\'s tests succeed', function() {
       this.timeout(30000);
 
-      var mockedRun = function(_, args) {
-        if (args[1].indexOf('test') > -1) {
-          return RSVP.resolve(0);
-        } else {
-          var regularRun = require('../../lib/utils/run');
-          return regularRun.apply(this, arguments);
-        }
-      };
-
+      var mockedRun = generateMockRun('ember test', function() {
+        return RSVP.resolve(0);
+      });
       mockery.registerMock('./run', mockedRun);
 
       var output = [];
@@ -169,19 +164,14 @@ describe('tryEach', function() {
       this.timeout(30000);
 
       var runTestCount = 0;
-      var mockedRun = function(_, args) {
-        if (args[1].indexOf('test') > -1) {
-          runTestCount++;
-          if (runTestCount == 1) {
-            return RSVP.reject(1);
-          } else {
-            return RSVP.resolve(0);
-          }
+      var mockedRun = generateMockRun('ember test', function() {
+        runTestCount++;
+        if (runTestCount == 1) {
+          return RSVP.reject(1);
         } else {
-          var regularRun = require('../../lib/utils/run');
-          return regularRun.apply(this, arguments);
+          return RSVP.resolve(0);
         }
-      };
+      });
 
       mockery.registerMock('./run', mockedRun);
 
@@ -223,14 +213,9 @@ describe('tryEach', function() {
     it('succeeds when scenario\'s tests succeed', function() {
       this.timeout(300000);
 
-      var mockedRun = function(cmd, args, opts) {
-        if (args && args.length > 1 && args[1].indexOf('test') > -1) {
-          return RSVP.resolve(0);
-        } else {
-          var regularRun = require('../../lib/utils/run');
-          return regularRun.apply(this, arguments);
-        }
-      };
+      var mockedRun = generateMockRun('ember test', function() {
+        return RSVP.resolve(0);
+      });
 
       mockery.registerMock('./run', mockedRun);
 
@@ -270,19 +255,14 @@ describe('tryEach', function() {
       this.timeout(300000);
 
       var runTestCount = 0;
-      var mockedRun = function(_, args) {
-        if (args && args.length > 1 && args[1].indexOf('test') > -1) {
-          runTestCount++;
-          if (runTestCount == 1) {
-            return RSVP.reject(1);
-          } else {
-            return RSVP.resolve(0);
-          }
+      var mockedRun = generateMockRun('ember test', function() {
+        runTestCount++;
+        if (runTestCount == 1) {
+          return RSVP.reject(1);
         } else {
-          var regularRun = require('../../lib/utils/run');
-          return regularRun.apply(this, arguments);
+          return RSVP.resolve(0);
         }
-      };
+      });
 
       mockery.registerMock('./run', mockedRun);
 
@@ -335,17 +315,12 @@ describe('tryEach', function() {
         }]
       };
       var passedInOptions = false;
-      var mockedRun = function(_, args, options) {
-        if (args[1].indexOf('serve') > -1) {
-          if(options.timeout && options.timeout.length == 20000 && options.timeout.isSuccess) {
-            passedInOptions = true;
-          }
-          return RSVP.resolve(0);
-        } else {
-          var regularRun = require('../../lib/utils/run');
-          return regularRun.apply(this, arguments);
+      var mockedRun = generateMockRun('ember serve', function(command, args, options) {
+        if (options.timeout && options.timeout.length == 20000 && options.timeout.isSuccess) {
+          passedInOptions = true;
         }
-      };
+        return RSVP.resolve(0);
+      });
 
       mockery.registerMock('./run', mockedRun);
 
@@ -363,7 +338,7 @@ describe('tryEach', function() {
         ui: {writeLine: outputFn},
         project: {root: tmpdir},
         config: config,
-        commandArgs: ['serve'],
+        commandArgs: ['ember', 'serve'],
         commandOptions: { timeout: { length: 20000, isSuccess: true }},
         dependencyManagerAdapters: [new StubDependencyAdapter()],
         _exit: mockedExit
@@ -379,58 +354,128 @@ describe('tryEach', function() {
       });
     });
 
-    it('allows passing in of the command to run', function() {
-      // With stubbed dependency manager, timing out is warning for accidentally not using the stub
-      this.timeout(100);
+    describe('configurable command', function() {
+      it('allows passing in of the command to run', function() {
+        // With stubbed dependency manager, timing out is warning for accidentally not using the stub
+        this.timeout(100);
 
-      var config = {
-        scenarios: [{
-          name: 'first',
-          dependencies: {
-            ember: '1.13.0'
-          }
-        }]
-      };
-      var ranPassedInCommand = false;
-      var mockedRun = function(_, args) {
-        if (args[1].indexOf('serve') > -1) {
+        var config = {
+          command: 'ember test-this',
+          scenarios: [{
+            name: 'first',
+            dependencies: {
+              ember: '1.13.0'
+            }
+          }]
+        };
+        var ranPassedInCommand = false;
+        var mockedRun = generateMockRun('ember serve', function() {
           ranPassedInCommand = true;
           return RSVP.resolve(0);
-        } else {
-          var regularRun = require('../../lib/utils/run');
-          return regularRun.apply(this, arguments);
-        }
-      };
+        });
+        mockery.registerMock('./run', mockedRun);
 
-      mockery.registerMock('./run', mockedRun);
+        var output = [];
+        var outputFn = function(log) {
+          output.push(log);
+        };
 
-      var output = [];
-      var outputFn = function(log) {
-        output.push(log);
-      };
+        var mockedExit = function(code) {
+          code.should.equal(0, 'exits 0 when all scenarios succeed');
+        };
 
-      var mockedExit = function(code) {
-        code.should.equal(0, 'exits 0 when all scenarios succeed');
-      };
+        var TryEachTask = require('../../lib/tasks/try-each');
+        var tryEachTask = new TryEachTask({
+          ui: {writeLine: outputFn},
+          project: {root: tmpdir},
+          config: config,
+          commandArgs: ['ember', 'serve'],
+          dependencyManagerAdapters: [new StubDependencyAdapter()],
+          _exit: mockedExit
+        });
 
-      var TryEachTask = require('../../lib/tasks/try-each');
-      var tryEachTask = new TryEachTask({
-        ui: {writeLine: outputFn},
-        project: {root: tmpdir},
-        config: config,
-        commandArgs: ['serve'],
-        dependencyManagerAdapters: [new StubDependencyAdapter()],
-        _exit: mockedExit
+        return tryEachTask.run(config.scenarios, {}).then(function() {
+          output.should.containEql('Scenario first: SUCCESS');
+          ranPassedInCommand.should.equal(true, 'Should run the passed in command');
+        }).catch(function(err) {
+          console.log(err);
+          true.should.equal(false, 'Assertions should run');
+        });
       });
 
-      writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(config.scenarios, {}).then(function() {
-        output.should.containEql('Scenario first: SUCCESS');
-        ranPassedInCommand.should.equal(true, 'Should run the passed in command');
-      }).catch(function(err) {
-        console.log(err);
-        true.should.equal(false, 'Assertions should run');
+      it('uses command from config', function() {
+        // With stubbed dependency manager, timing out is warning for accidentally not using the stub
+        this.timeout(100);
+
+        var config = {
+          command: 'ember test --test-port=2345',
+          scenarios: [{
+            name: 'first',
+            dependencies: {
+              ember: '1.13.0'
+            }
+          },{
+            name: 'second',
+            dependencies: {
+              ember: '2.2.0'
+            }
+          },{
+            name: 'different',
+            command: 'npm run-script different',
+            dependencies: {
+              ember: '2.0.0'
+            }
+          }]
+        };
+
+        var ranDefaultCommandCount = 0;
+        var ranScenarioCommandCount = 0;
+        var mockedRun = generateMockRun([{
+          command: 'ember test --test-port=2345',
+          callback: function() {
+            ranDefaultCommandCount++;
+            return RSVP.resolve(0);
+          }
+        },{
+          command: 'npm run-script different',
+          callback: function() {
+            ranScenarioCommandCount++;
+            return RSVP.resolve(0);
+          }
+        }]);
+        mockery.registerMock('./run', mockedRun);
+
+        var output = [];
+        var outputFn = function(log) {
+          output.push(log);
+        };
+
+        var mockedExit = function(code) {
+          code.should.equal(0, 'exits 0 when all scenarios succeed');
+        };
+
+        var TryEachTask = require('../../lib/tasks/try-each');
+        var tryEachTask = new TryEachTask({
+          ui: {writeLine: outputFn},
+          project: {root: tmpdir},
+          config: config,
+          dependencyManagerAdapters: [new StubDependencyAdapter()],
+          _exit: mockedExit
+        });
+
+        return tryEachTask.run(config.scenarios, {}).then(function() {
+          output.should.containEql('Scenario first: SUCCESS');
+          output.should.containEql('Scenario second: SUCCESS');
+          output.should.containEql('Scenario different: SUCCESS');
+
+          ranDefaultCommandCount.should.equal(2, 'Should run the default command scenarios without their own commands specified');
+          ranScenarioCommandCount.should.equal(1, 'Should run the scenario command for scenario that specified it');
+        }).catch(function(err) {
+          console.log(err);
+          true.should.equal(false, 'Assertions should run');
+        });
       });
+
     });
 
     it('allows passing options to the command run', function() {
@@ -460,7 +505,7 @@ describe('tryEach', function() {
         ui: {writeLine: outputFn},
         project: {root: tmpdir},
         config: config,
-        commandArgs: ['help', '--json', 'true'],
+        commandArgs: ['ember', 'help', '--json', 'true'],
         dependencyManagerAdapters: [new StubDependencyAdapter()],
         _exit: mockedExit
       });
@@ -507,7 +552,6 @@ describe('tryEach', function() {
         ui: {writeLine: outputFn},
         project: {root: tmpdir},
         config: config,
-        commandArgs: ['serve'],
         dependencyManagerAdapters: [new StubDependencyAdapter()],
         _exit: mockedExit,
         _runCommand: mockRunCommand
