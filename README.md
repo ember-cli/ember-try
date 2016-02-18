@@ -16,17 +16,17 @@ Can only change versions for Ember 1.10+ due to template compiler changes that t
 
 This addon provides a few commands:
 
-### `ember try:testall`
+### `ember try:each`
 
-This command will run `ember test` with each scenario's specified in the config and exit appropriately.
+This command will run `ember test` or the configured command with each scenario's specified in the config and exit appropriately.
 
 This command is especially useful to use on CI to test against multiple `ember` versions.
 
-In order to use an alternate config path or to group various scenarios together in a single `try:testall` run, you can use
+In order to use an alternate config path or to group various scenarios together in a single `try:each` run, you can use
 the `--config-path` option.
 
 ```
-  ember try:testall --config-path="config/legacy-scenarios.js"
+  ember try:each --config-path="config/legacy-scenarios.js"
 ```
 
 If you need to know the scenario that is being ran (i.e. to customize a test output file name) you can use the `EMBER_TRY_CURRENT_SCENARIO`
@@ -34,7 +34,7 @@ environment variable.
 
 #### `ember try <scenario> <command (Default: test)>`
 
-This command will run any `ember-cli` command with the specified scenario. The command will default to `ember test`.
+This command will run any `ember-cli` command with the specified scenario. The command will default to `ember test`, if no command is specified on the command-line or in configuration.
 
 For example:
 
@@ -48,7 +48,7 @@ or
   ember try ember-1.11-with-ember-data-beta-16 serve
 ```
 
-When running in a CI environment where changes are discarded you can skip reseting your environment back to its original state by specifying --skip-cleanup=true as an option to ember try.
+When running in a CI environment where changes are discarded you can skip resetting your environment back to its original state by specifying --skip-cleanup=true as an option to ember try.
 *Warning: If you use this option and, without cleaning up, build and deploy as the result of a passing test suite, it will build with the last set of dependencies ember try was run with.*
 
 ```
@@ -65,15 +65,32 @@ In order to use an alternate config path or to group various scenarios, you can 
 
 This command restores the original `bower.json` from `bower.json.ember-try`, `rm -rf`s `bower_components` and runs `bower install`. For use if any of the other commands fail to clean up after (they run this by default on completion).
 
+
+#### ember try:testall
+
+Deprecated. This command was renamed to `ember try:each` to better reflect what it does. This command still works, though.
+
+
 ### Config
 
 Configuration will be read from a file in your ember app in `config/ember-try.js`. It should look like:
 
 ```js
 module.exports = {
+  /*
+    `command` - a single command that, if set, will be the default command used by `ember-try`.
+    P.S. The command doesn't need to be an `ember <something>` command, they can be anything.
+    Keep in mind that this config file is JavaScript, so you can code in here to determine the command. 
+  */
+  command: 'ember test --reporter xunit'
   scenarios: [
     {
       name: 'Ember 1.10 with ember-data',
+      
+      /*
+        `command` can also be overridden at the scenario level. 
+      */
+      command: 'ember test --filter ember-1-10'
       bower: {
         dependencies: {
           'ember': '1.10.0',
