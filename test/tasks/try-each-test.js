@@ -542,7 +542,7 @@ describe('tryEach', function() {
 
       it('allows passing options to the command run', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
-        this.timeout(5000);
+        this.timeout(10000);
 
         var config = {
           scenarios: [{
