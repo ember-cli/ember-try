@@ -7,9 +7,10 @@ module.exports = function generateMockRun() {
   }
 
   return function mockRun(actualCommand, actualArgs, opts) {
-    var matchingRun = mockedRuns.find(function(mockedRun) {
+    var matchingRuns = mockedRuns.filter(function(mockedRun) {
       return isCommandMocked(mockedRun, actualCommand, actualArgs);
     });
+    var matchingRun= matchingRuns[0];
 
     if (matchingRun) {
       return matchingRun.callback(actualCommand, actualArgs, opts);
