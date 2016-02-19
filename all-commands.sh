@@ -15,7 +15,7 @@ ember try:each --config-path='test/fixtures/dummy-ember-try-config.js'
 # both ember-try options
 ember try:each --config-path='test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
 
-# try:testall
+# try:testall (Deprecated)
 ember try:testall
 
 # all styles of options for ember-try's own option
@@ -29,7 +29,7 @@ ember try:testall --config-path='test/fixtures/dummy-ember-try-config.js'
 # both ember-try options
 ember try:testall --config-path='test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
 
-# try <scenario>
+# try <scenario>  (Deprecated)
 ember try default
 
 # custom command
@@ -55,6 +55,32 @@ ember try default help --json true
 
 # custom command mixed with ember try's own option
 ember try default help --json --skip-cleanup
+
+# try:one <scenario>
+ember try:one default
+
+# custom command
+ember try:one default --- ember help
+
+# skip-cleanup option
+ember try:one default --skip-cleanup
+ember try:one default --skip-cleanup=true
+ember try:one default --skip-cleanup true
+
+# config-path option
+ember try:one test1 --config-path='test/fixtures/dummy-ember-try-config.js'
+
+# both ember-try options
+ember try:one test1 --config-path='test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
+
+# custom command with all styles of options
+ember try:one default --- ember help --json
+ember try:one default --- ember help --json=true
+ember try:one default --- ember help --json true
+
+# custom command mixed with ember try's own option
+ember try:one default --skip-cleanup --- ember help --json
+
 
 # try:reset
 ember try:reset
