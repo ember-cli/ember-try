@@ -6,6 +6,7 @@ var tmp           = require('tmp-sync');
 var fixturePackage  = require('./fixtures/package.json');
 var NpmAdapter  = require('../lib/utils/npm-adapter');
 var writeJSONFile = require('./helpers/write-json-file');
+var generateMockRun = require('./helpers/generate-mock-run');
 
 var remove = RSVP.denodeify(fs.remove);
 var stat = RSVP.denodeify(fs.stat);
@@ -42,21 +43,51 @@ describe('npmAdapter', function() {
   describe('#_install', function() {
     it('runs npm prune and npm install', function() {
       writeJSONFile('package.json', fixturePackage);
-      var runCount = 1;
-      var stubbedRun = function(command, args, opts) {
-        command.should.equal('npm');
-        if (runCount == 1) {
-          args[0].should.equal('install');
-        } else {
-          args[0].should.equal('prune');
+      var runCount = 0;
+      var stubbedRun = generateMockRun([{
+        command: 'npm install',
+        callback: function(command, args, opts) {
+          runCount++;
+          opts.should.have.property('cwd', tmpdir);
+          return RSVP.resolve();
         }
-        opts.should.have.property('cwd', tmpdir);
-        runCount++;
-        return new RSVP.Promise(function(resolve, reject) {
-          resolve();
-        });
-      };
-      return new NpmAdapter({cwd: tmpdir, run: stubbedRun})._install().catch(function(err) {
+      }, {
+        command: 'npm prune',
+        callback: function(command, args, opts) {
+          runCount++;
+          opts.should.have.property('cwd', tmpdir);
+          return RSVP.resolve();
+        }
+      }], { allowPassthrough: false });
+
+      return new NpmAdapter({cwd: tmpdir, run: stubbedRun})._install().then(function() {
+        runCount.should.equal(2, 'Both commands should run');
+      }).catch(function(err) {
+        console.log(err);
+        true.should.equal(false, 'Error should not happen');
+      });
+    });
+
+    it('uses managerOptions for npm commands', function() {
+      writeJSONFile('package.json', fixturePackage);
+      var runCount = 0;
+      var stubbedRun = generateMockRun([{
+        command: 'npm install --no-shrinkwrap=true',
+        callback: function() {
+          runCount++;
+          return RSVP.resolve();
+        }
+      }, {
+        command: 'npm prune --no-shrinkwrap=true',
+        callback: function() {
+          runCount++;
+          return RSVP.resolve();
+        }
+      }], { allowPassthrough: false });
+
+      return new NpmAdapter({cwd: tmpdir, run: stubbedRun, managerOptions: ['--no-shrinkwrap=true']})._install().then(function() {
+        runCount.should.equal(2, 'Both commands should run');
+      }).catch(function(err) {
         console.log(err);
         true.should.equal(false, 'Error should not happen');
       });

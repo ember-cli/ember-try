@@ -83,6 +83,14 @@ module.exports = {
     Keep in mind that this config file is JavaScript, so you can code in here to determine the command. 
   */
   command: 'ember test --reporter xunit'
+  /*
+    `bowerOptions` - options to be passed to `bower`.
+  */
+  bowerOptions: ['--allow-root=true'],
+  /*
+    `npmOptions` - options to be passed to `npm`.
+  */
+  npmOptions: ['--loglevel=silent', '--no-shrinkwrap=true'],
   scenarios: [
     {
       name: 'Ember 1.10 with ember-data',
