@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 set -ex
 
+# try:each
+ember try:each
+
+# all styles of options for ember-try's own option
+ember try:each --skip-cleanup
+ember try:each --skip-cleanup=true
+ember try:each --skip-cleanup true
+
+# config-path option
+ember try:each --config-path='test/fixtures/dummy-ember-try-config.js'
+
+# both ember-try options
+ember try:each --config-path='test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
+
 # try:testall
 ember try:testall
 

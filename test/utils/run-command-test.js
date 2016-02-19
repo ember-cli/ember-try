@@ -29,7 +29,7 @@ describe('utils/run-command', function() {
 
     var runCommand  = require('../../lib/utils/run-command');
 
-    return runCommand('rootPath', ['help', '--json', 'true'], {}).then(function(result){
+    return runCommand('rootPath', ['ember', 'help', '--json', 'true'], {}).then(function(result){
       result.should.equal(true);
     });
   });

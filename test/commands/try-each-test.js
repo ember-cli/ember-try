@@ -1,8 +1,8 @@
 var should         = require('should');
-var TestallCommand = require('../../lib/commands/testall');
+var TryEachCommand = require('../../lib/commands/try-each');
 
-var origTryEachTask = TestallCommand._TryEachTask;
-var origGetConfig = TestallCommand._getConfig;
+var origTryEachTask = TryEachCommand._TryEachTask;
+var origGetConfig = TryEachCommand._getConfig;
 
 describe('commands/testall', function() {
   describe('#run', function() {
@@ -12,28 +12,28 @@ describe('commands/testall', function() {
     MockTryEachTask.prototype.run = function() { };
 
     beforeEach(function() {
-      TestallCommand._getConfig = function() {
+      TryEachCommand._getConfig = function() {
         return mockConfig || { scenarios: [ ] };
       };
 
-      TestallCommand._TryEachTask = MockTryEachTask;
+      TryEachCommand._TryEachTask = MockTryEachTask;
     });
 
     afterEach(function() {
-      TestallCommand._TryEachTask = origTryEachTask;
-      TestallCommand._getConfig = origGetConfig;
+      TryEachCommand._TryEachTask = origTryEachTask;
+      TryEachCommand._getConfig = origGetConfig;
       mockConfig = null;
     });
 
     it('should pass the configPath to _getConfig', function() {
       var configPath;
-      TestallCommand._getConfig = function(options) {
+      TryEachCommand._getConfig = function(options) {
         configPath = options.configPath;
 
         return { scenarios: [ { name: 'foo' }]};
       };
 
-      TestallCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
+      TryEachCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
       configPath.should.equal('foo/bar/widget.js');
     });
   });
