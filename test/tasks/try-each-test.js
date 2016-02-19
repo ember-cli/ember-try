@@ -359,6 +359,179 @@ describe('tryEach', function() {
       });
     });
 
+    describe('allowedToFail', function() {
+      it('exits appropriately if all failures were allowedToFail', function() {
+        // With stubbed dependency manager, timing out is warning for accidentally not using the stub
+        this.timeout(100);
+
+        var config = {
+          scenarios: [{
+            name: 'first',
+            allowedToFail: true,
+            dependencies: {
+              ember: '1.13.0'
+            }
+          },{
+            name: 'second',
+            allowedToFail: true,
+            dependencies: {
+              ember: '2.2.0'
+            }
+          }]
+        };
+
+        var ranDefaultCommandCount = 0;
+        var ranScenarioCommandCount = 0;
+        var mockedRun = generateMockRun('ember test', function() {
+          return RSVP.reject(1);
+        });
+        mockery.registerMock('./run', mockedRun);
+
+        var output = [];
+        var outputFn = function(log) {
+          output.push(log);
+        };
+        var exitCode;
+        var mockedExit = function(code) {
+          exitCode = code;
+        };
+
+        var TryEachTask = require('../../lib/tasks/try-each');
+        var tryEachTask = new TryEachTask({
+          ui: {writeLine: outputFn},
+          project: {root: tmpdir},
+          config: config,
+          dependencyManagerAdapters: [new StubDependencyAdapter()],
+          _on: function() {},
+          _exit: mockedExit
+        });
+
+        return tryEachTask.run(config.scenarios, {}).then(function() {
+          output.should.containEql('Scenario first: FAIL (Allowed)');
+          output.should.containEql('Scenario second: FAIL (Allowed)');
+          output.should.containEql('2 scenarios failed (2 allowed)');
+          exitCode.should.equal(0, 'exits 0 when all failures were allowed');
+        }).catch(function(err) {
+          console.log(err);
+          true.should.equal(false, 'Assertions should run');
+        });
+      });
+
+      it('exits appropriately if any failures were not allowedToFail', function() {
+        // With stubbed dependency manager, timing out is warning for accidentally not using the stub
+        this.timeout(100);
+
+        var config = {
+          scenarios: [{
+            name: 'first',
+            dependencies: {
+              ember: '1.13.0'
+            }
+          },{
+            name: 'second',
+            allowedToFail: true,
+            dependencies: {
+              ember: '2.2.0'
+            }
+          }]
+        };
+
+        var ranDefaultCommandCount = 0;
+        var ranScenarioCommandCount = 0;
+        var mockedRun = generateMockRun('ember test', function() {
+          return RSVP.reject(1);
+        });
+        mockery.registerMock('./run', mockedRun);
+
+        var output = [];
+        var outputFn = function(log) {
+          output.push(log);
+        };
+        var exitCode;
+        var mockedExit = function(code) {
+          exitCode = code;
+        };
+
+        var TryEachTask = require('../../lib/tasks/try-each');
+        var tryEachTask = new TryEachTask({
+          ui: {writeLine: outputFn},
+          project: {root: tmpdir},
+          config: config,
+          dependencyManagerAdapters: [new StubDependencyAdapter()],
+          _on: function() {},
+          _exit: mockedExit
+        });
+
+        return tryEachTask.run(config.scenarios, {}).then(function() {
+          output.should.containEql('Scenario first: FAIL');
+          output.should.containEql('Scenario second: FAIL (Allowed)');
+          output.should.containEql('2 scenarios failed (1 allowed)');
+          exitCode.should.equal(1, 'exits 1 when any failures were NOT allowed');
+        }).catch(function(err) {
+          console.log(err);
+          true.should.equal(false, 'Assertions should run');
+        });
+      });
+
+      it('exits appropriately if all allowedToFail pass', function() {
+        // With stubbed dependency manager, timing out is warning for accidentally not using the stub
+        this.timeout(100);
+
+        var config = {
+          scenarios: [{
+            name: 'first',
+            allowedToFail: true,
+            dependencies: {
+              ember: '1.13.0'
+            }
+          },{
+            name: 'second',
+            allowedToFail: true,
+            dependencies: {
+              ember: '2.2.0'
+            }
+          }]
+        };
+
+        var ranDefaultCommandCount = 0;
+        var ranScenarioCommandCount = 0;
+        var mockedRun = generateMockRun('ember test', function() {
+          return RSVP.resolve(0);
+        });
+        mockery.registerMock('./run', mockedRun);
+
+        var output = [];
+        var outputFn = function(log) {
+          output.push(log);
+        };
+        var exitCode;
+        var mockedExit = function(code) {
+          exitCode = code;
+        };
+
+        var TryEachTask = require('../../lib/tasks/try-each');
+        var tryEachTask = new TryEachTask({
+          ui: {writeLine: outputFn},
+          project: {root: tmpdir},
+          config: config,
+          dependencyManagerAdapters: [new StubDependencyAdapter()],
+          _on: function() {},
+          _exit: mockedExit
+        });
+
+        return tryEachTask.run(config.scenarios, {}).then(function() {
+          output.should.containEql('Scenario first: SUCCESS');
+          output.should.containEql('Scenario second: SUCCESS');
+          output.should.containEql('All 2 scenarios succeeded');
+          exitCode.should.equal(0, 'exits 0 when all pass');
+        }).catch(function(err) {
+          console.log(err);
+          true.should.equal(false, 'Assertions should run');
+        });
+      });
+
+    });
+
     describe('configurable command', function() {
       it('defaults to `ember test`', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
