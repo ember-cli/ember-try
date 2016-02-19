@@ -1,9 +1,13 @@
+var extend = require('extend');
+
 module.exports = function generateMockRun() {
   var mockedRuns = [];
+  var options = { allowPassthrough: true };
   if (typeof arguments[0] === 'string') {
     mockedRuns.push({ command: arguments[0], callback: arguments[1] });
   } else {
     mockedRuns = arguments[0];
+    options = extend({}, options, arguments[1]);
   }
 
   return function mockRun(actualCommand, actualArgs, opts) {
@@ -15,7 +19,11 @@ module.exports = function generateMockRun() {
     if (matchingRun) {
       return matchingRun.callback(actualCommand, actualArgs, opts);
     } else {
-      return passthrough().apply(this, arguments);
+      if(options.allowPassthrough) {
+        return passthrough().apply(this, arguments);
+      } else {
+        throw new Error(actualCommand + ' ' + actualArgs.join(' ') + ' not stubbed and not allowed to passthrough');
+      }
     }
   };
 };

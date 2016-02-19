@@ -108,11 +108,23 @@ describe('bowerAdapter', function() {
         args[1].should.equal('install');
         args[2].should.equal('--config.interactive=false');
         opts.should.have.property('cwd', tmpdir);
-        return new RSVP.Promise(function(resolve, reject) {
-          resolve();
-        });
+        return RSVP.resolve();
       };
       return new BowerAdapter({cwd: tmpdir, run: stubbedRun})._install();
+    });
+
+    it('runs bower install including managerOptions', function() {
+      writeJSONFile('bower.json', fixtureBower);
+      var stubbedRun = function(command, args, opts) {
+        command.should.equal('node');
+        args[0].should.match(/bower/);
+        args[1].should.equal('install');
+        args[2].should.equal('--config.interactive=false');
+        args[3].should.equal('--verbose=true');
+        args[4].should.equal('--allow-root=true');
+        return RSVP.resolve();
+      };
+      return new BowerAdapter({cwd: tmpdir, run: stubbedRun, managerOptions: ['--verbose=true', '--allow-root=true']})._install();
     });
   });
 
