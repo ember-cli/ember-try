@@ -116,6 +116,10 @@ module.exports = {
     },
     {
       name: 'Ember canary with Ember-Data 2.3.0',
+      /*
+        `allowedToFail` - If true, if this scenario fails it will not fail the entire try command.
+      */
+      allowedToFail: true,
       npm: {
         devDependencies: {
           'ember-data': '2.3.0'
