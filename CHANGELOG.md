@@ -1,3 +1,12 @@
+#v0.2.0
+- Feature: New command `ember try:one <scenario-name>`, replacement for `ember try <scenario-name>` with different command line signature to better accommodate passing options to the command that is run.
+- Feature: New command `ember try:each`, replacement for `ember try:testall`, but with a better name for what it can now do. 
+- Feature: New configuration option, `command`, top level and within each scenario to set the command that wil be used by `ember-try`.
+- Feature: New configuration option, per scenario, `allowedToFail`. If set, `ember-try` will not fail the overall command if the scenario fails.
+- Feature: New configuration options, `bowerOptions` and `npmOptions`; these are passed to `bower` and `npm`, respectively, when used by `ember-try`.
+- Deprecation: `ember try <scenario-name>` command is deprecated and replaced with `ember try:one <scenario-name>`
+- Deprecation: `ember try:testall` command is deprecated and replaced with `ember try:each`.
+
 #v0.1.3
 - Bugfix: Passing options to `ember try <scenario> <command>` was broken.  
 
