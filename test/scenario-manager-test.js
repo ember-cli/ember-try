@@ -1,7 +1,7 @@
+var expect          = require('chai').expect;
 var ScenarioManager = require('../lib/utils/scenario-manager');
-var CoreObject = require('core-object');
-var RSVP = require('rsvp');
-var should = require('should');
+var CoreObject      = require('core-object');
+var RSVP            = require('rsvp');
 
 describe('scenarioManager', function() {
 
@@ -23,8 +23,8 @@ describe('scenarioManager', function() {
       ];
 
       return new ScenarioManager({dependencyManagerAdapters: fakeAdapters}).setup().then(function() {
-        calledFirstAdapter.should.equal(true);
-        calledSecondAdapter.should.equal(true);
+        expect(calledFirstAdapter).to.equal(true);
+        expect(calledSecondAdapter).to.equal(true);
       });
     });
   });
@@ -46,7 +46,7 @@ describe('scenarioManager', function() {
 
       var manager = new ScenarioManager({dependencyManagerAdapters: fakeAdapters});
       return manager.changeTo({}).then(function(results) {
-        results.should.containDeepOrdered(['a', 'b', 'r', 'u', 'q', 'a']);
+        expect(results).to.eql(['a', 'b', 'r', 'u', 'q', 'a']);
       });
     });
   });
@@ -69,8 +69,8 @@ describe('scenarioManager', function() {
       ];
 
       return new ScenarioManager({dependencyManagerAdapters: fakeAdapters}).cleanup().then(function() {
-        calledFirstAdapter.should.equal(true);
-        calledSecondAdapter.should.equal(true);
+        expect(calledFirstAdapter).to.equal(true);
+        expect(calledSecondAdapter).to.equal(true);
       });
     });
   });

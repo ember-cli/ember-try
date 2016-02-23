@@ -1,4 +1,4 @@
-var should      = require('should');
+var expect      = require('chai').expect;
 var mockery     = require('mockery');
 var RSVP        = require('rsvp');
 
@@ -17,11 +17,11 @@ describe('utils/run-command', function() {
 
   it('passes arguments to run', function() {
     var mockedRun = function(command, args) {
-      command.should.equal('node');
-      args[0].should.match(/.*\/ember/);
-      args[1].should.equal('help');
-      args[2].should.equal('--json');
-      args[3].should.equal('true');
+      expect(command).to.equal('node');
+      expect(args[0]).to.match(/.*\/ember/);
+      expect(args[1]).to.equal('help');
+      expect(args[2]).to.equal('--json');
+      expect(args[3]).to.equal('true');
       return RSVP.resolve(0);
     };
 
@@ -30,7 +30,7 @@ describe('utils/run-command', function() {
     var runCommand  = require('../../lib/utils/run-command');
 
     return runCommand('rootPath', ['ember', 'help', '--json', 'true'], {}).then(function(result){
-      result.should.equal(true);
+      expect(result).to.equal(true);
     });
   });
 });

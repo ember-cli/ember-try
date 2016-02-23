@@ -1,4 +1,4 @@
-var should        = require('should');
+var expect        = require('chai').expect;
 var RSVP          = require('rsvp');
 var fs            = require('fs-extra');
 var path          = require('path');
@@ -48,7 +48,7 @@ describe('bowerAdapter', function() {
         }
       };
       var results = new BowerAdapter({cwd: tmpdir})._getDependencySetAccountingForDeprecatedTopLevelKeys(scenarioDepSet);
-      results.should.deepEqual(scenarioDepSet);
+      expect(results).to.eql(scenarioDepSet);
     });
 
     it('uses dep set from bower key if present', function() {
@@ -76,7 +76,7 @@ describe('bowerAdapter', function() {
       };
 
       var results = new BowerAdapter({cwd: tmpdir})._getDependencySetAccountingForDeprecatedTopLevelKeys(scenarioDepSet);
-      results.should.deepEqual(scenarioDepSet.bower);
+      expect(results).to.eql(scenarioDepSet.bower);
     });
   });
 
@@ -93,9 +93,9 @@ describe('bowerAdapter', function() {
       writeJSONFile('bower_components/this-should-be-obliterated.json', {removed: false});
       return new BowerAdapter({cwd: tmpdir, run: stubbedRun})._install().then(function() {
         return stat('bower_components/this-should-be-obliterated.json').then(function(stats) {
-          true.should.equal(false, 'File should not exist');
+          expect(true).to.equal(false);
         }, function(err) {
-          err.code.should.equal('ENOENT', 'File should not exist');
+          expect(err.code).to.equal('ENOENT', 'File should not exist');
         });
       });
     });
@@ -103,11 +103,11 @@ describe('bowerAdapter', function() {
     it('runs bower install', function() {
       writeJSONFile('bower.json', fixtureBower);
       var stubbedRun = function(command, args, opts) {
-        command.should.equal('node');
-        args[0].should.match(/bower/);
-        args[1].should.equal('install');
-        args[2].should.equal('--config.interactive=false');
-        opts.should.have.property('cwd', tmpdir);
+        expect(command).to.equal('node');
+        expect(args[0]).to.match(/bower/);
+        expect(args[1]).to.equal('install');
+        expect(args[2]).to.equal('--config.interactive=false');
+        expect(opts).to.have.property('cwd', tmpdir);
         return RSVP.resolve();
       };
       return new BowerAdapter({cwd: tmpdir, run: stubbedRun})._install();
@@ -116,12 +116,12 @@ describe('bowerAdapter', function() {
     it('runs bower install including managerOptions', function() {
       writeJSONFile('bower.json', fixtureBower);
       var stubbedRun = function(command, args, opts) {
-        command.should.equal('node');
-        args[0].should.match(/bower/);
-        args[1].should.equal('install');
-        args[2].should.equal('--config.interactive=false');
-        args[3].should.equal('--verbose=true');
-        args[4].should.equal('--allow-root=true');
+        expect(command).to.equal('node');
+        expect(args[0]).to.match(/bower/);
+        expect(args[1]).to.equal('install');
+        expect(args[2]).to.equal('--config.interactive=false');
+        expect(args[3]).to.equal('--verbose=true');
+        expect(args[4]).to.equal('--allow-root=true');
         return RSVP.resolve();
       };
       return new BowerAdapter({cwd: tmpdir, run: stubbedRun, managerOptions: ['--verbose=true', '--allow-root=true']})._install();
@@ -146,7 +146,7 @@ describe('bowerAdapter', function() {
 
       var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
 
-      resultJSON.dependencies.jquery.should.equal('2.1.3');
+      expect(resultJSON.dependencies.jquery).to.equal('2.1.3');
     });
 
     it('changes specified bower dev dependency versions', function() {
@@ -156,7 +156,7 @@ describe('bowerAdapter', function() {
 
       var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
 
-      resultJSON.devDependencies.jquery.should.equal('2.1.3');
+      expect(resultJSON.devDependencies.jquery).to.equal('2.1.3');
     });
 
     it('adds to resolutions', function() {
@@ -166,7 +166,7 @@ describe('bowerAdapter', function() {
 
       var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
 
-      resultJSON.resolutions.jquery.should.equal('2.1.3');
+      expect(resultJSON.resolutions.jquery).to.equal('2.1.3');
     });
 
     it('sets custom resolutions', function() {
@@ -179,7 +179,7 @@ describe('bowerAdapter', function() {
 
       var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
 
-      resultJSON.resolutions.ember.should.equal('canary');
+      expect(resultJSON.resolutions.ember).to.equal('canary');
     });
 
     it('handles lack of resolutions in original bower.json', function() {
@@ -189,17 +189,17 @@ describe('bowerAdapter', function() {
 
       var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
 
-      resultJSON.resolutions.jquery.should.equal('2.1.3');
+      expect(resultJSON.resolutions.jquery).to.equal('2.1.3');
     });
   });
 
   describe('#_findBowerPath()', function() {
-    it('should return the correct bower path', function() {
+    it('returns the correct bower path', function() {
       return new BowerAdapter({cwd: tmpdir})._findBowerPath().then(function(path) {
-        path.should.containEql('node_modules/bower/bin/bower');
+        expect(path).to.include('node_modules/bower/bin/bower');
       }).catch(function(err) {
         console.log(err);
-        true.should.equal(false, 'Error should not happen');
+        expect(true).to.equal(false, 'Error should not happen');
       });
     });
   });
@@ -213,7 +213,7 @@ function assertFileContains(filename, expectedContents) {
   var regex = new RegExp(escapeForRegex(expectedContents) + '($|\\W)', 'gm');
   var actualContents = fs.readFileSync(path.join(tmpdir, filename), { encoding: 'utf-8' });
   var result = regex.test(actualContents);
-  result.should.equal(true, 'File ' + filename + ' is expected to contain ' + expectedContents);
+  expect(result).to.equal(true, 'File ' + filename + ' is expected to contain ' + expectedContents);
 }
 
 function escapeForRegex(str) {

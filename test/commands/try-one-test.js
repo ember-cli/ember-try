@@ -1,4 +1,4 @@
-var should        = require('should');
+var expect           = require('chai').expect;
 var TryOneCommand    = require('../../lib/commands/try-one');
 
 var origTryEachTask = TryOneCommand._TryEachTask;
@@ -8,12 +8,12 @@ describe('commands/try-one', function() {
   describe('getCommand', function() {
     it('returns args after --- as command args', function() {
       var args = TryOneCommand.getCommand(['ember', 'try:one', 'foo-bar-scenario', '--skip-cleanup', '---', 'ember', 'build']);
-      args.should.eql(['ember', 'build']);
+      expect(args).to.eql(['ember', 'build']);
     });
 
     it('returns no command args if no ---', function() {
       var args = TryOneCommand.getCommand(['ember', 'try:one', 'foo-bar-scenario', '--skip-cleanup']);
-      args.should.eql([]);
+      expect(args).to.eql([]);
     });
   });
 
@@ -37,13 +37,13 @@ describe('commands/try-one', function() {
       mockConfig = null;
     });
 
-    it('should throw if no scenario is provided', function() {
-      (function() {
+    it('throws if no scenario is provided', function() {
+      expect(function() {
         TryOneCommand.run({}, []);
-      }).should.throw(/requires a scenario name to be specified/);
+      }).to.throw(/requires a scenario name to be specified/);
     });
 
-    it('should pass the configPath to _getConfig', function() {
+    it('passes the configPath to _getConfig', function() {
       var configPath;
       TryOneCommand._getConfig = function(options) {
         configPath = options.configPath;
@@ -52,16 +52,16 @@ describe('commands/try-one', function() {
       };
 
       TryOneCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
-      configPath.should.equal('foo/bar/widget.js');
+      expect(configPath).to.equal('foo/bar/widget.js');
     });
 
-    it('should throw if a scenario was not found for the scenarioName provided', function() {
-      (function() {
+    it('throws if a scenario was not found for the scenarioName provided', function() {
+      expect(function() {
         TryOneCommand.run({ }, ['foo']);
-      }).should.throw(/requires a scenario specified in the config file/);
+      }).to.throw(/requires a scenario specified in the config file/);
     });
 
-    it('should set command on task init', function() {
+    it('sets command on task init', function() {
       testCommandSetsTheseAsCommandArgs('try:one default', []);
       testCommandSetsTheseAsCommandArgs('try:one default --- ember help', ['ember', 'help']);
       testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json', ['ember', 'help', '--json']);
@@ -74,7 +74,7 @@ describe('commands/try-one', function() {
 function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
   var additionalArgs = command.split(' ');
   function MockTask(opts) {
-    opts.commandArgs.should.eql(expectedArgs);
+    expect(opts.commandArgs).to.eql(expectedArgs);
   }
   MockTask.prototype.run = function() {
   };

@@ -1,4 +1,4 @@
-var should         = require('should');
+var expect         = require('chai').expect;
 var TryEachCommand = require('../../lib/commands/try-each');
 
 var origTryEachTask = TryEachCommand._TryEachTask;
@@ -25,7 +25,7 @@ describe('commands/testall', function() {
       mockConfig = null;
     });
 
-    it('should pass the configPath to _getConfig', function() {
+    it('passes the configPath to _getConfig', function() {
       var configPath;
       TryEachCommand._getConfig = function(options) {
         configPath = options.configPath;
@@ -34,7 +34,7 @@ describe('commands/testall', function() {
       };
 
       TryEachCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
-      configPath.should.equal('foo/bar/widget.js');
+      expect(configPath).to.equal('foo/bar/widget.js');
     });
   });
 });

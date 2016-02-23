@@ -1,3 +1,4 @@
+var expect        = require('chai').expect;
 var tmp           = require('tmp-sync');
 var path          = require('path');
 var RSVP          = require('rsvp');
@@ -133,7 +134,7 @@ describe('tryEach', function() {
       };
 
       var mockedExit = function(code) {
-        code.should.equal(0, 'exits 0 when all scenarios succeed');
+        expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
       };
 
       var TryEachTask = require('../../lib/tasks/try-each');
@@ -147,16 +148,16 @@ describe('tryEach', function() {
 
       writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(legacyConfig.scenarios, {}).then(function() {
-        output.should.containEql('Scenario default: SUCCESS');
-        output.should.containEql('Scenario first: SUCCESS');
-        output.should.containEql('Scenario second: SUCCESS');
-        output.should.containEql('Scenario with-dev-deps: SUCCESS');
-        output.should.containEql('Scenario with-resolutions: SUCCESS');
+        expect(output).to.include('Scenario default: SUCCESS');
+        expect(output).to.include('Scenario first: SUCCESS');
+        expect(output).to.include('Scenario second: SUCCESS');
+        expect(output).to.include('Scenario with-dev-deps: SUCCESS');
+        expect(output).to.include('Scenario with-resolutions: SUCCESS');
 
-        output.should.containEql('All 5 scenarios succeeded');
+        expect(output).to.include('All 5 scenarios succeeded');
       }).catch(function(err) {
         console.log(err);
-        true.should.equal(false, 'Assertions should run');
+        expect(true).to.equal(false, 'Assertions should run');
       });
     });
 
@@ -182,7 +183,7 @@ describe('tryEach', function() {
       };
 
       var mockedExit = function(code) {
-        code.should.equal(1);
+        expect(code).to.equal(1);
       };
 
       var TryEachTask = require('../../lib/tasks/try-each');
@@ -196,17 +197,17 @@ describe('tryEach', function() {
 
       writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(legacyConfig.scenarios, {}).then(function() {
-        output.should.containEql('Scenario default: FAIL');
-        output.should.containEql('Scenario first: SUCCESS');
-        output.should.containEql('Scenario second: SUCCESS');
-        output.should.containEql('Scenario with-dev-deps: SUCCESS');
-        output.should.containEql('Scenario with-resolutions: SUCCESS');
-        output.should.containEql('1 scenarios failed');
-        output.should.containEql('4 scenarios succeeded');
-        output.should.containEql('5 scenarios run');
+        expect(output).to.include('Scenario default: FAIL');
+        expect(output).to.include('Scenario first: SUCCESS');
+        expect(output).to.include('Scenario second: SUCCESS');
+        expect(output).to.include('Scenario with-dev-deps: SUCCESS');
+        expect(output).to.include('Scenario with-resolutions: SUCCESS');
+        expect(output).to.include('1 scenarios failed');
+        expect(output).to.include('4 scenarios succeeded');
+        expect(output).to.include('5 scenarios run');
       }).catch(function(err) {
         console.log(err);
-        true.should.equal(false, 'Assertions should run');
+        expect(true).to.equal(false, 'Assertions should run');
       });
     });
 
@@ -227,7 +228,7 @@ describe('tryEach', function() {
       };
 
       var mockedExit = function(code) {
-        code.should.equal(0, 'exits 0 when all scenarios succeed');
+        expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
       };
 
       var TryEachTask = require('../../lib/tasks/try-each');
@@ -243,13 +244,13 @@ describe('tryEach', function() {
       fs.mkdirSync('node_modules');
       writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(config.scenarios, {}).then(function() {
-        output.should.containEql('Scenario first: SUCCESS');
-        output.should.containEql('Scenario second: SUCCESS');
-        output.should.containEql('Scenario with-bower-resolutions: SUCCESS');
-        output.should.containEql('All 3 scenarios succeeded');
+        expect(output).to.include('Scenario first: SUCCESS');
+        expect(output).to.include('Scenario second: SUCCESS');
+        expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
+        expect(output).to.include('All 3 scenarios succeeded');
       }).catch(function(err) {
         console.log(err);
-        true.should.equal(false, 'Assertions should run');
+        expect(true).to.equal(false, 'Assertions should run');
       });
     });
 
@@ -275,7 +276,7 @@ describe('tryEach', function() {
       };
 
       var mockedExit = function(code) {
-        code.should.equal(1);
+        expect(code).to.equal(1);
       };
 
       var TryEachTask = require('../../lib/tasks/try-each');
@@ -291,15 +292,15 @@ describe('tryEach', function() {
       fs.mkdirSync('node_modules');
       writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(config.scenarios, {}).then(function() {
-        output.should.containEql('Scenario first: FAIL');
-        output.should.containEql('Scenario second: SUCCESS');
-        output.should.containEql('Scenario with-bower-resolutions: SUCCESS');
-        output.should.containEql('1 scenarios failed');
-        output.should.containEql('2 scenarios succeeded');
-        output.should.containEql('3 scenarios run');
+        expect(output).to.include('Scenario first: FAIL');
+        expect(output).to.include('Scenario second: SUCCESS');
+        expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
+        expect(output).to.include('1 scenarios failed');
+        expect(output).to.include('2 scenarios succeeded');
+        expect(output).to.include('3 scenarios run');
       }).catch(function(err) {
         console.log(err);
-        true.should.equal(false, 'Assertions should run');
+        expect(true).to.equal(false, 'Assertions should run');
       });
     });
 
@@ -334,7 +335,7 @@ describe('tryEach', function() {
       };
 
       var mockedExit = function(code) {
-        code.should.equal(0, 'exits 0 when all scenarios succeed');
+        expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
       };
 
       var TryEachTask = require('../../lib/tasks/try-each');
@@ -351,11 +352,11 @@ describe('tryEach', function() {
 
       writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(config.scenarios, {}).then(function() {
-        output.should.containEql('Scenario first: SUCCESS');
-        passedInOptions.should.equal(true, 'Should pass the options all the way down to run');
+        expect(output).to.include('Scenario first: SUCCESS');
+        expect(passedInOptions).to.equal(true, 'Should pass the options all the way down to run');
       }).catch(function(err) {
         console.log(err);
-        true.should.equal(false, 'Assertions should run');
+        expect(true).to.equal(false, 'Assertions should run');
       });
     });
 
@@ -407,13 +408,13 @@ describe('tryEach', function() {
         });
 
         return tryEachTask.run(config.scenarios, {}).then(function() {
-          output.should.containEql('Scenario first: FAIL (Allowed)');
-          output.should.containEql('Scenario second: FAIL (Allowed)');
-          output.should.containEql('2 scenarios failed (2 allowed)');
-          exitCode.should.equal(0, 'exits 0 when all failures were allowed');
+          expect(output).to.include('Scenario first: FAIL (Allowed)');
+          expect(output).to.include('Scenario second: FAIL (Allowed)');
+          expect(output).to.include('2 scenarios failed (2 allowed)');
+          expect(exitCode).to.equal(0, 'exits 0 when all failures were allowed');
         }).catch(function(err) {
           console.log(err);
-          true.should.equal(false, 'Assertions should run');
+          expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
@@ -463,13 +464,13 @@ describe('tryEach', function() {
         });
 
         return tryEachTask.run(config.scenarios, {}).then(function() {
-          output.should.containEql('Scenario first: FAIL');
-          output.should.containEql('Scenario second: FAIL (Allowed)');
-          output.should.containEql('2 scenarios failed (1 allowed)');
-          exitCode.should.equal(1, 'exits 1 when any failures were NOT allowed');
+          expect(output).to.include('Scenario first: FAIL');
+          expect(output).to.include('Scenario second: FAIL (Allowed)');
+          expect(output).to.include('2 scenarios failed (1 allowed)');
+          expect(exitCode).to.equal(1, 'exits 1 when any failures were NOT allowed');
         }).catch(function(err) {
           console.log(err);
-          true.should.equal(false, 'Assertions should run');
+          expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
@@ -520,13 +521,13 @@ describe('tryEach', function() {
         });
 
         return tryEachTask.run(config.scenarios, {}).then(function() {
-          output.should.containEql('Scenario first: SUCCESS');
-          output.should.containEql('Scenario second: SUCCESS');
-          output.should.containEql('All 2 scenarios succeeded');
-          exitCode.should.equal(0, 'exits 0 when all pass');
+          expect(output).to.include('Scenario first: SUCCESS');
+          expect(output).to.include('Scenario second: SUCCESS');
+          expect(output).to.include('All 2 scenarios succeeded');
+          expect(exitCode).to.equal(0, 'exits 0 when all pass');
         }).catch(function(err) {
           console.log(err);
-          true.should.equal(false, 'Assertions should run');
+          expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
@@ -566,7 +567,7 @@ describe('tryEach', function() {
         };
 
         var mockedExit = function(code) {
-          code.should.equal(0, 'exits 0 when all scenarios succeed');
+          expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
         };
 
         var TryEachTask = require('../../lib/tasks/try-each');
@@ -581,12 +582,12 @@ describe('tryEach', function() {
         });
 
         return tryEachTask.run(config.scenarios, {}).then(function() {
-          output.should.containEql('Scenario first: SUCCESS');
-          output.should.containEql('Scenario second: SUCCESS');
+          expect(output).to.include('Scenario first: SUCCESS');
+          expect(output).to.include('Scenario second: SUCCESS');
 
-          ranDefaultCommand.should.equal(true, 'Should run the default command');
+          expect(ranDefaultCommand).to.equal(true, 'Should run the default command');
         }).catch(function(err) {
-          true.should.equal(false, 'Assertions should run');
+          expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
@@ -616,7 +617,7 @@ describe('tryEach', function() {
         };
 
         var mockedExit = function(code) {
-          code.should.equal(0, 'exits 0 when all scenarios succeed');
+          expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
         };
 
         var TryEachTask = require('../../lib/tasks/try-each');
@@ -631,11 +632,11 @@ describe('tryEach', function() {
         });
 
         return tryEachTask.run(config.scenarios, {}).then(function() {
-          output.should.containEql('Scenario first: SUCCESS');
-          ranPassedInCommand.should.equal(true, 'Should run the passed in command');
+          expect(output).to.include('Scenario first: SUCCESS');
+          expect(ranPassedInCommand).to.equal(true, 'Should run the passed in command');
         }).catch(function(err) {
           console.log(err);
-          true.should.equal(false, 'Assertions should run');
+          expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
@@ -687,7 +688,7 @@ describe('tryEach', function() {
         };
 
         var mockedExit = function(code) {
-          code.should.equal(0, 'exits 0 when all scenarios succeed');
+          expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
         };
 
         var TryEachTask = require('../../lib/tasks/try-each');
@@ -701,15 +702,15 @@ describe('tryEach', function() {
         });
 
         return tryEachTask.run(config.scenarios, {}).then(function() {
-          output.should.containEql('Scenario first: SUCCESS');
-          output.should.containEql('Scenario second: SUCCESS');
-          output.should.containEql('Scenario different: SUCCESS');
+          expect(output).to.include('Scenario first: SUCCESS');
+          expect(output).to.include('Scenario second: SUCCESS');
+          expect(output).to.include('Scenario different: SUCCESS');
 
-          ranDefaultCommandCount.should.equal(2, 'Should run the default command scenarios without their own commands specified');
-          ranScenarioCommandCount.should.equal(1, 'Should run the scenario command for scenario that specified it');
+          expect(ranDefaultCommandCount).to.equal(2, 'Should run the default command scenarios without their own commands specified');
+          expect(ranScenarioCommandCount).to.equal(1, 'Should run the scenario command for scenario that specified it');
         }).catch(function(err) {
           console.log(err);
-          true.should.equal(false, 'Assertions should run');
+          expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
@@ -732,7 +733,7 @@ describe('tryEach', function() {
         };
 
         var mockedExit = function(code) {
-          code.should.equal(0, 'exits 0 when all scenarios succeed');
+          expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
         };
 
         var TryEachTask = require('../../lib/tasks/try-each');
@@ -747,10 +748,10 @@ describe('tryEach', function() {
         });
 
         return tryEachTask.run(config.scenarios, {}).then(function() {
-          output.should.containEql('Scenario first: SUCCESS', 'Passing scenario means options were passed along');
+          expect(output).to.include('Scenario first: SUCCESS', 'Passing scenario means options were passed along');
         }).catch(function(err) {
           console.log(err);
-          true.should.equal(false, 'Assertions should run');
+          expect(true).to.equal(false, 'Assertions should run');
         });
       });
     });
@@ -774,7 +775,7 @@ describe('tryEach', function() {
       };
 
       var mockedExit = function(code) {
-        code.should.equal(0, 'exits 0 when all scenarios succeed');
+        expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
       };
 
       var scenarios = [];
@@ -797,12 +798,12 @@ describe('tryEach', function() {
 
       writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(config.scenarios, {}).then(function() {
-        scenarios.should.eql(['first']);
+        expect(scenarios).to.eql(['first']);
         var currentScenarioIsUndefined = process.env.EMBER_TRY_CURRENT_SCENARIO === undefined;
-        currentScenarioIsUndefined.should.equal(true);
+        expect(currentScenarioIsUndefined).to.equal(true);
       }).catch(function(err) {
         console.log(err);
-        true.should.equal(false, 'Assertions should run');
+        expect(true).to.equal(false, 'Assertions should run');
       });
     });
   });

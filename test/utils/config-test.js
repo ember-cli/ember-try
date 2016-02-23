@@ -1,4 +1,4 @@
-var should        = require('should');
+var expect        = require('chai').expect;
 var RSVP          = require('rsvp');
 var fs            = require('fs-extra');
 var path          = require('path');
@@ -37,21 +37,21 @@ describe('utils/config', function() {
     generateConfigFile('module.exports = { scenarios: [ { qux: "baz" }] };', 'non-default.js');
 
     var config = getConfig({ project: project, configPath: 'config/non-default.js' });
-    config.scenarios.should.have.length(1);
-    config.scenarios[0].qux.should.equal('baz');
+    expect(config.scenarios).to.have.lengthOf(1);
+    expect(config.scenarios[0].qux).to.equal('baz');
   });
 
   it('uses projects config/ember-try.js if present', function() {
     generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };');
 
     var config = getConfig({ project: project });
-    config.scenarios.should.have.length(1);
-    config.scenarios[0].foo.should.equal('bar');
+    expect(config.scenarios).to.have.lengthOf(1);
+    expect(config.scenarios[0].foo).to.equal('bar');
   });
 
   it('uses default config if project.root/config/ember-try.js is not present', function() {
     var config = getConfig({ project: project });
-    config.should.eql(defaultConfig());
+    expect(config).to.eql(defaultConfig());
   });
 
   it('uses specified options.configFile over project config/ember-try.js', function() {
@@ -59,7 +59,7 @@ describe('utils/config', function() {
     generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };'); // Should not be used
 
     var config = getConfig({ project: project, configPath: 'config/non-default.js' });
-    config.scenarios.should.have.length(1);
-    config.scenarios[0].qux.should.equal('baz');
+    expect(config.scenarios).to.have.lengthOf(1);
+    expect(config.scenarios[0].qux).to.equal('baz');
   });
 });

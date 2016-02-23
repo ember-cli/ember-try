@@ -1,4 +1,4 @@
-var should        = require('should');
+var expect        = require('chai').expect;
 var RSVP          = require('rsvp');
 var fs            = require('fs-extra');
 var path          = require('path');
@@ -35,7 +35,7 @@ describe('npmAdapter', function() {
         assertFileContainsJSON('.node_modules.ember-try/prove-it.json', {originalNodeModules: true});
       }).catch(function(err) {
         console.log(err);
-        true.should.equal(false, 'Error should not happen');
+        expect(true).to.equal(false, 'Error should not happen');
       });
     });
   });
@@ -48,23 +48,23 @@ describe('npmAdapter', function() {
         command: 'npm install',
         callback: function(command, args, opts) {
           runCount++;
-          opts.should.have.property('cwd', tmpdir);
+          expect(opts).to.have.property('cwd', tmpdir);
           return RSVP.resolve();
         }
       }, {
         command: 'npm prune',
         callback: function(command, args, opts) {
           runCount++;
-          opts.should.have.property('cwd', tmpdir);
+          expect(opts).to.have.property('cwd', tmpdir);
           return RSVP.resolve();
         }
       }], { allowPassthrough: false });
 
       return new NpmAdapter({cwd: tmpdir, run: stubbedRun})._install().then(function() {
-        runCount.should.equal(2, 'Both commands should run');
+        expect(runCount).to.equal(2, 'Both commands should run');
       }).catch(function(err) {
         console.log(err);
-        true.should.equal(false, 'Error should not happen');
+        expect(true).to.equal(false, 'Error should not happen');
       });
     });
 
@@ -86,10 +86,10 @@ describe('npmAdapter', function() {
       }], { allowPassthrough: false });
 
       return new NpmAdapter({cwd: tmpdir, run: stubbedRun, managerOptions: ['--no-shrinkwrap=true']})._install().then(function() {
-        runCount.should.equal(2, 'Both commands should run');
+        expect(runCount).to.equal(2, 'Both commands should run');
       }).catch(function(err) {
         console.log(err);
-        true.should.equal(false, 'Error should not happen');
+        expect(true).to.equal(false, 'Error should not happen');
       });
     });
   });
@@ -105,7 +105,7 @@ describe('npmAdapter', function() {
         assertFileContainsJSON('node_modules/prove-it.json', {originalNodeModules: true});
       }).catch(function(err) {
         console.log(err);
-        true.should.equal(false, 'Error should not happen');
+        expect(true).to.equal(false, 'Error should not happen');
       });
     });
   });
@@ -118,7 +118,7 @@ describe('npmAdapter', function() {
 
       var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
-      resultJSON.dependencies['ember-cli-babel'].should.equal('6.0.0');
+      expect(resultJSON.dependencies['ember-cli-babel']).to.equal('6.0.0');
     });
 
     it('changes specified bower dev dependency versions', function() {
@@ -128,7 +128,7 @@ describe('npmAdapter', function() {
 
       var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
-      resultJSON.devDependencies['ember-feature-flags'].should.equal('2.0.1');
+      expect(resultJSON.devDependencies['ember-feature-flags']).to.equal('2.0.1');
     });
   });
 });
@@ -141,7 +141,7 @@ function assertFileContains(filename, expectedContents) {
   var regex = new RegExp(escapeForRegex(expectedContents) + '($|\\W)', 'gm');
   var actualContents = fs.readFileSync(path.join(tmpdir, filename), { encoding: 'utf-8' });
   var result = regex.test(actualContents);
-  result.should.equal(true, 'File ' + filename + ' is expected to contain ' + expectedContents);
+  expect(result).to.equal(true, 'File ' + filename + ' is expected to contain ' + expectedContents);
 }
 
 function escapeForRegex(str) {

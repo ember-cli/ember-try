@@ -1,4 +1,4 @@
-var should        = require('should');
+var expect        = require('chai').expect;
 var TryCommand    = require('../../lib/commands/try');
 
 var origTryEachTask = TryCommand._TryEachTask;
@@ -9,13 +9,13 @@ describe('commands/try', function() {
     it('removes `--skip-cleanup` from resulting arguments', function() {
       var args = TryCommand.getCommand(['ember', 'try', 'foo-bar-scenario', 'build', '--skip-cleanup']);
 
-      args.should.eql(['ember', 'build']);
+      expect(args).to.eql(['ember', 'build']);
     });
 
     it('removes `--config-path` from resulting arguments', function() {
       var args = TryCommand.getCommand(['ember', 'try', 'foo-bar-scenario', 'build', '--config-path']);
 
-      args.should.eql(['ember', 'build']);
+      expect(args).to.eql(['ember', 'build']);
     });
 
     it('removes both `--config-path` and `--skip-cleanup` from resulting arguments', function() {
@@ -23,13 +23,13 @@ describe('commands/try', function() {
         'ember', 'try', 'foo-bar-scenario', 'build', '--config-path', '--skip-cleanup'
       ]);
 
-      args.should.eql(['ember', 'build']);
+      expect(args).to.eql(['ember', 'build']);
     });
 
     it('adds `test` if no other subcommand arguments were supplied', function() {
       var args = TryCommand.getCommand(['ember', 'try', 'foo-bar-scenario']);
 
-      args.should.eql([]);
+      expect(args).to.eql([]);
     });
   });
 
@@ -55,13 +55,13 @@ describe('commands/try', function() {
       mockConfig = null;
     });
 
-    it('should throw if no scenario is provided', function() {
-      (function() {
+    it('throws if no scenario is provided', function() {
+      expect(function() {
         TryCommand.run({}, []);
-      }).should.throw(/requires a scenario name to be specified/);
+      }).to.throw(/requires a scenario name to be specified/);
     });
 
-    it('should pass the configPath to _getConfig', function() {
+    it('passes the configPath to _getConfig', function() {
       var configPath;
       TryCommand._getConfig = function(options) {
         configPath = options.configPath;
@@ -70,16 +70,16 @@ describe('commands/try', function() {
       };
 
       TryCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
-      configPath.should.equal('foo/bar/widget.js');
+      expect(configPath).to.equal('foo/bar/widget.js');
     });
 
-    it('should throw if a scenario was not found for the scenarioName provided', function() {
-      (function() {
+    it('throws if a scenario was not found for the scenarioName provided', function() {
+      expect(function() {
         TryCommand.run({ }, ['foo']);
-      }).should.throw(/requires a scenario specified in the config file/);
+      }).to.throw(/requires a scenario specified in the config file/);
     });
 
-    it('should set command on task init', function() {
+    it('sets command on task init', function() {
       testCommandSetsTheseAsCommandArgs('try default', []);
       testCommandSetsTheseAsCommandArgs('try default help', ['ember', 'help']);
       testCommandSetsTheseAsCommandArgs('try default help --json', ['ember', 'help', '--json']);
@@ -92,7 +92,7 @@ describe('commands/try', function() {
 function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
   var additionalArgs = command.split(' ');
   function MockTask(opts) {
-    opts.commandArgs.should.eql(expectedArgs);
+    expect(opts.commandArgs).to.eql(expectedArgs);
   }
   MockTask.prototype.run = function() {
   };
