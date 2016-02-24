@@ -44,7 +44,7 @@ describe('commands/try', function() {
         return mockConfig || { scenarios: [ ] };
       };
 
-      TryCommand.ui = { writeDeprecateLine: function () {} };
+      TryCommand.ui = { writeDeprecateLine: function() {} };
 
       TryCommand._TryEachTask = MockTryEachTask;
     });

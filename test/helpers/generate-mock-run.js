@@ -14,12 +14,12 @@ module.exports = function generateMockRun() {
     var matchingRuns = mockedRuns.filter(function(mockedRun) {
       return isCommandMocked(mockedRun, actualCommand, actualArgs);
     });
-    var matchingRun= matchingRuns[0];
+    var matchingRun = matchingRuns[0];
 
     if (matchingRun) {
       return matchingRun.callback(actualCommand, actualArgs, opts);
     } else {
-      if(options.allowPassthrough) {
+      if (options.allowPassthrough) {
         return passthrough().apply(this, arguments);
       } else {
         throw new Error(actualCommand + ' ' + actualArgs.join(' ') + ' not stubbed and not allowed to passthrough');
@@ -36,7 +36,7 @@ function isCommandMocked(mockedRun, actualCommand, actualArgs) {
          commandIsMocked(mockedCommand, mockedArgs, actualCommand, actualArgs);
 }
 
-function passthrough(){
+function passthrough() {
   return require('../../lib/utils/run');
 }
 
@@ -57,8 +57,8 @@ function arraysAreEqual(firstArr, secondArr) {
     return false;
   }
 
-  for (var i=0; i < secondArr.length; i++) {
-    if(firstArr[i] !== secondArr[i]) {
+  for (var i = 0; i < secondArr.length; i++) {
+    if (firstArr[i] !== secondArr[i]) {
       return false;
     }
   }

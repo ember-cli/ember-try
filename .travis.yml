@@ -33,4 +33,5 @@ install:
   - bower install
 
 script:
+  - npm run-script jscs
   - npm run-script $NPM_SCRIPT

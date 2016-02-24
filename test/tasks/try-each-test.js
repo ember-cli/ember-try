@@ -555,8 +555,8 @@ describe('tryEach', function() {
         var ranDefaultCommand = false;
 
         var mockedRun = generateMockRun('ember test', function() {
-            ranDefaultCommand = true;
-            return RSVP.resolve(0);
+          ranDefaultCommand = true;
+          return RSVP.resolve(0);
         });
 
         mockery.registerMock('./run', mockedRun);

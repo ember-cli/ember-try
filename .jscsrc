@@ -12,7 +12,6 @@
   },
   "disallowSpacesInsideParentheses": true,
   "disallowTrailingWhitespace": true,
-  "maximumLineLength": 120,
   "requireCamelCaseOrUpperCaseIdentifiers": true,
   "requireCapitalizedComments": true,
   "requireCapitalizedConstructors": true,
