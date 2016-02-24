@@ -1,3 +1,5 @@
+'use strict';
+
 var tmp           = require('tmp-sync');
 var path          = require('path');
 var RSVP          = require('rsvp');

@@ -1,3 +1,5 @@
+'use strict';
+
 var CoreObject    = require('core-object');
 var RSVP          = require('rsvp');
 

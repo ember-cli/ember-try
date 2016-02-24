@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs-extra');
 
 module.exports = function writeJSONFile(filename, contents) {

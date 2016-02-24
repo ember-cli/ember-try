@@ -1,3 +1,5 @@
+'use strict';
+
 var expect                          = require('chai').expect;
 var DependencyManagerAdapterFactory = require('../lib/utils/dependency-manager-adapter-factory');
 

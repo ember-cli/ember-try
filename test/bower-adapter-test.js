@@ -1,3 +1,5 @@
+'use strict';
+
 var expect        = require('chai').expect;
 var RSVP          = require('rsvp');
 var fs            = require('fs-extra');
@@ -92,7 +94,7 @@ describe('bowerAdapter', function() {
       writeJSONFile('bower.json', fixtureBower);
       writeJSONFile('bower_components/this-should-be-obliterated.json', {removed: false});
       return new BowerAdapter({cwd: tmpdir, run: stubbedRun})._install().then(function() {
-        return stat('bower_components/this-should-be-obliterated.json').then(function(stats) {
+        return stat('bower_components/this-should-be-obliterated.json').then(function() {
           expect(true).to.equal(false);
         }, function(err) {
           expect(err.code).to.equal('ENOENT', 'File should not exist');
@@ -115,7 +117,7 @@ describe('bowerAdapter', function() {
 
     it('runs bower install including managerOptions', function() {
       writeJSONFile('bower.json', fixtureBower);
-      var stubbedRun = function(command, args, opts) {
+      var stubbedRun = function(command, args) {
         expect(command).to.equal('node');
         expect(args[0]).to.match(/bower/);
         expect(args[1]).to.equal('install');

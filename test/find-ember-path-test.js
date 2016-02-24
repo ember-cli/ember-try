@@ -1,3 +1,5 @@
+'use strict';
+
 var expect        = require('chai').expect;
 var findEmberPath = require('../lib/utils/find-ember-path');
 

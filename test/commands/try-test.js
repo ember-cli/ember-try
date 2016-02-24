@@ -1,3 +1,5 @@
+'use strict';
+
 var expect        = require('chai').expect;
 var TryCommand    = require('../../lib/commands/try');
 
@@ -103,7 +105,7 @@ function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
                      additionalArgs);
   };
 
-  TryCommand._getConfig = function(options) {
+  TryCommand._getConfig = function() {
     return { scenarios: [ { name: 'default' }]};
   };
 

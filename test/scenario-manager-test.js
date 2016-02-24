@@ -1,3 +1,5 @@
+'use strict';
+
 var expect          = require('chai').expect;
 var ScenarioManager = require('../lib/utils/scenario-manager');
 var CoreObject      = require('core-object');

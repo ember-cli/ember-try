@@ -34,4 +34,5 @@ install:
 
 script:
   - npm run-script jscs
+  - npm run-script lint
   - npm run-script $NPM_SCRIPT

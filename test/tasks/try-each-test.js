@@ -1,3 +1,5 @@
+'use strict';
+
 var expect        = require('chai').expect;
 var tmp           = require('tmp-sync');
 var path          = require('path');
@@ -17,59 +19,25 @@ var root = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 var legacyConfig = {
-  scenarios: [{
-    name: 'default',
-    dependencies: {}
-  },
-  {
-    name: 'first',
-    dependencies: {
-      ember: '1.13.0'
-    }
-  },
-  {
-    name: 'second',
-    dependencies: {
-      ember: '2.0.0'
-    }
-  },
-  {
-    name: 'with-dev-deps',
-    dependencies: {
-      ember: '2.0.0'
-    },
-    devDependencies: {
-      jquery: '1.11.3'
-    }
-  },
-  {
-    name: 'with-resolutions',
-    dependencies: {
-      ember: 'components/ember#beta'
-    },
-    resolutions: {
-      ember: 'beta'
-    }
-  }]
-};
-
-var config = {
   scenarios: [
-  {
-    name: 'first',
-    bower: {
+    {
+      name: 'default',
+      dependencies: {}
+    },
+    {
+      name: 'first',
       dependencies: {
         ember: '1.13.0'
       }
     },
-    npm: {
+    {
+      name: 'second',
       dependencies: {
-        'ember-cli-deploy': '0.5.0'
+        ember: '2.0.0'
       }
-    }
-  },{
-    name: 'second',
-    bower: {
+    },
+    {
+      name: 'with-dev-deps',
       dependencies: {
         ember: '2.0.0'
       },
@@ -77,28 +45,64 @@ var config = {
         jquery: '1.11.3'
       }
     },
-    npm: {
-      devDependencies: {
-        'ember-cli-deploy': '0.5.1'
-      }
-    }
-  },
-  {
-    name: 'with-bower-resolutions',
-    bower: {
+    {
+      name: 'with-resolutions',
       dependencies: {
         ember: 'components/ember#beta'
       },
       resolutions: {
         ember: 'beta'
       }
-    },
-    npm: {
-      dependencies: {
-        'ember-cli-deploy': '0.5.1'
-      }
     }
-  }]
+  ]
+};
+
+var config = {
+  scenarios: [
+    {
+      name: 'first',
+      bower: {
+        dependencies: {
+          ember: '1.13.0'
+        }
+      },
+      npm: {
+        dependencies: {
+          'ember-cli-deploy': '0.5.0'
+        }
+      }
+    }, {
+      name: 'second',
+      bower: {
+        dependencies: {
+          ember: '2.0.0'
+        },
+        devDependencies: {
+          jquery: '1.11.3'
+        }
+      },
+      npm: {
+        devDependencies: {
+          'ember-cli-deploy': '0.5.1'
+        }
+      }
+    },
+    {
+      name: 'with-bower-resolutions',
+      bower: {
+        dependencies: {
+          ember: 'components/ember#beta'
+        },
+        resolutions: {
+          ember: 'beta'
+        }
+      },
+      npm: {
+        dependencies: {
+          'ember-cli-deploy': '0.5.1'
+        }
+      }
+    }]
 };
 
 describe('tryEach', function() {
@@ -168,7 +172,7 @@ describe('tryEach', function() {
       var runTestCount = 0;
       var mockedRun = generateMockRun('ember test', function() {
         runTestCount++;
-        if (runTestCount == 1) {
+        if (runTestCount === 1) {
           return RSVP.reject(1);
         } else {
           return RSVP.resolve(0);
@@ -261,7 +265,7 @@ describe('tryEach', function() {
       var runTestCount = 0;
       var mockedRun = generateMockRun('ember test', function() {
         runTestCount++;
-        if (runTestCount == 1) {
+        if (runTestCount === 1) {
           return RSVP.reject(1);
         } else {
           return RSVP.resolve(0);
@@ -321,7 +325,7 @@ describe('tryEach', function() {
       };
       var passedInOptions = false;
       var mockedRun = generateMockRun('ember serve', function(command, args, options) {
-        if (options.timeout && options.timeout.length == 20000 && options.timeout.isSuccess) {
+        if (options.timeout && options.timeout.length === 20000 && options.timeout.isSuccess) {
           passedInOptions = true;
         }
         return RSVP.resolve(0);
@@ -381,8 +385,6 @@ describe('tryEach', function() {
           }]
         };
 
-        var ranDefaultCommandCount = 0;
-        var ranScenarioCommandCount = 0;
         var mockedRun = generateMockRun('ember test', function() {
           return RSVP.reject(1);
         });
@@ -437,8 +439,6 @@ describe('tryEach', function() {
           }]
         };
 
-        var ranDefaultCommandCount = 0;
-        var ranScenarioCommandCount = 0;
         var mockedRun = generateMockRun('ember test', function() {
           return RSVP.reject(1);
         });
@@ -494,8 +494,6 @@ describe('tryEach', function() {
           }]
         };
 
-        var ranDefaultCommandCount = 0;
-        var ranScenarioCommandCount = 0;
         var mockedRun = generateMockRun('ember test', function() {
           return RSVP.resolve(0);
         });
@@ -586,7 +584,7 @@ describe('tryEach', function() {
           expect(output).to.include('Scenario second: SUCCESS');
 
           expect(ranDefaultCommand).to.equal(true, 'Should run the default command');
-        }).catch(function(err) {
+        }).catch(function() {
           expect(true).to.equal(false, 'Assertions should run');
         });
       });

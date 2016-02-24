@@ -1,3 +1,0 @@
-test/**/*.js
---ui bdd
---timeout 15000

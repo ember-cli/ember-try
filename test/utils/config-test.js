@@ -1,3 +1,5 @@
+'use strict';
+
 var expect        = require('chai').expect;
 var RSVP          = require('rsvp');
 var fs            = require('fs-extra');
@@ -7,7 +9,6 @@ var getConfig     = require('../../lib/utils/config');
 var defaultConfig = getConfig._defaultConfig;
 
 var remove = RSVP.denodeify(fs.remove);
-var stat = RSVP.denodeify(fs.stat);
 var root = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;

@@ -1,3 +1,5 @@
+'use strict';
+
 var expect           = require('chai').expect;
 var TryOneCommand    = require('../../lib/commands/try-one');
 
@@ -85,7 +87,7 @@ function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
                      additionalArgs);
   };
 
-  TryOneCommand._getConfig = function(options) {
+  TryOneCommand._getConfig = function() {
     return { scenarios: [ { name: 'default' }]};
   };
 

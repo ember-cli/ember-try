@@ -1,3 +1,5 @@
+'use strict';
+
 var extend = require('extend');
 
 module.exports = function generateMockRun() {
@@ -43,7 +45,7 @@ function passthrough() {
 function mockedCommandIsEmberAndArgumentsMatch(mockedCommand, mockedArgs, actualCommand, actualArgs) {
 
   return (mockedCommand === 'ember') &&
-         (actualCommand == 'node' && actualArgs && (actualArgs[0].indexOf('ember') > -1) &&
+         (actualCommand === 'node' && actualArgs && (actualArgs[0].indexOf('ember') > -1) &&
          arraysAreEqual(actualArgs.slice(1), mockedArgs));
 }
 
