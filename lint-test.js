@@ -2,12 +2,10 @@
 
 var glob = require('glob').sync;
 
-var paths = glob('test/*').filter(function(path) {
+var paths = glob('test/**/*.js').filter(function(path) {
   return !/fixtures/.test(path);
 });
 
-paths = paths.concat([
-  'lib'
-]);
+paths = paths.concat(glob('lib/**/*.js'));
 
 require('mocha-eslint')(paths);
