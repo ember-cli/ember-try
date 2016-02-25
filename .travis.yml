@@ -13,11 +13,16 @@ cache:
     - node_modules
 
 env:
-  - NPM_SCRIPT=node-test
+  - NPM_SCRIPT=node-test-with-coverage
   - NPM_SCRIPT=client-test
 
 matrix:
   fast_finish: true
+  include:
+  - node_js: "5"
+    env: NPM_SCRIPT=jscs
+  - node_js: "5"
+    env: NPM_SCRIPT=lint
   allow_failures:
     - env: EMBER_TRY_SCENARIO=ember-canary
 
@@ -33,6 +38,4 @@ install:
   - bower install
 
 script:
-  - npm run-script jscs
-  - npm run-script lint
   - npm run-script $NPM_SCRIPT
