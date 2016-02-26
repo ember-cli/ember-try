@@ -4,7 +4,7 @@ var expect         = require('chai').expect;
 var TryEachCommand = require('../../lib/commands/try-each');
 
 var origTryEachTask = TryEachCommand._TryEachTask;
-var origGetConfig = TryEachCommand._getConfig;
+var origGetConfig   = TryEachCommand._getConfig;
 
 describe('commands/testall', function() {
   describe('#run', function() {

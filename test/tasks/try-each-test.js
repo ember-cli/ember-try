@@ -1,23 +1,24 @@
 'use strict';
 
-var expect        = require('chai').expect;
-var tmp           = require('tmp-sync');
-var path          = require('path');
-var RSVP          = require('rsvp');
-var fs            = require('fs-extra');
-var fixtureBower  = require('../fixtures/bower.json');
+var expect          = require('chai').expect;
+var tmp             = require('tmp-sync');
+var path            = require('path');
+var RSVP            = require('rsvp');
+var fs              = require('fs-extra');
+var fixtureBower    = require('../fixtures/bower.json');
 var fixturePackage  = require('../fixtures/package.json');
-var writeJSONFile = require('../helpers/write-json-file');
-var mockery       = require('mockery');
+var writeJSONFile   = require('../helpers/write-json-file');
+var mockery         = require('mockery');
 
-/* The first two of the tests in this file intentionally DO NOT stub dependency manager adapter*/
+/* Some of the tests in this file intentionally DO NOT stub dependency manager adapter*/
 var StubDependencyAdapter = require('../helpers/stub-dependency-manager-adapter');
-var generateMockRun = require('../helpers/generate-mock-run');
+var generateMockRun       = require('../helpers/generate-mock-run');
 
-var remove = RSVP.denodeify(fs.remove);
-var root = process.cwd();
+var remove  = RSVP.denodeify(fs.remove);
+var root    = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
+
 var legacyConfig = {
   scenarios: [
     {

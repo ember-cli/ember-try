@@ -5,13 +5,13 @@ var RSVP          = require('rsvp');
 var fs            = require('fs-extra');
 var path          = require('path');
 var tmp           = require('tmp-sync');
-var fixtureBower  = require('./fixtures/bower.json');
-var BowerAdapter  = require('../lib/utils/bower-adapter');
-var writeJSONFile = require('./helpers/write-json-file');
+var fixtureBower  = require('../fixtures/bower.json');
+var BowerAdapter  = require('../../lib/dependency-manager-adapters/bower');
+var writeJSONFile = require('../helpers/write-json-file');
 
-var remove = RSVP.denodeify(fs.remove);
-var stat = RSVP.denodeify(fs.stat);
-var root = process.cwd();
+var remove  = RSVP.denodeify(fs.remove);
+var stat    = RSVP.denodeify(fs.stat);
+var root    = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 
