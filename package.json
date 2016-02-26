@@ -11,7 +11,8 @@
     "start": "ember server",
     "client-test": "./all-commands.sh",
     "node-test": "mocha test/**/*.js",
-    "lint": "mocha test/unit/lint-test",
+    "node-test-with-coverage": "istanbul cover _mocha test/**/*.js && ./upload-coverage.sh",
+    "lint": "mocha lint-test",
     "jscs": "jscs lib test",
     "test": "npm run-script jscs && npm run-script lint && npm run-script node-test && npm run-script client-test"
   },
@@ -24,6 +25,7 @@
   "devDependencies": {
     "broccoli-asset-rev": "^2.2.0",
     "chai": "^3.5.0",
+    "codeclimate-test-reporter": "^0.3.1",
     "ember-cli": "2.3.0",
     "ember-cli-app-version": "^1.0.0",
     "ember-cli-dependency-checker": "^1.2.0",
@@ -40,6 +42,7 @@
     "ember-load-initializers": "^0.5.0",
     "ember-resolver": "^2.0.3",
     "glob": "^7.0.0",
+    "istanbul": "1.0.0-alpha.2",
     "jscs": "^2.0.0",
     "loader.js": "^4.0.0",
     "mocha": "^2.2.5",
