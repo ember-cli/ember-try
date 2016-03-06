@@ -4,7 +4,7 @@ var expect        = require('chai').expect;
 var TryCommand    = require('../../lib/commands/try');
 
 var origTryEachTask = TryCommand._TryEachTask;
-var origGetConfig = TryCommand._getConfig;
+var origGetConfig   = TryCommand._getConfig;
 
 describe('commands/try', function() {
   describe('getCommand', function() {

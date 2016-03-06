@@ -1,17 +1,17 @@
 'use strict';
 
-var expect        = require('chai').expect;
-var RSVP          = require('rsvp');
-var fs            = require('fs-extra');
-var path          = require('path');
-var tmp           = require('tmp-sync');
-var fixturePackage  = require('./fixtures/package.json');
-var NpmAdapter  = require('../lib/utils/npm-adapter');
-var writeJSONFile = require('./helpers/write-json-file');
-var generateMockRun = require('./helpers/generate-mock-run');
+var expect          = require('chai').expect;
+var RSVP            = require('rsvp');
+var fs              = require('fs-extra');
+var path            = require('path');
+var tmp             = require('tmp-sync');
+var fixturePackage  = require('../fixtures/package.json');
+var NpmAdapter      = require('../../lib/dependency-manager-adapters/npm');
+var writeJSONFile   = require('../helpers/write-json-file');
+var generateMockRun = require('../helpers/generate-mock-run');
 
-var remove = RSVP.denodeify(fs.remove);
-var root = process.cwd();
+var remove  = RSVP.denodeify(fs.remove);
+var root    = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 

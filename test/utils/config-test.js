@@ -8,8 +8,8 @@ var tmp           = require('tmp-sync');
 var getConfig     = require('../../lib/utils/config');
 var defaultConfig = getConfig._defaultConfig;
 
-var remove = RSVP.denodeify(fs.remove);
-var root = process.cwd();
+var remove  = RSVP.denodeify(fs.remove);
+var root    = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 
