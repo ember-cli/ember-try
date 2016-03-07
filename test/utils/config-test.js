@@ -5,6 +5,8 @@ var RSVP          = require('rsvp');
 var fs            = require('fs-extra');
 var path          = require('path');
 var tmp           = require('tmp-sync');
+var fixturePackage  = require('../fixtures/package.json');
+var writeJSONFile   = require('../helpers/write-json-file');
 var getConfig     = require('../../lib/utils/config');
 var defaultConfig = getConfig._defaultConfig;
 
@@ -50,7 +52,7 @@ describe('utils/config', function() {
     expect(config.scenarios[0].foo).to.equal('bar');
   });
 
-  it('uses default config if project.root/config/ember-try.js is not present', function() {
+  it('uses default config if project.root/config/ember-try.js is not present and no versionCompatibility', function() {
     var config = getConfig({ project: project });
     expect(config).to.eql(defaultConfig());
   });
@@ -63,4 +65,67 @@ describe('utils/config', function() {
     expect(config.scenarios).to.have.lengthOf(1);
     expect(config.scenarios[0].qux).to.equal('baz');
   });
+
+  describe('versionCompatibility in package.json', function() {
+    beforeEach(function() {
+      writePackageJSONWithVersionCompatibility();
+    });
+
+    it('is used if there is no config file', function() {
+      var config = getConfig({ project: project });
+      expect(config).to.eql(
+        {
+          scenarios: [
+            { name: 'default', bower: { dependencies: {} } },
+            { name: 'ember-beta', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } } },
+            { name: 'ember-canary', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } } },
+            { name: 'ember-2.2.0', bower: { dependencies: { ember: '2.2.0' } } }
+          ]
+        }
+      );
+    });
+
+    it('is ignored if config file has scenarios', function() {
+      generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };');
+
+      var config = getConfig({ project: project });
+      expect(config.scenarios).to.have.lengthOf(1);
+      expect(config.scenarios[0].foo).to.equal('bar');
+    });
+
+    it('is merged with config if config does not have scenarios', function() {
+      generateConfigFile('module.exports = { bowerOptions: ["--allow-root=true"] };');
+      var config = getConfig({ project: project });
+      expect(config).to.eql(
+        {
+          bowerOptions: ['--allow-root=true'],
+          scenarios: [
+            { name: 'default', bower: { dependencies: {} } },
+            { name: 'ember-beta', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } } },
+            { name: 'ember-canary', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } } },
+            { name: 'ember-2.2.0', bower: { dependencies: { ember: '2.2.0' } } }
+          ]
+        }
+      );
+    });
+
+    it('is merged with config if config has useVersionCompatibility', function() {
+      generateConfigFile('module.exports = { useVersionCompatibility: true, bowerOptions: ["--allow-root=true"], scenarios: [ { name: "bar" }, { name: "ember-beta", allowedToFail: false } ] };');
+      var config = getConfig({ project: project });
+      expect(config.useVersionCompatibility).to.equal(true);
+      expect(config.bowerOptions).to.eql(['--allow-root=true']);
+      expect(config.scenarios).to.eql([
+            { name: 'default', bower: { dependencies: {} } },
+            { name: 'ember-beta', allowedToFail: false, bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } } },
+            { name: 'ember-canary', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } } },
+            { name: 'ember-2.2.0', bower: { dependencies: { ember: '2.2.0' } } },
+            { name: 'bar' }
+      ]);
+    });
+  });
 });
+
+function writePackageJSONWithVersionCompatibility() {
+  fixturePackage['ember-addon'] = { versionCompatibility: { ember: '>=2.2.0 <2.3.0'}};
+  writeJSONFile('package.json', fixturePackage);
+}
