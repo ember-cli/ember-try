@@ -15,6 +15,15 @@ ember try:each --config-path='test/fixtures/dummy-ember-try-config.js'
 # both ember-try options
 ember try:each --config-path='test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
 
+# try:ember
+ember try:ember '> 1.13.0 < 2.0.0'
+ember try:ember '1.13.0' --config-path='test/fixtures/dummy-ember-try-config.js'
+ember try:ember '1.13.0' --skip-cleanup=true
+
+# try:config
+ember try:config
+ember try:config --config-path='test/fixtures/dummy-ember-try-config.js'
+
 # try:testall (Deprecated)
 ember try:testall
 

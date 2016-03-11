@@ -66,7 +66,7 @@ describe('utils/config', function() {
     expect(config.scenarios[0].qux).to.equal('baz');
   });
 
-  describe('versionCompatibility in package.json', function() {
+  describe('versionCompatibility', function() {
     beforeEach(function() {
       writePackageJSONWithVersionCompatibility();
     });
@@ -80,6 +80,20 @@ describe('utils/config', function() {
             { name: 'ember-beta', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } } },
             { name: 'ember-canary', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } } },
             { name: 'ember-2.2.0', bower: { dependencies: { ember: '2.2.0' } } }
+          ]
+        }
+      );
+    });
+
+    it('can be overridden by passed in versionCompatibility', function() {
+      var config = getConfig({ project: project, versionCompatibility: { ember: '1.13.0'} });
+      expect(config).to.eql(
+        {
+          scenarios: [
+            { name: 'default', bower: { dependencies: {} } },
+            { name: 'ember-beta', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } } },
+            { name: 'ember-canary', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } } },
+            { name: 'ember-1.13.0', bower: { dependencies: { ember: '1.13.0' } } }
           ]
         }
       );
