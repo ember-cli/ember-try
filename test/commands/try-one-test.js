@@ -1,6 +1,7 @@
 'use strict';
 
 var expect           = require('chai').expect;
+var RSVP             = require('rsvp');
 var TryOneCommand    = require('../../lib/commands/try-one');
 
 var origTryEachTask = TryOneCommand._TryEachTask;
@@ -27,7 +28,7 @@ describe('commands/try-one', function() {
 
     beforeEach(function() {
       TryOneCommand._getConfig = function() {
-        return mockConfig || { scenarios: [ ] };
+        return RSVP.resolve(mockConfig || { scenarios: [ ] });
       };
 
       TryOneCommand._TryEachTask = MockTryEachTask;
@@ -50,7 +51,7 @@ describe('commands/try-one', function() {
       TryOneCommand._getConfig = function(options) {
         configPath = options.configPath;
 
-        return { scenarios: [ { name: 'foo' }]};
+        return RSVP.resolve({ scenarios: [ { name: 'foo' }]});
       };
 
       TryOneCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
@@ -58,9 +59,9 @@ describe('commands/try-one', function() {
     });
 
     it('throws if a scenario was not found for the scenarioName provided', function() {
-      expect(function() {
-        TryOneCommand.run({ }, ['foo']);
-      }).to.throw(/requires a scenario specified in the config file/);
+      return TryOneCommand.run({ }, ['foo']).catch(function(error) {
+        expect(error).to.match(/requires a scenario specified in the config/);
+      });
     });
 
     it('sets command on task init', function() {
@@ -88,7 +89,7 @@ function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
   };
 
   TryOneCommand._getConfig = function() {
-    return { scenarios: [ { name: 'default' }]};
+    return RSVP.resolve({ scenarios: [ { name: 'default' }]});
   };
 
   TryOneCommand.run({}, ['default']);
