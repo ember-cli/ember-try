@@ -103,7 +103,8 @@ To keep this from getting out of hand, `ember-try` will limit the versions of Em
 Configuration will be read from a file in your ember app in `config/ember-try.js`. It should look like:
 
 ```js
-module.exports = {
+module.exports = function(project) {
+  return {
   /*
     `command` - a single command that, if set, will be the default command used by `ember-try`.
     P.S. The command doesn't need to be an `ember <something>` command, they can be anything.
@@ -177,8 +178,8 @@ module.exports = {
         }
       }
     }
-  ]
-};
+  ]}
+}
 ```
 
 Scenarios are sets of dependencies (`bower` and `npm` only). They can be specified exactly as in the `bower.json` or `package.json`

@@ -54,6 +54,25 @@ describe('utils/config', function() {
     });
   });
 
+  it('config file can export a function', function() {
+    generateConfigFile('module.exports =  function() { return { scenarios: [ { foo: "bar" }] } };');
+
+    return getConfig({ project: project }).then(function(config) {
+      expect(config.scenarios).to.have.lengthOf(1);
+      expect(config.scenarios[0].foo).to.equal('bar');
+    });
+  });
+
+  it('config file exporting a function is passed the project', function() {
+    generateConfigFile('module.exports =  function(project) { return { scenarios: [ { foo: project.blah }] } };');
+
+    project.blah = 'passed-in';
+    return getConfig({ project: project }).then(function(config) {
+      expect(config.scenarios).to.have.lengthOf(1);
+      expect(config.scenarios[0].foo).to.equal('passed-in');
+    });
+  });
+
   it('uses default config if project.root/config/ember-try.js is not present and no versionCompatibility', function() {
     return getConfig({ project: project }).then(function(config) {
       expect(config).to.eql(defaultConfig());
