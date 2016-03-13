@@ -1,3 +1,10 @@
+#v0.2.1
+- Feature: Ability for addons to set Ember compatibility in a key in `package.json` to run against many Ember versions, see README.
+- Feature: New command `ember try:ember <semver-range>`, runs specified command for each Ember verson in the semver range
+- Feature: New command `ember try:config`, shows the config that `ember-try` will run with
+- Feature: Config file can now export a function that will receive the ember-cli project as a variable
+- Feature: Output header at the top of each scenario run to make output easier to parse
+
 #v0.2.0
 - Feature: New command `ember try:one <scenario-name>`, replacement for `ember try <scenario-name>` with different command line signature to better accommodate passing options to the command that is run.
 - Feature: New command `ember try:each`, replacement for `ember try:testall`, but with a better name for what it can now do. 
