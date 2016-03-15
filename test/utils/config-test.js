@@ -109,6 +109,23 @@ describe('utils/config', function() {
       });
     });
 
+    it('is always used if passed in and behaves as if config file has "useVersionCompatibility: true"', function() {
+      generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };');
+      return getConfig({ project: project, versionCompatibility: { ember: '1.13.0'} }).then(function(config) {
+        expect(config).to.eql(
+          {
+            scenarios: [
+              { name: 'default', bower: { dependencies: {} } },
+              { name: 'ember-beta', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } } },
+              { name: 'ember-canary', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } } },
+              { name: 'ember-1.13.0', bower: { dependencies: { ember: '1.13.0' } } },
+              { foo: 'bar' }
+            ]
+          }
+        );
+      });
+    });
+
     it('can be overridden by passed in versionCompatibility', function() {
       return getConfig({ project: project, versionCompatibility: { ember: '1.13.0'} }).then(function(config) {
         expect(config).to.eql(
