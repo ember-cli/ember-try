@@ -1,3 +1,6 @@
+#v0.2.2
+- Bugfix: Config should not clobber `ember try:ember` arguments
+
 #v0.2.1
 - Feature: Ability for addons to set Ember compatibility in a key in `package.json` to run against many Ember versions, see README.
 - Feature: New command `ember try:ember <semver-range>`, runs specified command for each Ember verson in the semver range
