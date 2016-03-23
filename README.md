@@ -105,12 +105,14 @@ To keep this from getting out of hand, `ember-try` will limit the versions of Em
 Configuration will be read from a file in your ember app in `config/ember-try.js`. It should look like:
 
 ```js
-module.exports = function(project) {
+/*jshint node:true*/
+
+module.exports = function() {
   return {
   /*
     `command` - a single command that, if set, will be the default command used by `ember-try`.
     P.S. The command doesn't need to be an `ember <something>` command, they can be anything.
-    Keep in mind that this config file is JavaScript, so you can code in here to determine the command. 
+    Keep in mind that this config file is JavaScript, so you can code in here to determine the command.
   */
   command: 'ember test --reporter xunit',
   /*
@@ -122,24 +124,24 @@ module.exports = function(project) {
   */
   npmOptions: ['--loglevel=silent', '--no-shrinkwrap=true'],
   /*
-    If set to true, the `versionCompatibility` key under `ember-addon` in `package.json` will be used to 
+    If set to true, the `versionCompatibility` key under `ember-addon` in `package.json` will be used to
     automatically generate scenarios that will deep merge with any in this configuration file.
   */
   useVersionCompatibility: true,
   scenarios: [
     {
       name: 'Ember 1.10 with ember-data',
-      
+
       /*
-        `command` can also be overridden at the scenario level. 
+        `command` can also be overridden at the scenario level.
       */
-      command: 'ember test --filter ember-1-10'
+      command: 'ember test --filter ember-1-10',
       bower: {
         dependencies: {
           'ember': '1.10.0',
           'ember-data': '1.0.0-beta.15'
         }
-      }
+      },
     },
     {
       name: 'Ember 1.11.0-beta.5',
@@ -180,8 +182,8 @@ module.exports = function(project) {
         }
       }
     }
-  ]}
-}
+  ]};
+};
 ```
 
 Scenarios are sets of dependencies (`bower` and `npm` only). They can be specified exactly as in the `bower.json` or `package.json`
