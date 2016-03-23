@@ -10,6 +10,8 @@ ember install ember-try
 
 ### Usage
 
+[![How to use EmberTry](https://i.vimeocdn.com/video/559399937_500.jpg)](https://vimeo.com/157688157)
+
 This addon provides a few commands:
 
 ### `ember try:each`
