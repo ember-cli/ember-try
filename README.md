@@ -10,8 +10,6 @@ ember install ember-try
 
 ### Usage
 
-[![How to use EmberTry](https://i.vimeocdn.com/video/559399937_500.jpg)](https://vimeo.com/157688157)
-
 This addon provides a few commands:
 
 ### `ember try:each`
@@ -229,6 +227,8 @@ If no `config/ember-try.js` file is present, the default config will be used. Th
   ]
 }
 ```
+### Video 
+[![How to use EmberTry](https://i.vimeocdn.com/video/559399937_500.jpg)](https://vimeo.com/157688157)
 
 See an example of using `ember-try` for CI [here](https://github.com/kategengler/ember-feature-flags/commit/aaf0226975c76630c875cf6b923fdc23b025aa79), and the resulting build [output](https://travis-ci.org/kategengler/ember-feature-flags/builds/55597086).
 
