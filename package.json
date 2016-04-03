@@ -16,7 +16,7 @@
     "jscs": "jscs lib test",
     "test": "npm run-script jscs && npm run-script lint && npm run-script node-test && npm run-script client-test"
   },
-  "repository": "https://github.com/kategengler/ember-try",
+  "repository": "ember-cli/ember-try",
   "engines": {
     "node": ">= 0.10.0"
   },
