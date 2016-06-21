@@ -1,3 +1,11 @@
+#v0.2.4
+
+- Bugfix: Prevent deprecation with recent versions of `core-object`.
+
+#v0.2.3
+
+- Bugfix: Reduce ember-cli load time, but only performing work when running an `ember try:*` command.
+
 #v0.2.2
 - Bugfix: Config should not clobber `ember try:ember` arguments
 
