@@ -1,3 +1,6 @@
+#v0.2.5
+- No longer use 'latest' as version for the ember-try-config dependency
+
 #v0.2.4
 
 - Bugfix: Prevent deprecation with recent versions of `core-object`.
