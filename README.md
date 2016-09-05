@@ -69,7 +69,7 @@ Runs `ember test` or the command in config for each version of Ember that is pos
 
 Displays the configuration that will be used. Also takes an optional `--config-path`.
 
-#### (DEPRECATED) ember try:testall
+#### (DEPRECATED) `ember try:testall`
 
 This command was renamed to `ember try:each` to better reflect what it does. This command still works, though.
 
