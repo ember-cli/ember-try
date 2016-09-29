@@ -1,0 +1,47 @@
+# http://www.appveyor.com/docs/appveyor-yml
+
+# Test against these versions of Node.js.
+environment:
+  MOCHA_REPORTER: "mocha-appveyor-reporter"
+  matrix:
+    - nodejs_version: "6"
+
+# Install scripts. (runs after repo cloning)
+install:
+  - git rev-parse HEAD
+  # Get the latest stable version of Node 0.STABLE.latest
+  - ps: Install-Product node $env:nodejs_version
+  # Install PhantomJS
+  - npm install phantomjs-prebuilt
+  - npm install mocha-appveyor-reporter
+  - npm install -g bower
+  # Typical npm stuff.
+  - npm version
+  - npm install
+  - bower install
+  - npm link
+  - npm link ember-try
+
+cache:
+  - '%APPDATA%\npm-cache'
+  - '%APPDATA%\Roaming\bower'
+
+
+# Post-install test scripts.
+test_script:
+  # Output useful info for debugging.
+  - npm version
+  - cmd: node_modules/.bin/ember try:each
+  - cmd: node_modules/.bin/ember try:ember "> 1.13.0 < 2.0.0"
+  - cmd: node_modules/.bin/ember try:config --config-path="test/fixtures/dummy-ember-try-config.js"
+  - cmd: node_modules/.bin/ember try:one default
+  - cmd: node_modules/.bin/ember try:one default --- ember help
+  - cmd: node_modules/.bin/ember try:one test1 --config-path="test/fixtures/dummy-ember-try-config.js"
+  - cmd: node_modules/.bin/ember try:one default --skip-cleanup --- ember help --json
+  - cmd: node_modules/.bin/ember try:reset
+
+# Don't actually build.
+build: off
+
+# Set build version format here instead of in the admin panel.
+version: "{build}"
