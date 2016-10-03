@@ -5,7 +5,15 @@ node_js:
   - "4.2"
 #  - "6" - The test that includes coverage runs with 6
 
-sudo: false
+dist: trusty
+sudo: required
+
+addons:
+  apt:
+    sources:
+    - google-chrome
+    packages:
+    - google-chrome-stable
 
 cache:
   directories:
@@ -27,7 +35,8 @@ matrix:
     env: NPM_SCRIPT=node-test-with-coverage
 
 before_install:
-  - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
   - "npm config set spin false"
   - "npm install -g npm@^2"
 
