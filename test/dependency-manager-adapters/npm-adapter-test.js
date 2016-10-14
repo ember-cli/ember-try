@@ -115,17 +115,17 @@ describe('npmAdapter', function() {
     it('changes specified dependency versions', function() {
       var npmAdapter = new NpmAdapter({cwd: tmpdir});
       var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0'} };
-      var depSet =  { dependencies: { 'ember-cli-babel': '6.0.0' } };
+      var depSet = { dependencies: { 'ember-cli-babel': '6.0.0' } };
 
       var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.dependencies['ember-cli-babel']).to.equal('6.0.0');
     });
 
-    it('changes specified bower dev dependency versions', function() {
+    it('changes specified npm dev dependency versions', function() {
       var npmAdapter = new NpmAdapter({cwd: tmpdir});
       var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0'} };
-      var depSet =  { devDependencies: { 'ember-feature-flags': '2.0.1' } };
+      var depSet = { devDependencies: { 'ember-feature-flags': '2.0.1' } };
 
       var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
