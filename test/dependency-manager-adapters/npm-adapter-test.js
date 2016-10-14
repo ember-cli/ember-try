@@ -131,6 +131,16 @@ describe('npmAdapter', function() {
 
       expect(resultJSON.devDependencies['ember-feature-flags']).to.equal('2.0.1');
     });
+
+    it('changes specified npm peer dependency versions', function() {
+      var npmAdapter = new NpmAdapter({cwd: tmpdir});
+      var packageJSON = { peerDependencies: { 'ember-cli-babel': '5.0.0' } };
+      var depSet = { peerDependencies: { 'ember-cli-babel': '4.0.0' } };
+
+      var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+      expect(resultJSON.peerDependencies['ember-cli-babel']).to.equal('4.0.0');
+    });
   });
 });
 
