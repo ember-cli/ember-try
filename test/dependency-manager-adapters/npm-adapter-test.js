@@ -141,6 +141,16 @@ describe('npmAdapter', function() {
 
       expect(resultJSON.peerDependencies['ember-cli-babel']).to.equal('4.0.0');
     });
+
+    it('can remove a package', function() {
+      var npmAdapter = new NpmAdapter({cwd: tmpdir});
+      var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' } };
+      var depSet = { devDependencies: { 'ember-feature-flags': undefined } };
+
+      var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+      expect(resultJSON.devDependencies).to.not.have.property('ember-feature-flags');
+    });
   });
 });
 
