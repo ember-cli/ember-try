@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -ex
 
+npm link
+npm link ember-try
+
 # try:each
 ember try:each
 
@@ -93,3 +96,9 @@ ember try:one default --skip-cleanup --- ember help --json
 
 # try:reset
 ember try:reset
+
+FOO="5" ember try:one default --- ./fail-if-no-foo.sh
+
+ember try:one default --- FOO=5 ./fail-if-no-foo.sh
+
+ember try:one default --- 'echo 1 && echo 2'

@@ -20,7 +20,6 @@ bower.json
 ember-cli-build.js
 testem.js
 all-commands.sh
-test-win-commands.sh
 lint-test.js
 testem.json
 upload-coverage.sh
