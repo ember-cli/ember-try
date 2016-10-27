@@ -17,7 +17,7 @@ env:
 matrix:
   fast_finish: true
   include:
-  - node_js: "4.2"
+  - node_js: "6"
     env: NPM_SCRIPT=client-test
   - node_js: "6"
     env: NPM_SCRIPT=jscs
