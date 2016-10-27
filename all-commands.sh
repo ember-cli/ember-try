@@ -61,12 +61,12 @@ ember try default --skip-cleanup
 # ember try test1 --config-path='test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
 
 # custom command with all styles of options
-ember try default help --json
-ember try default help --json=true
-ember try default help --json true
+ember try default help --silent
+ember try default help --silent=true
+ember try default help --silent true
 
 # custom command mixed with ember try's own option
-ember try default help --json --skip-cleanup
+ember try default help --silent --skip-cleanup
 
 # try:one <scenario>
 ember try:one default
@@ -86,12 +86,12 @@ ember try:one test1 --config-path='test/fixtures/dummy-ember-try-config.js'
 ember try:one test1 --config-path='test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
 
 # custom command with all styles of options
-ember try:one default --- ember help --json
-ember try:one default --- ember help --json=true
-ember try:one default --- ember help --json true
+ember try:one default --- ember help --silent
+ember try:one default --- ember help --silent=true
+ember try:one default --- ember help --silent true
 
 # custom command mixed with ember try's own option
-ember try:one default --skip-cleanup --- ember help --json
+ember try:one default --skip-cleanup --- ember help --silent
 
 
 # try:reset
