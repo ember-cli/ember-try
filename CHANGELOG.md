@@ -1,3 +1,7 @@
+#v0.2.6
+- Support peerDependencies
+- Support removing packages in scenarios
+                                                    
 #v0.2.5
 - No longer use 'latest' as version for the ember-try-config dependency
 
