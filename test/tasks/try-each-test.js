@@ -64,7 +64,8 @@ var config = {
       name: 'first',
       bower: {
         dependencies: {
-          ember: '1.13.0'
+          ember: '1.13.0',
+          bootstrap: null
         }
       },
       npm: {
