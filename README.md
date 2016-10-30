@@ -159,8 +159,8 @@ module.exports = function() {
         devDependencies: {
           'ember-data': '2.3.0',
 
-          // you can remove any package by marking `undefined`
-          'some-optional-package': undefined
+          // you can remove any package by marking `null`
+          'some-optional-package': null
         }
       },
       bower: {
