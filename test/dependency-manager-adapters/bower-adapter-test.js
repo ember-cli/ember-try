@@ -193,6 +193,17 @@ describe('bowerAdapter', function() {
 
       expect(resultJSON.resolutions.jquery).to.equal('2.1.3');
     });
+
+    it('can remove a package', function() {
+      var bowerAdapter = new BowerAdapter({cwd: tmpdir});
+      var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: { jquery: '1.11.1' } };
+      var depSet = { dependencies: { jquery: null } };
+
+      var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
+
+      expect(resultJSON.dependencies).to.not.have.property('jquery');
+      expect(resultJSON.resolutions).to.not.have.property('jquery');
+    });
   });
 
   describe('#_findBowerPath()', function() {

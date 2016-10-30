@@ -145,7 +145,7 @@ describe('npmAdapter', function() {
     it('can remove a package', function() {
       var npmAdapter = new NpmAdapter({cwd: tmpdir});
       var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' } };
-      var depSet = { devDependencies: { 'ember-feature-flags': undefined } };
+      var depSet = { devDependencies: { 'ember-feature-flags': null } };
 
       var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 

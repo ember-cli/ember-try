@@ -64,7 +64,8 @@ var config = {
       name: 'first',
       bower: {
         dependencies: {
-          ember: '1.13.0'
+          ember: '1.13.0',
+          bootstrap: null
         }
       },
       npm: {
@@ -314,7 +315,7 @@ describe('tryEach', function() {
   describe('with stubbed dependency manager', function() {
     it('passes along timeout options to run', function() {
       // With stubbed dependency manager, timing out is warning for accidentally not using the stub
-      this.timeout(600);
+      this.timeout(1200);
 
       var config = {
         scenarios: [{
@@ -368,7 +369,7 @@ describe('tryEach', function() {
     describe('allowedToFail', function() {
       it('exits appropriately if all failures were allowedToFail', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
-        this.timeout(600);
+        this.timeout(1200);
 
         var config = {
           scenarios: [{
@@ -423,7 +424,7 @@ describe('tryEach', function() {
 
       it('exits appropriately if any failures were not allowedToFail', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
-        this.timeout(600);
+        this.timeout(1200);
 
         var config = {
           scenarios: [{
@@ -477,7 +478,7 @@ describe('tryEach', function() {
 
       it('exits appropriately if all allowedToFail pass', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
-        this.timeout(600);
+        this.timeout(1200);
 
         var config = {
           scenarios: [{
@@ -535,7 +536,7 @@ describe('tryEach', function() {
     describe('configurable command', function() {
       it('defaults to `ember test`', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
-        this.timeout(600);
+        this.timeout(1200);
 
         var config = {
           scenarios: [{
@@ -592,7 +593,7 @@ describe('tryEach', function() {
 
       it('allows passing in of the command to run', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
-        this.timeout(600);
+        this.timeout(1200);
 
         var config = {
           command: 'ember test-this',
@@ -641,7 +642,7 @@ describe('tryEach', function() {
 
       it('uses command from config', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
-        this.timeout(600);
+        this.timeout(1200);
 
         var config = {
           command: 'ember test --test-port=2345',
@@ -757,7 +758,7 @@ describe('tryEach', function() {
 
     it('sets EMBER_TRY_CURRENT_SCENARIO', function() {
       // With stubbed dependency manager, timing out is warning for accidentally not using the stub
-      this.timeout(600);
+      this.timeout(1200);
 
       var config = {
         scenarios: [{

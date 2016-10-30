@@ -1,6 +1,7 @@
 {
   "name": "a-test-project",
   "dependencies": {
-    "jquery": "^1.11.1"
+    "jquery": "^1.11.1",
+    "bootstrap": "3.0.0"
   }
 }
