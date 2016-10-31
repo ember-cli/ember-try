@@ -238,3 +238,8 @@ See an example of using `ember-try` for CI [here](https://github.com/kategengler
 ### Special Thanks
 
 - Much credit is due to [Edward Faulkner](https://github.com/ef4) The scripts in [liquid-fire](https://github.com/ef4/liquid-fire) that test against multiple ember versions were the inspiration for this project.
+
+
+### Developing
+
+- Be sure to run `npm link` and `npm link ember-try`, otherwise any `ember try` commands you run will use the version of ember-try included by ember-cli itself.
