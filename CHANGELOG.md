@@ -1,3 +1,6 @@
+#v0.2.8
+- Bugfix: Support any command `sh -c` or `cmd /d /s /c` can take.
+
 #v0.2.7
 - Support peerDependencies
 - Support removing packages in scenarios
