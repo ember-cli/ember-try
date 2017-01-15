@@ -1,3 +1,6 @@
+#v0.2.9
+- Lazily install bower if necessary
+
 #v0.2.8
 - Bugfix: Support any command `sh -c` or `cmd /d /s /c` can take.
 
