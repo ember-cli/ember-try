@@ -210,9 +210,61 @@ describe('bowerAdapter', function() {
     it('returns the correct bower path', function() {
       return new BowerAdapter({cwd: tmpdir})._findBowerPath().then(function(path) {
         expect(path).to.include('node_modules/bower/bin/bower');
-      }).catch(function(err) {
-        console.log(err);
-        expect(true).to.equal(false, 'Error should not happen');
+      });
+    });
+
+    it('does not attempt to install bower if bower is found', function() {
+      var installCount = 0;
+      var stubbedResolveModule = function() {
+        return RSVP.resolve('blip/bloop/foo/lib/index.js');
+      };
+      var stubbedInstallBower = function() {
+        installCount++;
+      };
+      return new BowerAdapter({cwd: tmpdir, _installBower: stubbedInstallBower, _resolveModule: stubbedResolveModule})._findBowerPath().then(function(path) {
+        expect(path).to.include('blip/bloop/foo/bin/bower');
+        expect(installCount).to.equal(0);
+      });
+    });
+
+    it('installs bower if bower is not found', function() {
+      var installCount = 0;
+      var resolveModuleCount = 0;
+      var stubbedResolveModule = function() {
+        resolveModuleCount++;
+        if (resolveModuleCount === 1) {
+          return RSVP.reject();
+        }
+        if (resolveModuleCount === 2) {
+          return RSVP.resolve('flip/flop/gloop/lib/index.js');
+        }
+      };
+
+      var stubbedInstallBower = function() {
+        installCount++;
+      };
+
+      return new BowerAdapter({cwd: tmpdir, _installBower: stubbedInstallBower, _resolveModule: stubbedResolveModule})._findBowerPath().then(function(path) {
+        expect(path).to.include('flip/flop/gloop/bin/bower');
+        expect(installCount).to.equal(1);
+      });
+    });
+  });
+
+  describe('#_installBower()', function() {
+    it('installs bower via npm', function() {
+      var command, args, opts;
+      var stubbedRun = function(c, a, o) {
+        command = c;
+        args = a;
+        opts = o;
+        return RSVP.resolve();
+      };
+      return new BowerAdapter({cwd: tmpdir, run: stubbedRun})._installBower().then(function() {
+        expect(command).to.equal('npm');
+        expect(args[0]).to.equal('install');
+        expect(args[1]).to.equal('bower@^1.3.12');
+        expect(opts).to.have.property('cwd', tmpdir);
       });
     });
   });
