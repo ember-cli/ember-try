@@ -49,7 +49,7 @@ describe('bowerAdapter', function() {
           ember: 'beta'
         }
       };
-      var results = new BowerAdapter({cwd: tmpdir})._getDependencySetAccountingForDeprecatedTopLevelKeys(scenarioDepSet);
+      var results = new BowerAdapter({cwd: tmpdir})._getDepSet(scenarioDepSet);
       expect(results).to.eql(scenarioDepSet);
     });
 
@@ -77,7 +77,7 @@ describe('bowerAdapter', function() {
         }
       };
 
-      var results = new BowerAdapter({cwd: tmpdir})._getDependencySetAccountingForDeprecatedTopLevelKeys(scenarioDepSet);
+      var results = new BowerAdapter({cwd: tmpdir})._getDepSet(scenarioDepSet);
       expect(results).to.eql(scenarioDepSet.bower);
     });
   });
@@ -134,7 +134,7 @@ describe('bowerAdapter', function() {
     it('replaces the bower.json with the backed up version', function() {
       writeJSONFile('bower.json.ember-try', {originalBowerJSON: true});
       writeJSONFile('bower.json', {originalBowerJSON: false});
-      return new BowerAdapter({cwd: tmpdir})._restoreOriginalBowerFile().then(function() {
+      return new BowerAdapter({cwd: tmpdir})._restore().then(function() {
         assertFileContainsJSON('bower.json', {originalBowerJSON: true});
       });
     });
@@ -146,7 +146,7 @@ describe('bowerAdapter', function() {
       var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: {} };
       var depSet =  { dependencies: { jquery: '2.1.3' } };
 
-      var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
+      var resultJSON = bowerAdapter._newJSONForDependencySet(bowerJSON, depSet);
 
       expect(resultJSON.dependencies.jquery).to.equal('2.1.3');
     });
@@ -156,7 +156,7 @@ describe('bowerAdapter', function() {
       var bowerJSON = { devDependencies: { jquery: '1.11.1' }, resolutions: {} };
       var depSet =  { devDependencies: { jquery: '2.1.3' } };
 
-      var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
+      var resultJSON = bowerAdapter._newJSONForDependencySet(bowerJSON, depSet);
 
       expect(resultJSON.devDependencies.jquery).to.equal('2.1.3');
     });
@@ -166,7 +166,7 @@ describe('bowerAdapter', function() {
       var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: {} };
       var depSet =  { dependencies: { jquery: '2.1.3' } };
 
-      var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
+      var resultJSON = bowerAdapter._newJSONForDependencySet(bowerJSON, depSet);
 
       expect(resultJSON.resolutions.jquery).to.equal('2.1.3');
     });
@@ -179,7 +179,7 @@ describe('bowerAdapter', function() {
         resolutions:  { ember: 'canary' }
       };
 
-      var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
+      var resultJSON = bowerAdapter._newJSONForDependencySet(bowerJSON, depSet);
 
       expect(resultJSON.resolutions.ember).to.equal('canary');
     });
@@ -189,7 +189,7 @@ describe('bowerAdapter', function() {
       var bowerJSON = { dependencies: { jquery: '1.11.1' } };
       var depSet =  { dependencies: { jquery: '2.1.3' } };
 
-      var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
+      var resultJSON = bowerAdapter._newJSONForDependencySet(bowerJSON, depSet);
 
       expect(resultJSON.resolutions.jquery).to.equal('2.1.3');
     });
@@ -199,7 +199,7 @@ describe('bowerAdapter', function() {
       var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: { jquery: '1.11.1' } };
       var depSet = { dependencies: { jquery: null } };
 
-      var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
+      var resultJSON = bowerAdapter._newJSONForDependencySet(bowerJSON, depSet);
 
       expect(resultJSON.dependencies).to.not.have.property('jquery');
       expect(resultJSON.resolutions).to.not.have.property('jquery');

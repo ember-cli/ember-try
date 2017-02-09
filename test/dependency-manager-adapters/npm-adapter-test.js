@@ -101,7 +101,7 @@ describe('npmAdapter', function() {
       writeJSONFile('package.json', {originalPackageJSON: false});
       fs.mkdirSync('.node_modules.ember-try');
       writeJSONFile('.node_modules.ember-try/prove-it.json', {originalNodeModules: true});
-      return new NpmAdapter({cwd: tmpdir})._restoreOriginalDependencies().then(function() {
+      return new NpmAdapter({cwd: tmpdir})._restore().then(function() {
         assertFileContainsJSON('package.json', {originalPackageJSON: true});
         assertFileContainsJSON('node_modules/prove-it.json', {originalNodeModules: true});
       }).catch(function(err) {
@@ -117,7 +117,7 @@ describe('npmAdapter', function() {
       var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0'} };
       var depSet = { dependencies: { 'ember-cli-babel': '6.0.0' } };
 
-      var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+      var resultJSON = npmAdapter._newJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.dependencies['ember-cli-babel']).to.equal('6.0.0');
     });
@@ -127,7 +127,7 @@ describe('npmAdapter', function() {
       var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0'} };
       var depSet = { devDependencies: { 'ember-feature-flags': '2.0.1' } };
 
-      var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+      var resultJSON = npmAdapter._newJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.devDependencies['ember-feature-flags']).to.equal('2.0.1');
     });
@@ -137,7 +137,7 @@ describe('npmAdapter', function() {
       var packageJSON = { peerDependencies: { 'ember-cli-babel': '5.0.0' } };
       var depSet = { peerDependencies: { 'ember-cli-babel': '4.0.0' } };
 
-      var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+      var resultJSON = npmAdapter._newJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.peerDependencies['ember-cli-babel']).to.equal('4.0.0');
     });
@@ -147,7 +147,7 @@ describe('npmAdapter', function() {
       var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' } };
       var depSet = { devDependencies: { 'ember-feature-flags': null } };
 
-      var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+      var resultJSON = npmAdapter._newJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.devDependencies).to.not.have.property('ember-feature-flags');
     });
