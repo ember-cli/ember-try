@@ -64,6 +64,7 @@
     "ember-try-config": "^2.0.1",
     "extend": "^3.0.0",
     "fs-extra": "^0.26.0",
+    "js-yaml": "^3.8.1",
     "promise-map-series": "^0.2.1",
     "resolve": "^1.1.6",
     "rimraf": "^2.3.2",
