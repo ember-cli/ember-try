@@ -18,7 +18,6 @@ install:
   # Typical npm stuff.
   - npm version
   - npm install
-  - bower install
   - npm link
   - npm link ember-try
 
