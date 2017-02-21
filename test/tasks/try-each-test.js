@@ -139,21 +139,17 @@ describe('tryEach', function() {
         output.push(log);
       };
 
-      var mockedExit = function(code) {
-        expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
-      };
-
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
         ui: {writeLine: outputFn},
         project: {root: tmpdir},
         config: legacyConfig,
-        _on: function() {},
-        _exit: mockedExit
+        _on: function() {}
       });
 
       writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(legacyConfig.scenarios, {}).then(function() {
+      return tryEachTask.run(legacyConfig.scenarios, {}).then(function(exitCode) {
+        expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(output).to.include('Scenario default: SUCCESS');
         expect(output).to.include('Scenario first: SUCCESS');
         expect(output).to.include('Scenario second: SUCCESS');
@@ -188,21 +184,17 @@ describe('tryEach', function() {
         output.push(log);
       };
 
-      var mockedExit = function(code) {
-        expect(code).to.equal(1);
-      };
-
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
         ui: {writeLine: outputFn},
         project: {root: tmpdir},
         config: legacyConfig,
-        _on: function() {},
-        _exit: mockedExit
+        _on: function() {}
       });
 
       writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(legacyConfig.scenarios, {}).then(function() {
+      return tryEachTask.run(legacyConfig.scenarios, {}).then(function(exitCode) {
+        expect(exitCode).to.equal(1);
         expect(output).to.include('Scenario default: FAIL');
         expect(output).to.include('Scenario first: SUCCESS');
         expect(output).to.include('Scenario second: SUCCESS');
@@ -233,23 +225,19 @@ describe('tryEach', function() {
         output.push(log);
       };
 
-      var mockedExit = function(code) {
-        expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
-      };
-
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
         ui: {writeLine: outputFn},
         project: {root: tmpdir},
         config: config,
-        _on: function() {},
-        _exit: mockedExit
+        _on: function() {}
       });
 
       writeJSONFile('package.json', fixturePackage);
       fs.mkdirSync('node_modules');
       writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(config.scenarios, {}).then(function() {
+      return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+        expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(output).to.include('Scenario first: SUCCESS');
         expect(output).to.include('Scenario second: SUCCESS');
         expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
@@ -281,23 +269,19 @@ describe('tryEach', function() {
         output.push(log);
       };
 
-      var mockedExit = function(code) {
-        expect(code).to.equal(1);
-      };
-
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
         ui: {writeLine: outputFn},
         project: {root: tmpdir},
         config: config,
-        _on: function() {},
-        _exit: mockedExit
+        _on: function() {}
       });
 
       writeJSONFile('package.json', fixturePackage);
       fs.mkdirSync('node_modules');
       writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(config.scenarios, {}).then(function() {
+      return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+        expect(exitCode).to.equal(1);
         expect(output).to.include('Scenario first: FAIL');
         expect(output).to.include('Scenario second: SUCCESS');
         expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
@@ -340,10 +324,6 @@ describe('tryEach', function() {
         output.push(log);
       };
 
-      var mockedExit = function(code) {
-        expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
-      };
-
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
         ui: {writeLine: outputFn},
@@ -352,12 +332,12 @@ describe('tryEach', function() {
         commandArgs: ['ember', 'serve'],
         commandOptions: { timeout: { length: 20000, isSuccess: true }},
         dependencyManagerAdapters: [new StubDependencyAdapter()],
-        _on: function() {},
-        _exit: mockedExit
+        _on: function() {}
       });
 
       writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(config.scenarios, {}).then(function() {
+      return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+        expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(output).to.include('Scenario first: SUCCESS');
         expect(passedInOptions).to.equal(true, 'Should pass the options all the way down to run');
       }).catch(function(err) {
@@ -396,10 +376,6 @@ describe('tryEach', function() {
         var outputFn = function(log) {
           output.push(log);
         };
-        var exitCode;
-        var mockedExit = function(code) {
-          exitCode = code;
-        };
 
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
@@ -407,11 +383,10 @@ describe('tryEach', function() {
           project: {root: tmpdir},
           config: config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {},
-          _exit: mockedExit
+          _on: function() {}
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function() {
+        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
           expect(output).to.include('Scenario first: FAIL (Allowed)');
           expect(output).to.include('Scenario second: FAIL (Allowed)');
           expect(output).to.include('2 scenarios failed (2 allowed)');
@@ -450,10 +425,6 @@ describe('tryEach', function() {
         var outputFn = function(log) {
           output.push(log);
         };
-        var exitCode;
-        var mockedExit = function(code) {
-          exitCode = code;
-        };
 
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
@@ -461,11 +432,10 @@ describe('tryEach', function() {
           project: {root: tmpdir},
           config: config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {},
-          _exit: mockedExit
+          _on: function() {}
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function() {
+        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
           expect(output).to.include('Scenario first: FAIL');
           expect(output).to.include('Scenario second: FAIL (Allowed)');
           expect(output).to.include('2 scenarios failed (1 allowed)');
@@ -505,10 +475,6 @@ describe('tryEach', function() {
         var outputFn = function(log) {
           output.push(log);
         };
-        var exitCode;
-        var mockedExit = function(code) {
-          exitCode = code;
-        };
 
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
@@ -516,11 +482,10 @@ describe('tryEach', function() {
           project: {root: tmpdir},
           config: config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {},
-          _exit: mockedExit
+          _on: function() {}
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function() {
+        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
           expect(output).to.include('Scenario first: SUCCESS');
           expect(output).to.include('Scenario second: SUCCESS');
           expect(output).to.include('All 2 scenarios succeeded');
@@ -566,10 +531,6 @@ describe('tryEach', function() {
           output.push(log);
         };
 
-        var mockedExit = function(code) {
-          expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
-        };
-
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
           ui: {writeLine: outputFn},
@@ -577,11 +538,11 @@ describe('tryEach', function() {
           config: config,
           commandArgs: [],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {},
-          _exit: mockedExit
+          _on: function() {}
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function() {
+        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+          expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
           expect(output).to.include('Scenario first: SUCCESS');
           expect(output).to.include('Scenario second: SUCCESS');
 
@@ -616,10 +577,6 @@ describe('tryEach', function() {
           output.push(log);
         };
 
-        var mockedExit = function(code) {
-          expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
-        };
-
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
           ui: {writeLine: outputFn},
@@ -627,11 +584,11 @@ describe('tryEach', function() {
           config: config,
           commandArgs: ['ember', 'serve'],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {},
-          _exit: mockedExit
+          _on: function() {}
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function() {
+        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+          expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
           expect(output).to.include('Scenario first: SUCCESS');
           expect(ranPassedInCommand).to.equal(true, 'Should run the passed in command');
         }).catch(function(err) {
@@ -687,21 +644,18 @@ describe('tryEach', function() {
           output.push(log);
         };
 
-        var mockedExit = function(code) {
-          expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
-        };
-
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
           ui: {writeLine: outputFn},
           project: {root: tmpdir},
           config: config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {},
-          _exit: mockedExit
+          _on: function() {}
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function() {
+        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+          expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
+
           expect(output).to.include('Scenario first: SUCCESS');
           expect(output).to.include('Scenario second: SUCCESS');
           expect(output).to.include('Scenario different: SUCCESS');
@@ -732,10 +686,6 @@ describe('tryEach', function() {
           output.push(log);
         };
 
-        var mockedExit = function(code) {
-          expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
-        };
-
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
           ui: {writeLine: outputFn},
@@ -743,11 +693,11 @@ describe('tryEach', function() {
           config: config,
           commandArgs: ['ember', 'help', '--json', 'true'],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {},
-          _exit: mockedExit
+          _on: function() {}
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function() {
+        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+          expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
           expect(output).to.include('Scenario first: SUCCESS', 'Passing scenario means options were passed along');
         }).catch(function(err) {
           console.log(err);
@@ -774,10 +724,6 @@ describe('tryEach', function() {
         output.push(log);
       };
 
-      var mockedExit = function(code) {
-        expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
-      };
-
       var scenarios = [];
       var mockRunCommand = function() {
         var currentScenario = process.env.EMBER_TRY_CURRENT_SCENARIO;
@@ -792,12 +738,12 @@ describe('tryEach', function() {
         config: config,
         dependencyManagerAdapters: [new StubDependencyAdapter()],
         _on: function() {},
-        _exit: mockedExit,
         _runCommand: mockRunCommand
       });
 
       writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(config.scenarios, {}).then(function() {
+      return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+        expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(scenarios).to.eql(['first']);
         var currentScenarioIsUndefined = process.env.EMBER_TRY_CURRENT_SCENARIO === undefined;
         expect(currentScenarioIsUndefined).to.equal(true);
@@ -807,5 +753,4 @@ describe('tryEach', function() {
       });
     });
   });
-
 });
