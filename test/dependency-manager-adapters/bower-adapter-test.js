@@ -33,6 +33,12 @@ describe('bowerAdapter', function() {
         assertFileContainsJSON('bower.json.ember-try', {originalBowerJSON: true});
       });
     });
+
+    it('does not error if no bower.json', function() {
+      return new BowerAdapter({cwd: tmpdir}).setup().catch(function() {
+        expect(true).to.eql(false);
+      });
+    });
   });
 
   describe('#_getDependencySetAccountingForDeprecatedTopLevelKeys', function() {
@@ -136,6 +142,40 @@ describe('bowerAdapter', function() {
       writeJSONFile('bower.json', {originalBowerJSON: false});
       return new BowerAdapter({cwd: tmpdir})._restoreOriginalBowerFile().then(function() {
         assertFileContainsJSON('bower.json', {originalBowerJSON: true});
+      });
+    });
+  });
+
+  describe('#_writeBowerFileWithDepSetChanges', function() {
+    it('writes bower.json with dep set changes', function() {
+      var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: {} };
+      var depSet =  { dependencies: { jquery: '2.1.3' } };
+      writeJSONFile('bower.json', bowerJSON);
+      writeJSONFile('bower.json.ember-try', bowerJSON);
+
+      new BowerAdapter({cwd: tmpdir})._writeBowerFileWithDepSetChanges(depSet);
+      assertFileContainsJSON('bower.json', {
+        dependencies: {
+          jquery: '2.1.3'
+        },
+        resolutions: {
+          jquery: '2.1.3'
+        }
+      });
+    });
+
+    it('writes bower.json with dep set changes even if no original bower.json', function() {
+      var depSet =  { dependencies: { jquery: '2.1.3' } };
+
+      new BowerAdapter({cwd: tmpdir})._writeBowerFileWithDepSetChanges(depSet);
+      assertFileContainsJSON('bower.json', {
+        name: 'ember-try-placeholder',
+        dependencies: {
+          jquery: '2.1.3'
+        },
+        resolutions: {
+          jquery: '2.1.3'
+        }
       });
     });
   });
@@ -278,7 +318,7 @@ function assertFileContains(filename, expectedContents) {
   var regex = new RegExp(escapeForRegex(expectedContents) + '($|\\W)', 'gm');
   var actualContents = fs.readFileSync(path.join(tmpdir, filename), { encoding: 'utf-8' });
   var result = regex.test(actualContents);
-  expect(result).to.equal(true, 'File ' + filename + ' is expected to contain ' + expectedContents);
+  expect(result).to.equal(true, 'File ' + filename + ' is expected to contain ' + expectedContents + ' but contained ' + actualContents);
 }
 
 function escapeForRegex(str) {
