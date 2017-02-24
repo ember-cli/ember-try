@@ -163,7 +163,6 @@ describe('tryEach', function() {
       });
     });
 
-
     it('fails scenarios when scenario\'s tests fail', function() {
       this.timeout(30000);
 
@@ -208,8 +207,39 @@ describe('tryEach', function() {
         expect(true).to.equal(false, 'Assertions should run');
       });
     });
-
   });
+
+  describe('with bower scenarios', function() {
+    it('works without an initial bower.json', function() {
+      this.timeout(30000);
+
+      var mockedRun = generateMockRun('ember test', function() {
+        return RSVP.resolve(0);
+      });
+      mockery.registerMock('./run', mockedRun);
+
+      var output = [];
+      var outputFn = function(log) {
+        output.push(log);
+      };
+
+      var TryEachTask = require('../../lib/tasks/try-each');
+      var tryEachTask = new TryEachTask({
+        ui: {writeLine: outputFn},
+        project: {root: tmpdir},
+        config: legacyConfig,
+        _on: function() {}
+      });
+
+      expect(fs.existsSync('bower.json')).to.eql(false);
+      return tryEachTask.run(legacyConfig.scenarios, {}).then(function() {
+        expect(output).to.include('All 5 scenarios succeeded');
+        expect(fs.existsSync('bower.json')).to.eql(false);
+        expect(fs.existsSync('bower_components')).to.eql(false);
+      });
+    });
+  });
+
   describe('with both npm and bower', function() {
     it('succeeds when scenario\'s tests succeed', function() {
       this.timeout(300000);
