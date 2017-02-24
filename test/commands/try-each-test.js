@@ -1,11 +1,11 @@
 'use strict';
 
-var expect         = require('chai').expect;
-var RSVP           = require('rsvp');
+var expect = require('chai').expect;
+var RSVP = require('rsvp');
 var TryEachCommand = require('../../lib/commands/try-each');
 
 var origTryEachTask = TryEachCommand._TryEachTask;
-var origGetConfig   = TryEachCommand._getConfig;
+var origGetConfig = TryEachCommand._getConfig;
 
 describe('commands/try-each', function() {
   describe('#run', function() {
@@ -16,7 +16,7 @@ describe('commands/try-each', function() {
 
     beforeEach(function() {
       TryEachCommand._getConfig = function() {
-        return RSVP.resolve(mockConfig || { scenarios: [ ] });
+        return RSVP.resolve(mockConfig || { scenarios: [] });
       };
 
       TryEachCommand._TryEachTask = MockTryEachTask;
@@ -33,7 +33,7 @@ describe('commands/try-each', function() {
       TryEachCommand._getConfig = function(options) {
         configPath = options.configPath;
 
-        return RSVP.resolve({ scenarios: [ { name: 'foo' }]});
+        return RSVP.resolve({ scenarios: [{ name: 'foo' }] });
       };
 
       TryEachCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);

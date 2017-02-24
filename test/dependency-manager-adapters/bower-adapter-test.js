@@ -1,17 +1,17 @@
 'use strict';
 
-var expect        = require('chai').expect;
-var RSVP          = require('rsvp');
-var fs            = require('fs-extra');
-var path          = require('path');
-var tmp           = require('tmp-sync');
-var fixtureBower  = require('../fixtures/bower.json');
-var BowerAdapter  = require('../../lib/dependency-manager-adapters/bower');
+var expect = require('chai').expect;
+var RSVP = require('rsvp');
+var fs = require('fs-extra');
+var path = require('path');
+var tmp = require('tmp-sync');
+var fixtureBower = require('../fixtures/bower.json');
+var BowerAdapter = require('../../lib/dependency-manager-adapters/bower');
 var writeJSONFile = require('../helpers/write-json-file');
 
-var remove  = RSVP.denodeify(fs.remove);
-var stat    = RSVP.denodeify(fs.stat);
-var root    = process.cwd();
+var remove = RSVP.denodeify(fs.remove);
+var stat = RSVP.denodeify(fs.stat);
+var root = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 
@@ -28,14 +28,14 @@ describe('bowerAdapter', function() {
 
   describe('#setup', function() {
     it('backs up the bower file', function() {
-      writeJSONFile('bower.json', {originalBowerJSON: true});
-      return new BowerAdapter({cwd: tmpdir}).setup().then(function() {
-        assertFileContainsJSON('bower.json.ember-try', {originalBowerJSON: true});
+      writeJSONFile('bower.json', { originalBowerJSON: true });
+      return new BowerAdapter({ cwd: tmpdir }).setup().then(function() {
+        assertFileContainsJSON('bower.json.ember-try', { originalBowerJSON: true });
       });
     });
 
     it('does not error if no bower.json', function() {
-      return new BowerAdapter({cwd: tmpdir}).setup().catch(function() {
+      return new BowerAdapter({ cwd: tmpdir }).setup().catch(function() {
         expect(true).to.eql(false);
       });
     });
@@ -55,7 +55,7 @@ describe('bowerAdapter', function() {
           ember: 'beta'
         }
       };
-      var results = new BowerAdapter({cwd: tmpdir})._getDependencySetAccountingForDeprecatedTopLevelKeys(scenarioDepSet);
+      var results = new BowerAdapter({ cwd: tmpdir })._getDependencySetAccountingForDeprecatedTopLevelKeys(scenarioDepSet);
       expect(results).to.eql(scenarioDepSet);
     });
 
@@ -83,7 +83,7 @@ describe('bowerAdapter', function() {
         }
       };
 
-      var results = new BowerAdapter({cwd: tmpdir})._getDependencySetAccountingForDeprecatedTopLevelKeys(scenarioDepSet);
+      var results = new BowerAdapter({ cwd: tmpdir })._getDependencySetAccountingForDeprecatedTopLevelKeys(scenarioDepSet);
       expect(results).to.eql(scenarioDepSet.bower);
     });
   });
@@ -98,8 +98,8 @@ describe('bowerAdapter', function() {
 
       fs.mkdirSync('bower_components');
       writeJSONFile('bower.json', fixtureBower);
-      writeJSONFile('bower_components/this-should-be-obliterated.json', {removed: false});
-      return new BowerAdapter({cwd: tmpdir, run: stubbedRun})._install().then(function() {
+      writeJSONFile('bower_components/this-should-be-obliterated.json', { removed: false });
+      return new BowerAdapter({ cwd: tmpdir, run: stubbedRun })._install().then(function() {
         return stat('bower_components/this-should-be-obliterated.json').then(function() {
           expect(true).to.equal(false);
         }, function(err) {
@@ -118,7 +118,7 @@ describe('bowerAdapter', function() {
         expect(opts).to.have.property('cwd', tmpdir);
         return RSVP.resolve();
       };
-      return new BowerAdapter({cwd: tmpdir, run: stubbedRun})._install();
+      return new BowerAdapter({ cwd: tmpdir, run: stubbedRun })._install();
     });
 
     it('runs bower install including managerOptions', function() {
@@ -132,16 +132,16 @@ describe('bowerAdapter', function() {
         expect(args[4]).to.equal('--allow-root=true');
         return RSVP.resolve();
       };
-      return new BowerAdapter({cwd: tmpdir, run: stubbedRun, managerOptions: ['--verbose=true', '--allow-root=true']})._install();
+      return new BowerAdapter({ cwd: tmpdir, run: stubbedRun, managerOptions: ['--verbose=true', '--allow-root=true'] })._install();
     });
   });
 
   describe('#_restoreOriginalBowerFile', function() {
     it('replaces the bower.json with the backed up version', function() {
-      writeJSONFile('bower.json.ember-try', {originalBowerJSON: true});
-      writeJSONFile('bower.json', {originalBowerJSON: false});
-      return new BowerAdapter({cwd: tmpdir})._restoreOriginalBowerFile().then(function() {
-        assertFileContainsJSON('bower.json', {originalBowerJSON: true});
+      writeJSONFile('bower.json.ember-try', { originalBowerJSON: true });
+      writeJSONFile('bower.json', { originalBowerJSON: false });
+      return new BowerAdapter({ cwd: tmpdir })._restoreOriginalBowerFile().then(function() {
+        assertFileContainsJSON('bower.json', { originalBowerJSON: true });
       });
     });
   });
@@ -149,11 +149,11 @@ describe('bowerAdapter', function() {
   describe('#_writeBowerFileWithDepSetChanges', function() {
     it('writes bower.json with dep set changes', function() {
       var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: {} };
-      var depSet =  { dependencies: { jquery: '2.1.3' } };
+      var depSet = { dependencies: { jquery: '2.1.3' } };
       writeJSONFile('bower.json', bowerJSON);
       writeJSONFile('bower.json.ember-try', bowerJSON);
 
-      new BowerAdapter({cwd: tmpdir})._writeBowerFileWithDepSetChanges(depSet);
+      new BowerAdapter({ cwd: tmpdir })._writeBowerFileWithDepSetChanges(depSet);
       assertFileContainsJSON('bower.json', {
         dependencies: {
           jquery: '2.1.3'
@@ -165,9 +165,9 @@ describe('bowerAdapter', function() {
     });
 
     it('writes bower.json with dep set changes even if no original bower.json', function() {
-      var depSet =  { dependencies: { jquery: '2.1.3' } };
+      var depSet = { dependencies: { jquery: '2.1.3' } };
 
-      new BowerAdapter({cwd: tmpdir})._writeBowerFileWithDepSetChanges(depSet);
+      new BowerAdapter({ cwd: tmpdir })._writeBowerFileWithDepSetChanges(depSet);
       assertFileContainsJSON('bower.json', {
         name: 'ember-try-placeholder',
         dependencies: {
@@ -182,9 +182,9 @@ describe('bowerAdapter', function() {
 
   describe('#_bowerJSONForDependencySet', function() {
     it('changes specified bower dependency versions', function() {
-      var bowerAdapter = new BowerAdapter({cwd: tmpdir});
+      var bowerAdapter = new BowerAdapter({ cwd: tmpdir });
       var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: {} };
-      var depSet =  { dependencies: { jquery: '2.1.3' } };
+      var depSet = { dependencies: { jquery: '2.1.3' } };
 
       var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
 
@@ -192,9 +192,9 @@ describe('bowerAdapter', function() {
     });
 
     it('changes specified bower dev dependency versions', function() {
-      var bowerAdapter = new BowerAdapter({cwd: tmpdir});
+      var bowerAdapter = new BowerAdapter({ cwd: tmpdir });
       var bowerJSON = { devDependencies: { jquery: '1.11.1' }, resolutions: {} };
-      var depSet =  { devDependencies: { jquery: '2.1.3' } };
+      var depSet = { devDependencies: { jquery: '2.1.3' } };
 
       var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
 
@@ -202,9 +202,9 @@ describe('bowerAdapter', function() {
     });
 
     it('adds to resolutions', function() {
-      var bowerAdapter = new BowerAdapter({cwd: tmpdir});
+      var bowerAdapter = new BowerAdapter({ cwd: tmpdir });
       var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: {} };
-      var depSet =  { dependencies: { jquery: '2.1.3' } };
+      var depSet = { dependencies: { jquery: '2.1.3' } };
 
       var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
 
@@ -212,11 +212,11 @@ describe('bowerAdapter', function() {
     });
 
     it('sets custom resolutions', function() {
-      var bowerAdapter = new BowerAdapter({cwd: tmpdir});
+      var bowerAdapter = new BowerAdapter({ cwd: tmpdir });
       var bowerJSON = { dependencies: { ember: '1.13.5' }, resolutions: {} };
-      var depSet =  {
+      var depSet = {
         dependencies: { ember: 'components/ember#canary' },
-        resolutions:  { ember: 'canary' }
+        resolutions: { ember: 'canary' }
       };
 
       var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
@@ -225,9 +225,9 @@ describe('bowerAdapter', function() {
     });
 
     it('handles lack of resolutions in original bower.json', function() {
-      var bowerAdapter = new BowerAdapter({cwd: tmpdir});
+      var bowerAdapter = new BowerAdapter({ cwd: tmpdir });
       var bowerJSON = { dependencies: { jquery: '1.11.1' } };
-      var depSet =  { dependencies: { jquery: '2.1.3' } };
+      var depSet = { dependencies: { jquery: '2.1.3' } };
 
       var resultJSON = bowerAdapter._bowerJSONForDependencySet(bowerJSON, depSet);
 
@@ -235,7 +235,7 @@ describe('bowerAdapter', function() {
     });
 
     it('can remove a package', function() {
-      var bowerAdapter = new BowerAdapter({cwd: tmpdir});
+      var bowerAdapter = new BowerAdapter({ cwd: tmpdir });
       var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: { jquery: '1.11.1' } };
       var depSet = { dependencies: { jquery: null } };
 
@@ -248,7 +248,7 @@ describe('bowerAdapter', function() {
 
   describe('#_findBowerPath()', function() {
     it('returns the correct bower path', function() {
-      return new BowerAdapter({cwd: tmpdir})._findBowerPath().then(function(path) {
+      return new BowerAdapter({ cwd: tmpdir })._findBowerPath().then(function(path) {
         expect(path).to.include('node_modules/bower/bin/bower');
       });
     });
@@ -261,7 +261,7 @@ describe('bowerAdapter', function() {
       var stubbedInstallBower = function() {
         installCount++;
       };
-      return new BowerAdapter({cwd: tmpdir, _installBower: stubbedInstallBower, _resolveModule: stubbedResolveModule})._findBowerPath().then(function(path) {
+      return new BowerAdapter({ cwd: tmpdir, _installBower: stubbedInstallBower, _resolveModule: stubbedResolveModule })._findBowerPath().then(function(path) {
         expect(path).to.include('blip/bloop/foo/bin/bower');
         expect(installCount).to.equal(0);
       });
@@ -284,7 +284,7 @@ describe('bowerAdapter', function() {
         installCount++;
       };
 
-      return new BowerAdapter({cwd: tmpdir, _installBower: stubbedInstallBower, _resolveModule: stubbedResolveModule})._findBowerPath().then(function(path) {
+      return new BowerAdapter({ cwd: tmpdir, _installBower: stubbedInstallBower, _resolveModule: stubbedResolveModule })._findBowerPath().then(function(path) {
         expect(path).to.include('flip/flop/gloop/bin/bower');
         expect(installCount).to.equal(1);
       });
@@ -300,7 +300,7 @@ describe('bowerAdapter', function() {
         opts = o;
         return RSVP.resolve();
       };
-      return new BowerAdapter({cwd: tmpdir, run: stubbedRun})._installBower().then(function() {
+      return new BowerAdapter({ cwd: tmpdir, run: stubbedRun })._installBower().then(function() {
         expect(command).to.equal('npm');
         expect(args[0]).to.equal('install');
         expect(args[1]).to.equal('bower@^1.3.12');

@@ -12,13 +12,12 @@
     "client-test": "./all-commands.sh",
     "node-test": "mocha test/**/*.js",
     "node-test-with-coverage": "istanbul cover _mocha test/**/*.js && ./upload-coverage.sh",
-    "lint": "mocha lint-test",
-    "jscs": "jscs lib test",
-    "test": "npm run-script jscs && npm run-script lint && npm run-script node-test && npm run-script client-test"
+    "lint": "eslint lib test",
+    "test": "npm run-script lint && npm run-script node-test && npm run-script client-test"
   },
   "repository": "ember-cli/ember-try",
   "engines": {
-    "node": ">= 0.10.0"
+    "node": "^4.5 || 6.* || 7.*"
   },
   "author": "Katie Gengler",
   "license": "MIT",
@@ -41,12 +40,11 @@
     "ember-export-application-global": "^1.0.5",
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
+    "eslint": "^3.16.1",
     "glob": "^7.0.0",
     "istanbul": "1.0.0-alpha.2",
-    "jscs": "^2.0.0",
     "loader.js": "^4.0.1",
     "mocha": "^2.2.5",
-    "mocha-eslint": "^2.0.0",
     "mockery": "^1.4.0",
     "tmp-sync": "^1.1.0"
   },

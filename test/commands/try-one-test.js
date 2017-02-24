@@ -1,11 +1,11 @@
 'use strict';
 
-var expect           = require('chai').expect;
-var RSVP             = require('rsvp');
-var TryOneCommand    = require('../../lib/commands/try-one');
+var expect = require('chai').expect;
+var RSVP = require('rsvp');
+var TryOneCommand = require('../../lib/commands/try-one');
 
 var origTryEachTask = TryOneCommand._TryEachTask;
-var origGetConfig   = TryOneCommand._getConfig;
+var origGetConfig = TryOneCommand._getConfig;
 
 describe('commands/try-one', function() {
   describe('getCommand', function() {
@@ -28,7 +28,7 @@ describe('commands/try-one', function() {
 
     beforeEach(function() {
       TryOneCommand._getConfig = function() {
-        return RSVP.resolve(mockConfig || { scenarios: [ ] });
+        return RSVP.resolve(mockConfig || { scenarios: [] });
       };
 
       TryOneCommand._TryEachTask = MockTryEachTask;
@@ -51,7 +51,7 @@ describe('commands/try-one', function() {
       TryOneCommand._getConfig = function(options) {
         configPath = options.configPath;
 
-        return RSVP.resolve({ scenarios: [ { name: 'foo' }]});
+        return RSVP.resolve({ scenarios: [{ name: 'foo' }] });
       };
 
       TryOneCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
@@ -83,13 +83,13 @@ function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
   };
   TryOneCommand._TryEachTask = MockTask;
   TryOneCommand._commandLineArguments = function() {
-    return [].concat([ '/usr/local/Cellar/node/5.3.0/bin/node',
-                       '/usr/local/bin/ember'],
+    return [].concat(['/usr/local/Cellar/node/5.3.0/bin/node',
+      '/usr/local/bin/ember'],
                      additionalArgs);
   };
 
   TryOneCommand._getConfig = function() {
-    return RSVP.resolve({ scenarios: [ { name: 'default' }]});
+    return RSVP.resolve({ scenarios: [{ name: 'default' }] });
   };
 
   TryOneCommand.run({}, ['default']);

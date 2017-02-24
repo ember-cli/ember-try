@@ -1,7 +1,7 @@
 'use strict';
 
-var CoreObject    = require('core-object');
-var RSVP          = require('rsvp');
+var CoreObject = require('core-object');
+var RSVP = require('rsvp');
 
 module.exports = CoreObject.extend({
   setup: function() {
