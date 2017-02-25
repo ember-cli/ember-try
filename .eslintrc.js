@@ -1,5 +1,8 @@
 module.exports = {
   root: true,
+  parserOptions: {
+    ecmaVersion: 6,
+  },
   extends: 'eslint:recommended',
   env: {
     browser: false,
@@ -8,90 +11,88 @@ module.exports = {
   globals: {
   },
   rules: {
-    // JSHint "expr"
+    /*** Possible Errors ***/
+
+    'no-console': 0,
+    'no-template-curly-in-string': 2,
+    'no-unsafe-negation': 2,
+
+    /*** Best Practices ***/
+
+    'curly': 2,
+    'eqeqeq': 2,
+    'guard-for-in': 0,
+    'no-caller': 2,
+    'no-eq-null': 2,
+    'no-eval': 2,
+    'no-multi-spaces': [2, {
+      'exceptions': {
+        'ObjectExpression': true,
+        'Property': true,
+      },
+    }],
+    'no-new': 0,
     'no-unused-expressions': [2, {
       allowShortCircuit: true,
       allowTernary: true,
     }],
+    'wrap-iife': 0,
+    'yoda': 2,
 
-    // JSHint "proto", disabled due to warnings
-    'no-proto': 0,
+    /*** Strict Mode ***/
 
-    // JSHint "strict"
     'strict': [2, 'global'],
 
-    // JSHint "indent", disabled due to warnings
+    /*** Variables ***/
+
+    'no-undef': 2,
+    'no-unused-vars': 2,
+    'no-use-before-define': [2, 'nofunc'],
+
+    /*** Stylistic Issues ***/
+
+    'array-bracket-spacing': 2,
+    'block-spacing': 2,
+    'brace-style': [2, '1tbs', {
+      'allowSingleLine': true,
+    }],
+    'camelcase': 2,
+    'comma-dangle': 0,
+    'comma-spacing': 2,
+    'comma-style': 2,
+    'eol-last': 2,
+    'func-call-spacing': 2,
     'indent': [2, 2, {
       'SwitchCase': 1,
       'VariableDeclarator': { 'var': 2, 'let': 2, 'const': 3 }
     }],
-
-    // JSHint "camelcase"
-    camelcase: 2,
-
-    // JSHint "boss"
-    'no-cond-assign': [2, 'except-parens'],
-
-    // JSHint "curly"
-    curly: 2,
-
-    // JSHint "latedef"
-    'no-use-before-define': [2, 'nofunc'],
-
-    // JSHint "debug", disabled already in .jshintrc
-    'no-debugger': 0,
-
-    // JSHint "eqeqeq"
-    eqeqeq: 2,
-
-    // JSHint "evil"
-    'no-eval': 2,
-
-    // JSHint "forin", disabled already in .jshintrc
-    'guard-for-in': 0,
-
-    // JSHint "immed", disabled already in .jshintrc
-    'wrap-iife': 0,
-
-    // JSHint "laxbreak"
+    'key-spacing': 2,
+    'keyword-spacing': 2,
     'linebreak-style': [2, 'unix'],
-
-    // JSHint "newcap
     'new-cap': [2, {
       properties: false,
     }],
-
-    // JSHint "noarg"
-    'no-caller': 2,
-
-    // JSHint "noempty", JSCS "disallowEmptyBlocks"
-    'no-empty': 2,
-
-    // JSHint "quotmark", disabled due to warnings
-    quotes: [0, 'single'],
-
-    // JSHint "nonew", disabled already in .jshintrc
-    'no-new': 0,
-
-    // JSHint "plusplus", disabled already in .jshintrc
+    'new-parens': 2,
+    'no-array-constructor': 2,
+    'no-bitwise': 2,
+    'no-lonely-if': 2,
+    'no-mixed-operators': 2,
     'no-plusplus': 0,
-
-    // JSHint "undef"
-    'no-undef': 2,
-
-    // JSHint "unused"
-    'no-unused-vars': 2,
-
-    // JSHint "sub", disabled due to warnings
-    'dot-notation': 0,
-
-    // JSHint "trailing"
     'no-trailing-spaces': 2,
-
-    // JSHint "eqnull"
-    'no-eq-null': 2,
-
-    'no-console': 0,
-    'comma-dangle': 0,
+    'no-unneeded-ternary': 2,
+    'no-whitespace-before-property': 2,
+    'object-curly-spacing': [2, 'always'],
+    'semi-spacing': 2,
+    'semi': 2,
+    'space-before-blocks': 2,
+    'space-before-function-paren': [2, 'never'],
+    'space-in-parens': 2,
+    'space-infix-ops': 2,
+    'space-unary-ops': 2,
+    'quotes': [2, 'single', {
+      'allowTemplateLiterals': true,
+    }],
+    'semi': [2, 'always'],
+    'wrap-regex': 2
   },
 };

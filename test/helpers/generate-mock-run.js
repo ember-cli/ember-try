@@ -20,12 +20,10 @@ module.exports = function generateMockRun() {
 
     if (matchingRun) {
       return matchingRun.callback(actualCommand, actualArgs, opts);
+    } else if (options.allowPassthrough) {
+      return passthrough().apply(this, arguments);
     } else {
-      if (options.allowPassthrough) {
-        return passthrough().apply(this, arguments);
-      } else {
-        throw new Error(actualCommand + ' ' + actualArgs.join(' ') + ' not stubbed and not allowed to passthrough');
-      }
+      throw new Error(actualCommand + ' ' + actualArgs.join(' ') + ' not stubbed and not allowed to passthrough');
     }
   };
 };

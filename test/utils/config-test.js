@@ -1,17 +1,17 @@
 'use strict';
 
-var expect        = require('chai').expect;
-var RSVP          = require('rsvp');
-var fs            = require('fs-extra');
-var path          = require('path');
-var tmp           = require('tmp-sync');
-var fixturePackage  = require('../fixtures/package.json');
-var writeJSONFile   = require('../helpers/write-json-file');
-var getConfig     = require('../../lib/utils/config');
+var expect = require('chai').expect;
+var RSVP = require('rsvp');
+var fs = require('fs-extra');
+var path = require('path');
+var tmp = require('tmp-sync');
+var fixturePackage = require('../fixtures/package.json');
+var writeJSONFile = require('../helpers/write-json-file');
+var getConfig = require('../../lib/utils/config');
 var defaultConfig = getConfig._defaultConfig;
 
-var remove  = RSVP.denodeify(fs.remove);
-var root    = process.cwd();
+var remove = RSVP.denodeify(fs.remove);
+var root = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 
@@ -111,7 +111,7 @@ describe('utils/config', function() {
 
     it('is always used if passed in and behaves as if config file has "useVersionCompatibility: true"', function() {
       generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };');
-      return getConfig({ project: project, versionCompatibility: { ember: '1.13.0'} }).then(function(config) {
+      return getConfig({ project: project, versionCompatibility: { ember: '1.13.0' } }).then(function(config) {
         expect(config).to.eql(
           {
             scenarios: [
@@ -127,7 +127,7 @@ describe('utils/config', function() {
     });
 
     it('can be overridden by passed in versionCompatibility', function() {
-      return getConfig({ project: project, versionCompatibility: { ember: '1.13.0'} }).then(function(config) {
+      return getConfig({ project: project, versionCompatibility: { ember: '1.13.0' } }).then(function(config) {
         expect(config).to.eql(
           {
             scenarios: [
@@ -185,6 +185,6 @@ describe('utils/config', function() {
 });
 
 function writePackageJSONWithVersionCompatibility() {
-  fixturePackage['ember-addon'] = { versionCompatibility: { ember: '=2.2.0'}};
+  fixturePackage['ember-addon'] = { versionCompatibility: { ember: '=2.2.0' } };
   writeJSONFile('package.json', fixturePackage);
 }

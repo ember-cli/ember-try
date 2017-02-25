@@ -1,21 +1,21 @@
 'use strict';
 
-var expect          = require('chai').expect;
-var tmp             = require('tmp-sync');
-var path            = require('path');
-var RSVP            = require('rsvp');
-var fs              = require('fs-extra');
-var fixtureBower    = require('../fixtures/bower.json');
-var fixturePackage  = require('../fixtures/package.json');
-var writeJSONFile   = require('../helpers/write-json-file');
-var mockery         = require('mockery');
+var expect = require('chai').expect;
+var tmp = require('tmp-sync');
+var path = require('path');
+var RSVP = require('rsvp');
+var fs = require('fs-extra');
+var fixtureBower = require('../fixtures/bower.json');
+var fixturePackage = require('../fixtures/package.json');
+var writeJSONFile = require('../helpers/write-json-file');
+var mockery = require('mockery');
 
 /* Some of the tests in this file intentionally DO NOT stub dependency manager adapter*/
 var StubDependencyAdapter = require('../helpers/stub-dependency-manager-adapter');
-var generateMockRun       = require('../helpers/generate-mock-run');
+var generateMockRun = require('../helpers/generate-mock-run');
 
-var remove  = RSVP.denodeify(fs.remove);
-var root    = process.cwd();
+var remove = RSVP.denodeify(fs.remove);
+var root = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 
@@ -141,8 +141,8 @@ describe('tryEach', function() {
 
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
-        ui: {writeLine: outputFn},
-        project: {root: tmpdir},
+        ui: { writeLine: outputFn },
+        project: { root: tmpdir },
         config: legacyConfig,
         _on: function() {}
       });
@@ -185,8 +185,8 @@ describe('tryEach', function() {
 
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
-        ui: {writeLine: outputFn},
-        project: {root: tmpdir},
+        ui: { writeLine: outputFn },
+        project: { root: tmpdir },
         config: legacyConfig,
         _on: function() {}
       });
@@ -225,8 +225,8 @@ describe('tryEach', function() {
 
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
-        ui: {writeLine: outputFn},
-        project: {root: tmpdir},
+        ui: { writeLine: outputFn },
+        project: { root: tmpdir },
         config: legacyConfig,
         _on: function() {}
       });
@@ -257,8 +257,8 @@ describe('tryEach', function() {
 
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
-        ui: {writeLine: outputFn},
-        project: {root: tmpdir},
+        ui: { writeLine: outputFn },
+        project: { root: tmpdir },
         config: config,
         _on: function() {}
       });
@@ -301,8 +301,8 @@ describe('tryEach', function() {
 
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
-        ui: {writeLine: outputFn},
-        project: {root: tmpdir},
+        ui: { writeLine: outputFn },
+        project: { root: tmpdir },
         config: config,
         _on: function() {}
       });
@@ -356,11 +356,11 @@ describe('tryEach', function() {
 
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
-        ui: {writeLine: outputFn},
-        project: {root: tmpdir},
+        ui: { writeLine: outputFn },
+        project: { root: tmpdir },
         config: config,
         commandArgs: ['ember', 'serve'],
-        commandOptions: { timeout: { length: 20000, isSuccess: true }},
+        commandOptions: { timeout: { length: 20000, isSuccess: true } },
         dependencyManagerAdapters: [new StubDependencyAdapter()],
         _on: function() {}
       });
@@ -388,7 +388,7 @@ describe('tryEach', function() {
             dependencies: {
               ember: '1.13.0'
             }
-          },{
+          }, {
             name: 'second',
             allowedToFail: true,
             dependencies: {
@@ -409,8 +409,8 @@ describe('tryEach', function() {
 
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
-          ui: {writeLine: outputFn},
-          project: {root: tmpdir},
+          ui: { writeLine: outputFn },
+          project: { root: tmpdir },
           config: config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
           _on: function() {}
@@ -437,7 +437,7 @@ describe('tryEach', function() {
             dependencies: {
               ember: '1.13.0'
             }
-          },{
+          }, {
             name: 'second',
             allowedToFail: true,
             dependencies: {
@@ -458,8 +458,8 @@ describe('tryEach', function() {
 
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
-          ui: {writeLine: outputFn},
-          project: {root: tmpdir},
+          ui: { writeLine: outputFn },
+          project: { root: tmpdir },
           config: config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
           _on: function() {}
@@ -487,7 +487,7 @@ describe('tryEach', function() {
             dependencies: {
               ember: '1.13.0'
             }
-          },{
+          }, {
             name: 'second',
             allowedToFail: true,
             dependencies: {
@@ -508,8 +508,8 @@ describe('tryEach', function() {
 
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
-          ui: {writeLine: outputFn},
-          project: {root: tmpdir},
+          ui: { writeLine: outputFn },
+          project: { root: tmpdir },
           config: config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
           _on: function() {}
@@ -539,7 +539,7 @@ describe('tryEach', function() {
             dependencies: {
               ember: '1.13.0'
             }
-          },{
+          }, {
             name: 'second',
             dependencies: {
               ember: '2.2.0'
@@ -563,8 +563,8 @@ describe('tryEach', function() {
 
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
-          ui: {writeLine: outputFn},
-          project: {root: tmpdir},
+          ui: { writeLine: outputFn },
+          project: { root: tmpdir },
           config: config,
           commandArgs: [],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
@@ -609,8 +609,8 @@ describe('tryEach', function() {
 
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
-          ui: {writeLine: outputFn},
-          project: {root: tmpdir},
+          ui: { writeLine: outputFn },
+          project: { root: tmpdir },
           config: config,
           commandArgs: ['ember', 'serve'],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
@@ -638,12 +638,12 @@ describe('tryEach', function() {
             dependencies: {
               ember: '1.13.0'
             }
-          },{
+          }, {
             name: 'second',
             dependencies: {
               ember: '2.2.0'
             }
-          },{
+          }, {
             name: 'different',
             command: 'npm run-script different',
             dependencies: {
@@ -660,7 +660,7 @@ describe('tryEach', function() {
             ranDefaultCommandCount++;
             return RSVP.resolve(0);
           }
-        },{
+        }, {
           command: 'npm run-script different',
           callback: function() {
             ranScenarioCommandCount++;
@@ -676,8 +676,8 @@ describe('tryEach', function() {
 
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
-          ui: {writeLine: outputFn},
-          project: {root: tmpdir},
+          ui: { writeLine: outputFn },
+          project: { root: tmpdir },
           config: config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
           _on: function() {}
@@ -718,8 +718,8 @@ describe('tryEach', function() {
 
         var TryEachTask = require('../../lib/tasks/try-each');
         var tryEachTask = new TryEachTask({
-          ui: {writeLine: outputFn},
-          project: {root: tmpdir},
+          ui: { writeLine: outputFn },
+          project: { root: tmpdir },
           config: config,
           commandArgs: ['ember', 'help', '--json', 'true'],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
@@ -763,8 +763,8 @@ describe('tryEach', function() {
 
       var TryEachTask = require('../../lib/tasks/try-each');
       var tryEachTask = new TryEachTask({
-        ui: {writeLine: outputFn},
-        project: {root: tmpdir},
+        ui: { writeLine: outputFn },
+        project: { root: tmpdir },
         config: config,
         dependencyManagerAdapters: [new StubDependencyAdapter()],
         _on: function() {},
