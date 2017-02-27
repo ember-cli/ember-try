@@ -1,17 +1,17 @@
 'use strict';
 
-var expect          = require('chai').expect;
-var RSVP            = require('rsvp');
-var fs              = require('fs-extra');
-var path            = require('path');
-var tmp             = require('tmp-sync');
-var fixturePackage  = require('../fixtures/package.json');
-var NpmAdapter      = require('../../lib/dependency-manager-adapters/npm');
-var writeJSONFile   = require('../helpers/write-json-file');
+var expect = require('chai').expect;
+var RSVP = require('rsvp');
+var fs = require('fs-extra');
+var path = require('path');
+var tmp = require('tmp-sync');
+var fixturePackage = require('../fixtures/package.json');
+var NpmAdapter = require('../../lib/dependency-manager-adapters/npm');
+var writeJSONFile = require('../helpers/write-json-file');
 var generateMockRun = require('../helpers/generate-mock-run');
 
-var remove  = RSVP.denodeify(fs.remove);
-var root    = process.cwd();
+var remove = RSVP.denodeify(fs.remove);
+var root = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 
@@ -29,11 +29,11 @@ describe('npmAdapter', function() {
   describe('#setup', function() {
     it('backs up the package.json file and node_modules', function() {
       fs.mkdirSync('node_modules');
-      writeJSONFile('node_modules/prove-it.json', {originalNodeModules: true});
-      writeJSONFile('package.json', {originalPackageJSON: true});
-      return new NpmAdapter({cwd: tmpdir}).setup().then(function() {
-        assertFileContainsJSON('package.json.ember-try', {originalPackageJSON: true});
-        assertFileContainsJSON('.node_modules.ember-try/prove-it.json', {originalNodeModules: true});
+      writeJSONFile('node_modules/prove-it.json', { originalNodeModules: true });
+      writeJSONFile('package.json', { originalPackageJSON: true });
+      return new NpmAdapter({ cwd: tmpdir }).setup().then(function() {
+        assertFileContainsJSON('package.json.ember-try', { originalPackageJSON: true });
+        assertFileContainsJSON('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
       }).catch(function(err) {
         console.log(err);
         expect(true).to.equal(false, 'Error should not happen');
@@ -61,7 +61,7 @@ describe('npmAdapter', function() {
         }
       }], { allowPassthrough: false });
 
-      return new NpmAdapter({cwd: tmpdir, run: stubbedRun})._install().then(function() {
+      return new NpmAdapter({ cwd: tmpdir, run: stubbedRun })._install().then(function() {
         expect(runCount).to.equal(2, 'Both commands should run');
       }).catch(function(err) {
         console.log(err);
@@ -86,7 +86,7 @@ describe('npmAdapter', function() {
         }
       }], { allowPassthrough: false });
 
-      return new NpmAdapter({cwd: tmpdir, run: stubbedRun, managerOptions: ['--no-shrinkwrap=true']})._install().then(function() {
+      return new NpmAdapter({ cwd: tmpdir, run: stubbedRun, managerOptions: ['--no-shrinkwrap=true'] })._install().then(function() {
         expect(runCount).to.equal(2, 'Both commands should run');
       }).catch(function(err) {
         console.log(err);
@@ -97,13 +97,13 @@ describe('npmAdapter', function() {
 
   describe('#_restore', function() {
     it('replaces the package.json with the backed up version', function() {
-      writeJSONFile('package.json.ember-try', {originalPackageJSON: true});
-      writeJSONFile('package.json', {originalPackageJSON: false});
+      writeJSONFile('package.json.ember-try', { originalPackageJSON: true });
+      writeJSONFile('package.json', { originalPackageJSON: false });
       fs.mkdirSync('.node_modules.ember-try');
-      writeJSONFile('.node_modules.ember-try/prove-it.json', {originalNodeModules: true});
-      return new NpmAdapter({cwd: tmpdir})._restore().then(function() {
-        assertFileContainsJSON('package.json', {originalPackageJSON: true});
-        assertFileContainsJSON('node_modules/prove-it.json', {originalNodeModules: true});
+      writeJSONFile('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
+      return new NpmAdapter({ cwd: tmpdir })._restore().then(function() {
+        assertFileContainsJSON('package.json', { originalPackageJSON: true });
+        assertFileContainsJSON('node_modules/prove-it.json', { originalNodeModules: true });
       }).catch(function(err) {
         console.log(err);
         expect(true).to.equal(false, 'Error should not happen');
@@ -113,8 +113,8 @@ describe('npmAdapter', function() {
 
   describe('#_packageJSONForDependencySet', function() {
     it('changes specified dependency versions', function() {
-      var npmAdapter = new NpmAdapter({cwd: tmpdir});
-      var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0'} };
+      var npmAdapter = new NpmAdapter({ cwd: tmpdir });
+      var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0' } };
       var depSet = { dependencies: { 'ember-cli-babel': '6.0.0' } };
 
       var resultJSON = npmAdapter._newJSONForDependencySet(packageJSON, depSet);
@@ -123,8 +123,8 @@ describe('npmAdapter', function() {
     });
 
     it('changes specified npm dev dependency versions', function() {
-      var npmAdapter = new NpmAdapter({cwd: tmpdir});
-      var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0'} };
+      var npmAdapter = new NpmAdapter({ cwd: tmpdir });
+      var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0' } };
       var depSet = { devDependencies: { 'ember-feature-flags': '2.0.1' } };
 
       var resultJSON = npmAdapter._newJSONForDependencySet(packageJSON, depSet);
@@ -133,7 +133,7 @@ describe('npmAdapter', function() {
     });
 
     it('changes specified npm peer dependency versions', function() {
-      var npmAdapter = new NpmAdapter({cwd: tmpdir});
+      var npmAdapter = new NpmAdapter({ cwd: tmpdir });
       var packageJSON = { peerDependencies: { 'ember-cli-babel': '5.0.0' } };
       var depSet = { peerDependencies: { 'ember-cli-babel': '4.0.0' } };
 
@@ -143,7 +143,7 @@ describe('npmAdapter', function() {
     });
 
     it('can remove a package', function() {
-      var npmAdapter = new NpmAdapter({cwd: tmpdir});
+      var npmAdapter = new NpmAdapter({ cwd: tmpdir });
       var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' } };
       var depSet = { devDependencies: { 'ember-feature-flags': null } };
 

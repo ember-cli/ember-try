@@ -1,8 +1,8 @@
 'use strict';
 
-var expect      = require('chai').expect;
-var mockery     = require('mockery');
-var RSVP        = require('rsvp');
+var expect = require('chai').expect;
+var mockery = require('mockery');
+var RSVP = require('rsvp');
 
 describe('utils/run-command', function() {
   beforeEach(function() {
@@ -29,7 +29,7 @@ describe('utils/run-command', function() {
 
     mockery.registerMock('./run', mockedRun);
 
-    var runCommand  = require('../../lib/utils/run-command');
+    var runCommand = require('../../lib/utils/run-command');
 
     return runCommand('rootPath', ['ember', 'help', '--json', 'true'], {}).then(function(result) {
       expect(result).to.equal(true);

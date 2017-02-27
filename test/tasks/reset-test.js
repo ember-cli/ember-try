@@ -1,14 +1,14 @@
 'use strict';
 
-var tmp           = require('tmp-sync');
-var path          = require('path');
-var RSVP          = require('rsvp');
-var fs            = require('fs-extra');
-var fixtureBower  = require('../fixtures/bower.json');
+var tmp = require('tmp-sync');
+var path = require('path');
+var RSVP = require('rsvp');
+var fs = require('fs-extra');
+var fixtureBower = require('../fixtures/bower.json');
 var writeJSONFile = require('../helpers/write-json-file');
 
-var remove  = RSVP.denodeify(fs.remove);
-var root    = process.cwd();
+var remove = RSVP.denodeify(fs.remove);
+var root = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 
@@ -36,7 +36,7 @@ describe('reset', function() {
 
     var ResetTask = require('../../lib/tasks/reset');
     var resetTask = new ResetTask({
-      project: {root: tmpdir},
+      project: { root: tmpdir },
       config: config
     });
 

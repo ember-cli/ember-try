@@ -1,19 +1,19 @@
 'use strict';
 
-var expect          = require('chai').expect;
-var RSVP            = require('rsvp');
-var fs              = require('fs-extra');
-var path            = require('path');
-var tmp             = require('tmp-sync');
-var yaml            = require('js-yaml');
-var fixturePackage  = require('../fixtures/package.json');
-var YarnAdapter      = require('../../lib/dependency-manager-adapters/yarn');
-var writeJSONFile   = require('../helpers/write-json-file');
-var writeYamlFile   = require('../helpers/write-yaml-file');
+var expect = require('chai').expect;
+var RSVP = require('rsvp');
+var fs = require('fs-extra');
+var path = require('path');
+var tmp = require('tmp-sync');
+var yaml = require('js-yaml');
+var fixturePackage = require('../fixtures/package.json');
+var YarnAdapter = require('../../lib/dependency-manager-adapters/yarn');
+var writeJSONFile = require('../helpers/write-json-file');
+var writeYamlFile = require('../helpers/write-yaml-file');
 var generateMockRun = require('../helpers/generate-mock-run');
 
-var remove  = RSVP.denodeify(fs.remove);
-var root    = process.cwd();
+var remove = RSVP.denodeify(fs.remove);
+var root = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 
@@ -31,13 +31,13 @@ describe('yarnAdapter', function() {
   describe('#setup', function() {
     it('backs up the package.json, yarn.lock files and node_modules', function() {
       fs.mkdirSync('node_modules');
-      writeJSONFile('node_modules/prove-it.json', {originalNodeModules: true});
-      writeJSONFile('package.json', {originalPackageJSON: true});
-      writeYamlFile('yarn.lock', {originalYarnLock: true});
-      return new YarnAdapter({cwd: tmpdir}).setup().then(function() {
-        assertFileContainsJSON('package.json.ember-try', {originalPackageJSON: true});
-        assertYamlFileContainsJSON('yarn.lock.ember-try', {originalYarnLock: true});
-        assertFileContainsJSON('.node_modules.ember-try/prove-it.json', {originalNodeModules: true});
+      writeJSONFile('node_modules/prove-it.json', { originalNodeModules: true });
+      writeJSONFile('package.json', { originalPackageJSON: true });
+      writeYamlFile('yarn.lock', { originalYarnLock: true });
+      return new YarnAdapter({ cwd: tmpdir }).setup().then(function() {
+        assertFileContainsJSON('package.json.ember-try', { originalPackageJSON: true });
+        assertYamlFileContainsJSON('yarn.lock.ember-try', { originalYarnLock: true });
+        assertFileContainsJSON('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
       }).catch(function(err) {
         console.log(err);
         expect(true).to.equal(false, 'Error should not happen');
@@ -58,7 +58,7 @@ describe('yarnAdapter', function() {
         }
       }], { allowPassthrough: false });
 
-      return new YarnAdapter({cwd: tmpdir, run: stubbedRun})._install().then(function() {
+      return new YarnAdapter({ cwd: tmpdir, run: stubbedRun })._install().then(function() {
         expect(runCount).to.equal(1, 'Runs only yarn install command');
       }).catch(function(err) {
         console.log(err);
@@ -77,7 +77,7 @@ describe('yarnAdapter', function() {
         }
       }], { allowPassthrough: false });
 
-      return new YarnAdapter({cwd: tmpdir, run: stubbedRun, managerOptions: ['--no-lockfile']})._install().then(function() {
+      return new YarnAdapter({ cwd: tmpdir, run: stubbedRun, managerOptions: ['--no-lockfile'] })._install().then(function() {
         expect(runCount).to.equal(1, 'Runs yarn install command with managerOptions');
       }).catch(function(err) {
         console.log(err);
@@ -88,16 +88,16 @@ describe('yarnAdapter', function() {
 
   describe('#_restore', function() {
     it('replaces the package.json and yarn.lock with the backed up versions', function() {
-      writeJSONFile('package.json.ember-try', {originalPackageJSON: true});
-      writeJSONFile('package.json', {originalPackageJSON: false});
-      writeYamlFile('yarn.lock.ember-try', {originalYarnLock: true});
-      writeYamlFile('yarn.lock', {originalYarnLock: false});
+      writeJSONFile('package.json.ember-try', { originalPackageJSON: true });
+      writeJSONFile('package.json', { originalPackageJSON: false });
+      writeYamlFile('yarn.lock.ember-try', { originalYarnLock: true });
+      writeYamlFile('yarn.lock', { originalYarnLock: false });
       fs.mkdirSync('.node_modules.ember-try');
-      writeJSONFile('.node_modules.ember-try/prove-it.json', {originalNodeModules: true});
-      return new YarnAdapter({cwd: tmpdir})._restore().then(function() {
-        assertFileContainsJSON('package.json', {originalPackageJSON: true});
-        assertYamlFileContainsJSON('yarn.lock', {originalYarnLock: true});
-        assertFileContainsJSON('node_modules/prove-it.json', {originalNodeModules: true});
+      writeJSONFile('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
+      return new YarnAdapter({ cwd: tmpdir })._restore().then(function() {
+        assertFileContainsJSON('package.json', { originalPackageJSON: true });
+        assertYamlFileContainsJSON('yarn.lock', { originalYarnLock: true });
+        assertFileContainsJSON('node_modules/prove-it.json', { originalNodeModules: true });
       }).catch(function(err) {
         console.log(err);
         expect(true).to.equal(false, 'Error should not happen');
@@ -107,8 +107,8 @@ describe('yarnAdapter', function() {
 
   describe('#_newJSONForDependencySet', function() {
     it('changes specified dependency versions', function() {
-      var yarnAdapter = new YarnAdapter({cwd: tmpdir});
-      var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0'} };
+      var yarnAdapter = new YarnAdapter({ cwd: tmpdir });
+      var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0' } };
       var depSet = { dependencies: { 'ember-cli-babel': '6.0.0' } };
 
       var resultJSON = yarnAdapter._newJSONForDependencySet(packageJSON, depSet);
@@ -117,8 +117,8 @@ describe('yarnAdapter', function() {
     });
 
     it('changes specified package.json dev dependency versions', function() {
-      var yarnAdapter = new YarnAdapter({cwd: tmpdir});
-      var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0'} };
+      var yarnAdapter = new YarnAdapter({ cwd: tmpdir });
+      var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0' } };
       var depSet = { devDependencies: { 'ember-feature-flags': '2.0.1' } };
 
       var resultJSON = yarnAdapter._newJSONForDependencySet(packageJSON, depSet);
@@ -127,7 +127,7 @@ describe('yarnAdapter', function() {
     });
 
     it('changes specified package.json peer dependency versions', function() {
-      var yarnAdapter = new YarnAdapter({cwd: tmpdir});
+      var yarnAdapter = new YarnAdapter({ cwd: tmpdir });
       var packageJSON = { peerDependencies: { 'ember-cli-babel': '5.0.0' } };
       var depSet = { peerDependencies: { 'ember-cli-babel': '4.0.0' } };
 
@@ -137,7 +137,7 @@ describe('yarnAdapter', function() {
     });
 
     it('can remove a package', function() {
-      var yarnAdapter = new YarnAdapter({cwd: tmpdir});
+      var yarnAdapter = new YarnAdapter({ cwd: tmpdir });
       var packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' } };
       var depSet = { devDependencies: { 'ember-feature-flags': null } };
 
