@@ -61,7 +61,13 @@ describe('npmAdapter', function() {
         }
       }], { allowPassthrough: false });
 
-      return new NpmAdapter({ cwd: tmpdir, run: stubbedRun })._install().then(function() {
+      return new NpmAdapter({
+        cwd: tmpdir,
+        run: stubbedRun,
+        adapterInit() {
+          this.configKey = 'npm';
+        }
+      })._install().then(function() {
         expect(runCount).to.equal(2, 'Both commands should run');
       }).catch(function(err) {
         console.log(err);
@@ -86,7 +92,14 @@ describe('npmAdapter', function() {
         }
       }], { allowPassthrough: false });
 
-      return new NpmAdapter({ cwd: tmpdir, run: stubbedRun, managerOptions: ['--no-shrinkwrap=true'] })._install().then(function() {
+      return new NpmAdapter({
+        cwd: tmpdir,
+        run: stubbedRun,
+        managerOptions: ['--no-shrinkwrap=true'],
+        adapterInit() {
+          this.configKey = 'npm';
+        }
+      })._install().then(function() {
         expect(runCount).to.equal(2, 'Both commands should run');
       }).catch(function(err) {
         console.log(err);
