@@ -5,10 +5,9 @@ var DependencyManagerAdapterFactory = require('../../lib/utils/dependency-manage
 
 describe('DependencyManagerAdapterFactory', function() {
   describe('generateFromConfig', function() {
-    it('creates npm or yarn adapter when config has npm key', function() {
-      let configKeys = ['npm', 'yarn'];
-      let adapters = DependencyManagerAdapterFactory.generateFromConfig({ scenarios: [{ npm: {} }] }, 'here');
-      expect(configKeys).to.include(adapters[0].configKey);
+    it('creates npm adapter when config has npm key', function() {
+      var adapters = DependencyManagerAdapterFactory.generateFromConfig({ scenarios: [{ npm: {} }] }, 'here');
+      expect(adapters[0].configKey).to.equal('npm');
       expect(adapters.length).to.equal(1);
     });
 
@@ -19,9 +18,8 @@ describe('DependencyManagerAdapterFactory', function() {
     });
 
     it('creates both adapters when it has both keys', function() {
-      let configKeys = ['npm', 'yarn'];
-      let adapters = DependencyManagerAdapterFactory.generateFromConfig({ scenarios: [{ bower: {}, npm: {} }] }, 'here');
-      expect(configKeys).to.include(adapters[0].configKey);
+      var adapters = DependencyManagerAdapterFactory.generateFromConfig({ scenarios: [{ bower: {}, npm: {} }] }, 'here');
+      expect(adapters[0].configKey).to.equal('npm');
       expect(adapters[1].configKey).to.equal('bower');
       expect(adapters.length).to.equal(2);
     });
