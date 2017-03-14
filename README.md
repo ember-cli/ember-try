@@ -59,7 +59,7 @@ In order to use an alternate config path or to group various scenarios, you can 
 
 #### `ember try:reset`
 
-This command restores the original `bower.json` from `bower.json.ember-try`, `rm -rf`s `bower_components` and runs `bower install`. For use if any of the other commands fail to clean up after (they run this by default on completion).
+This command restores the original `bower.json` from `bower.json.ember-try`, `package.json` from `package.json.ember-try`, `rm -rf`s `bower_components` and `node_components` and runs `bower install` and `npm install`. For use if any of the other commands fail to clean up after (they run this by default on completion).
 
 #### `ember try:ember <semver-string>`
 
