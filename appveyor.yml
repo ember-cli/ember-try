@@ -14,11 +14,10 @@ install:
   # Install PhantomJS
   - npm install phantomjs-prebuilt
   - npm install mocha-appveyor-reporter
-  - npm install -g bower
+  - npm install -g bower yarn
   # Typical npm stuff.
   - npm version
   - npm install
-  - bower install
   - npm link
   - npm link ember-try
 

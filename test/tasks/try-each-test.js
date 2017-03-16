@@ -7,6 +7,7 @@ var RSVP = require('rsvp');
 var fs = require('fs-extra');
 var fixtureBower = require('../fixtures/bower.json');
 var fixturePackage = require('../fixtures/package.json');
+var fixtureYarn = fs.readFileSync(path.join(__dirname, '../fixtures/yarn.lock'), 'utf8');
 var writeJSONFile = require('../helpers/write-json-file');
 var mockery = require('mockery');
 
@@ -100,6 +101,55 @@ var config = {
         }
       },
       npm: {
+        dependencies: {
+          'ember-cli-deploy': '0.5.1'
+        }
+      }
+    }]
+};
+
+var yarnConfig = {
+  scenarios: [
+    {
+      name: 'first',
+      bower: {
+        dependencies: {
+          ember: '1.13.0',
+          bootstrap: null
+        }
+      },
+      yarn: {
+        dependencies: {
+          'ember-cli-deploy': '0.5.0'
+        }
+      }
+    }, {
+      name: 'second',
+      bower: {
+        dependencies: {
+          ember: '2.0.0'
+        },
+        devDependencies: {
+          jquery: '1.11.3'
+        }
+      },
+      yarn: {
+        devDependencies: {
+          'ember-cli-deploy': '0.5.1'
+        }
+      }
+    },
+    {
+      name: 'with-bower-resolutions',
+      bower: {
+        dependencies: {
+          ember: 'components/ember#beta'
+        },
+        resolutions: {
+          ember: 'beta'
+        }
+      },
+      yarn: {
         dependencies: {
           'ember-cli-deploy': '0.5.1'
         }
@@ -312,6 +362,102 @@ describe('tryEach', function() {
       writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
         expect(exitCode).to.equal(1);
+        expect(output).to.include('Scenario first: FAIL');
+        expect(output).to.include('Scenario second: SUCCESS');
+        expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
+        expect(output).to.include('1 scenarios failed');
+        expect(output).to.include('2 scenarios succeeded');
+        expect(output).to.include('3 scenarios run');
+      }).catch(function(err) {
+        console.log(err);
+        expect(true).to.equal(false, 'Assertions should run');
+      });
+    });
+
+  });
+
+  describe('with both yarn and bower', function() {
+    it('succeeds when scenario\'s tests succeed', function() {
+      this.timeout(300000);
+
+      var mockedRun = generateMockRun('ember test', function() {
+        return RSVP.resolve(0);
+      });
+
+      mockery.registerMock('./run', mockedRun);
+
+      var output = [];
+      var outputFn = function(log) {
+        output.push(log);
+      };
+
+      var mockedExit = function(code) {
+        expect(code).to.equal(0, 'exits 0 when all scenarios succeed');
+      };
+
+      var TryEachTask = require('../../lib/tasks/try-each');
+      var tryEachTask = new TryEachTask({
+        ui: { writeLine: outputFn },
+        project: { root: tmpdir },
+        config: yarnConfig,
+        _on: function() {},
+        _exit: mockedExit
+      });
+
+      writeJSONFile('package.json', fixturePackage);
+      fs.mkdirSync('node_modules');
+      writeJSONFile('bower.json', fixtureBower);
+      fs.writeFileSync('yarn.lock', fixtureYarn);
+      return tryEachTask.run(yarnConfig.scenarios, {}).then(function() {
+        expect(output).to.include('Scenario first: SUCCESS');
+        expect(output).to.include('Scenario second: SUCCESS');
+        expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
+        expect(output).to.include('All 3 scenarios succeeded');
+      }).catch(function(err) {
+        console.log(err);
+        expect(true).to.equal(false, 'Assertions should run');
+      });
+    });
+
+
+    it('fails scenarios when scenario\'s tests fail', function() {
+      this.timeout(300000);
+
+      var runTestCount = 0;
+      var mockedRun = generateMockRun('ember test', function() {
+        runTestCount++;
+        if (runTestCount === 1) {
+          return RSVP.reject(1);
+        } else {
+          return RSVP.resolve(0);
+        }
+      });
+
+      mockery.registerMock('./run', mockedRun);
+
+      var output = [];
+      var outputFn = function(log) {
+        output.push(log);
+      };
+
+      var mockedExit = function(code) {
+        expect(code).to.equal(1);
+      };
+
+      var TryEachTask = require('../../lib/tasks/try-each');
+      var tryEachTask = new TryEachTask({
+        ui: { writeLine: outputFn },
+        project: { root: tmpdir },
+        config: yarnConfig,
+        _on: function() {},
+        _exit: mockedExit
+      });
+
+      writeJSONFile('package.json', fixturePackage);
+      fs.mkdirSync('node_modules');
+      writeJSONFile('bower.json', fixtureBower);
+      fs.writeFileSync('yarn.lock', fixtureYarn);
+      return tryEachTask.run(yarnConfig.scenarios, {}).then(function() {
         expect(output).to.include('Scenario first: FAIL');
         expect(output).to.include('Scenario second: SUCCESS');
         expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
