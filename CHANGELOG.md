@@ -1,3 +1,11 @@
+#v0.2.11
+
+- Support having scenarios needing `bower` dependencies, without having a `bower.json` initially.
+
+#v0.2.10
+
+- Fix bug around SIGINT handlers when used with ember-cli@2.13.
+
 #v0.2.9
 - Lazily install bower if necessary
 
