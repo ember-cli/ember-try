@@ -15,6 +15,12 @@ var root = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 
+var failedYarnCheck = function() {
+  throw new Error('Yarn not available');
+};
+
+var passedYarnCheck = function() {};
+
 describe('npmAdapter', function() {
   beforeEach(function() {
     tmpdir = tmp.in(tmproot);
@@ -31,7 +37,10 @@ describe('npmAdapter', function() {
       fs.mkdirSync('node_modules');
       writeJSONFile('node_modules/prove-it.json', { originalNodeModules: true });
       writeJSONFile('package.json', { originalPackageJSON: true });
-      return new NpmAdapter({ cwd: tmpdir }).setup().then(function() {
+      return new NpmAdapter({
+        cwd: tmpdir,
+        _runYarnCheck: failedYarnCheck
+      }).setup().then(function() {
         assertFileContainsJSON('package.json.ember-try', { originalPackageJSON: true });
         assertFileContainsJSON('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
       }).catch(function(err) {
@@ -42,68 +51,129 @@ describe('npmAdapter', function() {
   });
 
   describe('#_install', function() {
-    it('runs npm prune and npm install', function() {
-      writeJSONFile('package.json', fixturePackage);
-      var runCount = 0;
-      var stubbedRun = generateMockRun([{
-        command: 'npm install',
-        callback: function(command, args, opts) {
-          runCount++;
-          expect(opts).to.have.property('cwd', tmpdir);
-          return RSVP.resolve();
-        }
-      }, {
-        command: 'npm prune',
-        callback: function(command, args, opts) {
-          runCount++;
-          expect(opts).to.have.property('cwd', tmpdir);
-          return RSVP.resolve();
-        }
-      }], { allowPassthrough: false });
+    describe('without yarn', function() {
+      it('runs npm prune and npm install', function() {
+        writeJSONFile('package.json', fixturePackage);
+        var runCount = 0;
+        var stubbedRun = generateMockRun([{
+          command: 'npm install',
+          callback: function(command, args, opts) {
+            runCount++;
+            expect(opts).to.have.property('cwd', tmpdir);
+            return RSVP.resolve();
+          }
+        }, {
+          command: 'npm prune',
+          callback: function(command, args, opts) {
+            runCount++;
+            expect(opts).to.have.property('cwd', tmpdir);
+            return RSVP.resolve();
+          }
+        }], { allowPassthrough: false });
 
-      return new NpmAdapter({
-        cwd: tmpdir,
-        run: stubbedRun,
-        adapterInit() {
-          this.configKey = 'npm';
-        }
-      })._install().then(function() {
-        expect(runCount).to.equal(2, 'Both commands should run');
-      }).catch(function(err) {
-        console.log(err);
-        expect(true).to.equal(false, 'Error should not happen');
+        return new NpmAdapter({
+          cwd: tmpdir,
+          run: stubbedRun,
+          _runYarnCheck: failedYarnCheck
+        })._install().then(function() {
+          expect(runCount).to.equal(2, 'Both commands should run');
+        }).catch(function(err) {
+          console.log(err);
+          expect(true).to.equal(false, 'Error should not happen');
+        });
+      });
+
+      it('uses managerOptions for npm commands', function() {
+        writeJSONFile('package.json', fixturePackage);
+        var runCount = 0;
+        var stubbedRun = generateMockRun([{
+          command: 'npm install --no-shrinkwrap=true',
+          callback: function() {
+            runCount++;
+            return RSVP.resolve();
+          }
+        }, {
+          command: 'npm prune --no-shrinkwrap=true',
+          callback: function() {
+            runCount++;
+            return RSVP.resolve();
+          }
+        }], { allowPassthrough: false });
+
+        return new NpmAdapter({
+          cwd: tmpdir,
+          run: stubbedRun,
+          _runYarnCheck: failedYarnCheck,
+          managerOptions: ['--no-shrinkwrap=true']
+        })._install().then(function() {
+          expect(runCount).to.equal(2, 'Both commands should run');
+        }).catch(function(err) {
+          console.log(err);
+          expect(true).to.equal(false, 'Error should not happen');
+        });
       });
     });
+    describe('with yarn', function() {
+      it('runs yarn install', function() {
+        writeJSONFile('package.json', fixturePackage);
+        var runCount = 0;
+        var stubbedRun = generateMockRun([{
+          command: 'yarn install --no-lockfile',
+          callback: function(command, args, opts) {
+            runCount++;
+            expect(opts).to.have.property('cwd', tmpdir);
+            return RSVP.resolve();
+          }
+        }], { allowPassthrough: false });
 
-    it('uses managerOptions for npm commands', function() {
-      writeJSONFile('package.json', fixturePackage);
-      var runCount = 0;
-      var stubbedRun = generateMockRun([{
-        command: 'npm install --no-shrinkwrap=true',
-        callback: function() {
-          runCount++;
-          return RSVP.resolve();
-        }
-      }, {
-        command: 'npm prune --no-shrinkwrap=true',
-        callback: function() {
-          runCount++;
-          return RSVP.resolve();
-        }
-      }], { allowPassthrough: false });
+        return new NpmAdapter({
+          cwd: tmpdir,
+          run: stubbedRun,
+          _runYarnCheck: passedYarnCheck
+        })._install().then(function() {
+          expect(runCount).to.equal(1, 'Only yarn install should run');
+        });
+      });
 
-      return new NpmAdapter({
-        cwd: tmpdir,
-        run: stubbedRun,
-        managerOptions: ['--no-shrinkwrap=true'],
-        adapterInit() {
-          this.configKey = 'npm';
-        }
-      })._install().then(function() {
-        expect(runCount).to.equal(2, 'Both commands should run');
-      }).catch(function(err) {
-        console.log(err);
-        expect(true).to.equal(false, 'Error should not happen');
+      it('uses managerOptions for yarn commands', function() {
+        writeJSONFile('package.json', fixturePackage);
+        var runCount = 0;
+        var stubbedRun = generateMockRun([{
+          command: 'yarn install --flat --no-lockfile',
+          callback: function() {
+            runCount++;
+            return RSVP.resolve();
+          }
+        }], { allowPassthrough: false });
+
+        return new NpmAdapter({
+          cwd: tmpdir,
+          run: stubbedRun,
+          _runYarnCheck: passedYarnCheck,
+          managerOptions: ['--flat']
+        })._install().then(function() {
+          expect(runCount).to.equal(1, 'Only yarn install should run with manager options and --no-lockfile');
+        });
+      });
+
+      it('runs yarn install with lockfile if given option', function() {
+        writeJSONFile('package.json', fixturePackage);
+        var runCount = 0;
+        var stubbedRun = generateMockRun([{
+          command: 'yarn install',
+          callback: function() {
+            runCount++;
+            return RSVP.resolve();
+          }
+        }], { allowPassthrough: false });
+
+        return new NpmAdapter({
+          cwd: tmpdir,
+          run: stubbedRun,
+          _runYarnCheck: passedYarnCheck
+        })._install({ useYarnLock: true }).then(function() {
+          expect(runCount).to.equal(1, 'Only yarn install should run without --no-lockfile');
+        });
       });
     });
   });
@@ -163,6 +233,52 @@ describe('npmAdapter', function() {
       var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.devDependencies).to.not.have.property('ember-feature-flags');
+    });
+  });
+
+  describe('#_setYarnAvailability', function() {
+    it('sets useYarnCommand to true if yarn check does not raise', function() {
+      var npmAdapter = new NpmAdapter({
+        cwd: tmpdir,
+        _runYarnCheck: function() {}
+      });
+
+      npmAdapter._setYarnAvailability();
+
+      expect(npmAdapter.useYarnCommand).to.equal(true);
+    });
+
+    it('sets useYarnCommand to false if yarn check raises', function() {
+      var npmAdapter = new NpmAdapter({
+        cwd: tmpdir,
+        _runYarnCheck: function() {
+          throw new Error();
+        }
+      });
+
+      npmAdapter._setYarnAvailability();
+
+      expect(npmAdapter.useYarnCommand).to.equal(false);
+    });
+  });
+
+  describe('#cleanup', function() {
+    it('runs _install using yarn lock if present', function() {
+      fs.writeFileSync('yarn.lock', 'stuff');
+      var installOptions = {};
+      function mockInstall(options) {
+        installOptions = options;
+      }
+
+      return new NpmAdapter({
+        cwd: tmpdir,
+        _restoreOriginalDependencies: function() {
+          return RSVP.resolve();
+        },
+        _install: mockInstall
+      }).cleanup().then(function() {
+        expect(installOptions).to.eql({ useYarnLock: true });
+      });
     });
   });
 });
