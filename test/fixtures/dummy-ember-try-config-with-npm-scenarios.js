@@ -1,0 +1,20 @@
+module.exports = {
+  scenarios: [
+    {
+      name: 'test1',
+      bower: {
+        dependencies: {
+          ember: '1.10.0'
+        }
+      }
+    },
+    {
+      name: 'test2',
+      npm: {
+        dependencies: {
+          'ember-feature-flags': '3.0.0'
+        }
+      }
+    }
+  ]
+};

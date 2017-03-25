@@ -11,7 +11,9 @@
     "start": "ember server",
     "client-test": "./all-commands.sh",
     "node-test": "mocha test/**/*.js",
+    "all-test": "npm run-script node-test && npm run-script smoke-test",
     "node-test-with-coverage": "istanbul cover _mocha test/**/*.js && ./upload-coverage.sh",
+    "smoke-test": "./smoke-test.sh",
     "lint": "eslint lib test",
     "test": "npm run-script lint && npm run-script node-test && npm run-script client-test"
   },
