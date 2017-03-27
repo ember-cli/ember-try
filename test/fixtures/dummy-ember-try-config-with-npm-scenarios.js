@@ -10,6 +10,7 @@ module.exports = {
     },
     {
       name: 'test2',
+      command: 'ember test',
       npm: {
         dependencies: {
           'ember-feature-flags': '3.0.0'

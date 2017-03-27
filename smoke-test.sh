@@ -8,5 +8,4 @@ rm -rf node_modules/ember-try
 npm link
 npm link ember-try
 
-# try:each
-ember try:each --config-path='test/fixtures/dummy-ember-try-config-with-npm-scenarios.js'
+ember try:one test2 --config-path='test/fixtures/dummy-ember-try-config-with-npm-scenarios.js'
