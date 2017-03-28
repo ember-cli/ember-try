@@ -152,27 +152,7 @@ describe('npmAdapter', function() {
           _runYarnCheck: passedYarnCheck,
           managerOptions: ['--flat']
         })._install().then(function() {
-          expect(runCount).to.equal(1, 'Only yarn install should run with manager options and --no-lockfile');
-        });
-      });
-
-      it('runs yarn install with lockfile if given option', function() {
-        writeJSONFile('package.json', fixturePackage);
-        var runCount = 0;
-        var stubbedRun = generateMockRun([{
-          command: 'yarn install',
-          callback: function() {
-            runCount++;
-            return RSVP.resolve();
-          }
-        }], { allowPassthrough: false });
-
-        return new NpmAdapter({
-          cwd: tmpdir,
-          run: stubbedRun,
-          _runYarnCheck: passedYarnCheck
-        })._install({ useYarnLock: true }).then(function() {
-          expect(runCount).to.equal(1, 'Only yarn install should run without --no-lockfile');
+          expect(runCount).to.equal(1, 'Only yarn install should run with manager options');
         });
       });
     });
@@ -259,26 +239,6 @@ describe('npmAdapter', function() {
       npmAdapter._setYarnAvailability();
 
       expect(npmAdapter.useYarnCommand).to.equal(false);
-    });
-  });
-
-  describe('#cleanup', function() {
-    it('runs _install using yarn lock if present', function() {
-      fs.writeFileSync('yarn.lock', 'stuff');
-      var installOptions = {};
-      function mockInstall(options) {
-        installOptions = options;
-      }
-
-      return new NpmAdapter({
-        cwd: tmpdir,
-        _restoreOriginalDependencies: function() {
-          return RSVP.resolve();
-        },
-        _install: mockInstall
-      }).cleanup().then(function() {
-        expect(installOptions).to.eql({ useYarnLock: true });
-      });
     });
   });
 });
