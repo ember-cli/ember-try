@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.2.14](https://github.com/ember-cli/ember-try/tree/v0.2.14) (2017-04-25)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.13...v0.2.14)
+
+- Move ember-cli-babel to a dev dependency (it is unused at runtime).
+
 ## [v0.2.13](https://github.com/ember-cli/ember-try/tree/v0.2.13) (2017-03-27)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.12...v0.2.13)
 
