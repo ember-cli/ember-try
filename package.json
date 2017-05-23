@@ -68,8 +68,7 @@
     "resolve": "^1.1.6",
     "rimraf": "^2.3.2",
     "rsvp": "^3.0.17",
-    "semver": "^5.1.0",
-    "sync-exec": "^0.6.2"
+    "semver": "^5.1.0"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
