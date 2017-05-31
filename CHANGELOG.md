@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.2.15](https://github.com/ember-cli/ember-try/tree/v0.2.15) (2017-05-31)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.14...v0.2.15)
+
+- Loosen engine constraints, assume new versions are compatible
+
 ## [v0.2.14](https://github.com/ember-cli/ember-try/tree/v0.2.14) (2017-04-25)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.13...v0.2.14)
 
