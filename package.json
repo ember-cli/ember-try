@@ -19,7 +19,7 @@
   },
   "repository": "ember-cli/ember-try",
   "engines": {
-    "node": "^4.5 || 6.* || 7.*"
+    "node": ">= 4.5"
   },
   "author": "Katie Gengler",
   "license": "MIT",
