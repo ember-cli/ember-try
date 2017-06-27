@@ -127,9 +127,9 @@ describe('bowerAdapter', function() {
         expect(command).to.equal('node');
         expect(args[0]).to.match(/bower/);
         expect(args[1]).to.equal('install');
-        expect(args[2]).to.equal('--config.interactive=false');
-        expect(args[3]).to.equal('--verbose=true');
-        expect(args[4]).to.equal('--allow-root=true');
+        expect(args[2]).to.equal('--verbose=true');
+        expect(args[3]).to.equal('--allow-root=true');
+        expect(args[4]).to.equal('--config.interactive=false');
         return RSVP.resolve();
       };
       return new BowerAdapter({ cwd: tmpdir, run: stubbedRun, managerOptions: ['--verbose=true', '--allow-root=true'] })._install();
