@@ -28,7 +28,7 @@ the `--config-path` option.
 If you need to know the scenario that is being run (i.e. to customize a test output file name) you can use the `EMBER_TRY_CURRENT_SCENARIO`
 environment variable.
 
-#### `ember try:one <scenario> (...options) --- <command (Default: test)>`
+#### `ember try:one <scenario> (...options) --- <command (Default: ember test)>`
 
 This command will run any `ember-cli` command with the specified scenario. The command will default to `ember test`, if no command is specified on the command-line or in configuration.
 
