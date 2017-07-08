@@ -118,7 +118,7 @@ describe('npmAdapter', function() {
         writeJSONFile('package.json', fixturePackage);
         var runCount = 0;
         var stubbedRun = generateMockRun([{
-          command: 'yarn install --no-lockfile',
+          command: 'yarn install --no-lockfile --ignore-engines',
           callback: function(command, args, opts) {
             runCount++;
             expect(opts).to.have.property('cwd', tmpdir);
@@ -139,7 +139,7 @@ describe('npmAdapter', function() {
         writeJSONFile('package.json', fixturePackage);
         var runCount = 0;
         var stubbedRun = generateMockRun([{
-          command: 'yarn install --flat --no-lockfile',
+          command: 'yarn install --flat --no-lockfile --ignore-engines',
           callback: function() {
             runCount++;
             return RSVP.resolve();
