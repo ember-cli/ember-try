@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.2.16](https://github.com/ember-cli/ember-try/tree/v0.2.16) (2017-07-16)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.15...v0.2.16)
+
+- add --ignore-engines to yarn default options
+
 ## [v0.2.15](https://github.com/ember-cli/ember-try/tree/v0.2.15) (2017-05-31)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.14...v0.2.15)
 
