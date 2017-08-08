@@ -215,32 +215,6 @@ describe('npmAdapter', function() {
       expect(resultJSON.devDependencies).to.not.have.property('ember-feature-flags');
     });
   });
-
-  describe('#_setYarnAvailability', function() {
-    it('sets useYarnCommand to true if yarn check does not raise', function() {
-      var npmAdapter = new NpmAdapter({
-        cwd: tmpdir,
-        _runYarnCheck: function() {}
-      });
-
-      npmAdapter._setYarnAvailability();
-
-      expect(npmAdapter.useYarnCommand).to.equal(true);
-    });
-
-    it('sets useYarnCommand to false if yarn check raises', function() {
-      var npmAdapter = new NpmAdapter({
-        cwd: tmpdir,
-        _runYarnCheck: function() {
-          throw new Error();
-        }
-      });
-
-      npmAdapter._setYarnAvailability();
-
-      expect(npmAdapter.useYarnCommand).to.equal(false);
-    });
-  });
 });
 
 function assertFileContainsJSON(filename, expectedObj) {
