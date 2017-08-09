@@ -15,12 +15,6 @@ var root = process.cwd();
 var tmproot = path.join(root, 'tmp');
 var tmpdir;
 
-var failedYarnCheck = function() {
-  throw new Error('Yarn not available');
-};
-
-var passedYarnCheck = function() {};
-
 describe('npmAdapter', function() {
   beforeEach(function() {
     tmpdir = tmp.in(tmproot);
@@ -38,8 +32,7 @@ describe('npmAdapter', function() {
       writeJSONFile('node_modules/prove-it.json', { originalNodeModules: true });
       writeJSONFile('package.json', { originalPackageJSON: true });
       return new NpmAdapter({
-        cwd: tmpdir,
-        _runYarnCheck: failedYarnCheck
+        cwd: tmpdir
       }).setup().then(function() {
         assertFileContainsJSON('package.json.ember-try', { originalPackageJSON: true });
         assertFileContainsJSON('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
@@ -73,8 +66,7 @@ describe('npmAdapter', function() {
 
         return new NpmAdapter({
           cwd: tmpdir,
-          run: stubbedRun,
-          _runYarnCheck: failedYarnCheck
+          run: stubbedRun
         })._install().then(function() {
           expect(runCount).to.equal(2, 'Both commands should run');
         }).catch(function(err) {
@@ -103,7 +95,6 @@ describe('npmAdapter', function() {
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-          _runYarnCheck: failedYarnCheck,
           managerOptions: ['--no-shrinkwrap=true']
         })._install().then(function() {
           expect(runCount).to.equal(2, 'Both commands should run');
@@ -129,7 +120,7 @@ describe('npmAdapter', function() {
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-          _runYarnCheck: passedYarnCheck
+          useYarnCommand: true
         })._install().then(function() {
           expect(runCount).to.equal(1, 'Only yarn install should run');
         });
@@ -149,7 +140,7 @@ describe('npmAdapter', function() {
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-          _runYarnCheck: passedYarnCheck,
+          useYarnCommand: true,
           managerOptions: ['--flat']
         })._install().then(function() {
           expect(runCount).to.equal(1, 'Only yarn install should run with manager options');
@@ -213,32 +204,6 @@ describe('npmAdapter', function() {
       var resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.devDependencies).to.not.have.property('ember-feature-flags');
-    });
-  });
-
-  describe('#_setYarnAvailability', function() {
-    it('sets useYarnCommand to true if yarn check does not raise', function() {
-      var npmAdapter = new NpmAdapter({
-        cwd: tmpdir,
-        _runYarnCheck: function() {}
-      });
-
-      npmAdapter._setYarnAvailability();
-
-      expect(npmAdapter.useYarnCommand).to.equal(true);
-    });
-
-    it('sets useYarnCommand to false if yarn check raises', function() {
-      var npmAdapter = new NpmAdapter({
-        cwd: tmpdir,
-        _runYarnCheck: function() {
-          throw new Error();
-        }
-      });
-
-      npmAdapter._setYarnAvailability();
-
-      expect(npmAdapter.useYarnCommand).to.equal(false);
     });
   });
 });
