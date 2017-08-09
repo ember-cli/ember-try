@@ -264,7 +264,7 @@ describe('tryEach', function() {
       });
 
       writeJSONFile('package.json', fixturePackage);
-      fs.closeSync(fs.openSync('yarn.lock', 'w'));
+      fs.writeFileSync('yarn.lock', 'w');
       fs.mkdirSync('node_modules');
       writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
