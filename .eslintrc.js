@@ -7,6 +7,7 @@ module.exports = {
   env: {
     browser: false,
     node: true,
+    es6: true,
   },
   globals: {
   },
@@ -57,7 +58,7 @@ module.exports = {
       'allowSingleLine': true,
     }],
     'camelcase': 2,
-    'comma-dangle': 0,
+    'comma-dangle': [2, 'always-multiline'],
     'comma-spacing': 2,
     'comma-style': 2,
     'eol-last': 2,
@@ -93,6 +94,27 @@ module.exports = {
       'allowTemplateLiterals': true,
     }],
     'semi': [2, 'always'],
-    'wrap-regex': 2
+    'wrap-regex': 2,
+
+    /*** ECMAScript 6 ***/
+
+    'arrow-body-style': 2,
+    'arrow-parens': [2, 'as-needed'],
+    'arrow-spacing': 2,
+    'generator-star-spacing': 2,
+    'no-confusing-arrow': [2, {
+      'allowParens': true,
+    }],
+    'no-useless-computed-key': 2,
+    'no-var': 2,
+    'object-shorthand': 2,
+    'prefer-arrow-callback': [2, {
+      'allowNamedFunctions': true,
+    }],
+    'prefer-template': 2,
+    'rest-spread-spacing': 2,
+    'symbol-description': 2,
+    'template-curly-spacing': 2,
+    'yield-star-spacing': 2,
   },
 };
