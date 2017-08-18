@@ -105,7 +105,7 @@ To keep this from getting out of hand, `ember-try` will limit the versions of Em
 Configuration will be read from a file in your ember app in `config/ember-try.js`. Here are the possible options:
 
 ```js
-/*jshint node:true*/
+/* eslint-env node */
 
 module.exports = function() {
   return {

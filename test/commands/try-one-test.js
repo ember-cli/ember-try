@@ -1,32 +1,32 @@
 'use strict';
 
-var expect = require('chai').expect;
-var RSVP = require('rsvp');
-var TryOneCommand = require('../../lib/commands/try-one');
+let expect = require('chai').expect;
+let RSVP = require('rsvp');
+let TryOneCommand = require('../../lib/commands/try-one');
 
-var origTryEachTask = TryOneCommand._TryEachTask;
-var origGetConfig = TryOneCommand._getConfig;
+let origTryEachTask = TryOneCommand._TryEachTask;
+let origGetConfig = TryOneCommand._getConfig;
 
-describe('commands/try-one', function() {
-  describe('getCommand', function() {
-    it('returns args after --- as command args', function() {
-      var args = TryOneCommand.getCommand(['ember', 'try:one', 'foo-bar-scenario', '--skip-cleanup', '---', 'ember', 'build']);
+describe('commands/try-one', () => {
+  describe('getCommand', () => {
+    it('returns args after --- as command args', () => {
+      let args = TryOneCommand.getCommand(['ember', 'try:one', 'foo-bar-scenario', '--skip-cleanup', '---', 'ember', 'build']);
       expect(args).to.eql(['ember', 'build']);
     });
 
-    it('returns no command args if no ---', function() {
-      var args = TryOneCommand.getCommand(['ember', 'try:one', 'foo-bar-scenario', '--skip-cleanup']);
+    it('returns no command args if no ---', () => {
+      let args = TryOneCommand.getCommand(['ember', 'try:one', 'foo-bar-scenario', '--skip-cleanup']);
       expect(args).to.eql([]);
     });
   });
 
-  describe('#run', function() {
-    var mockConfig;
+  describe('#run', () => {
+    let mockConfig;
 
     function MockTryEachTask() { }
     MockTryEachTask.prototype.run = function() { };
 
-    beforeEach(function() {
+    beforeEach(() => {
       TryOneCommand._getConfig = function() {
         return RSVP.resolve(mockConfig || { scenarios: [] });
       };
@@ -34,20 +34,20 @@ describe('commands/try-one', function() {
       TryOneCommand._TryEachTask = MockTryEachTask;
     });
 
-    afterEach(function() {
+    afterEach(() => {
       TryOneCommand._TryEachTask = origTryEachTask;
       TryOneCommand._getConfig = origGetConfig;
       mockConfig = null;
     });
 
-    it('throws if no scenario is provided', function() {
-      expect(function() {
+    it('throws if no scenario is provided', () => {
+      expect(() => {
         TryOneCommand.run({}, []);
       }).to.throw(/requires a scenario name to be specified/);
     });
 
-    it('passes the configPath to _getConfig', function() {
-      var configPath;
+    it('passes the configPath to _getConfig', () => {
+      let configPath;
       TryOneCommand._getConfig = function(options) {
         configPath = options.configPath;
 
@@ -58,13 +58,13 @@ describe('commands/try-one', function() {
       expect(configPath).to.equal('foo/bar/widget.js');
     });
 
-    it('throws if a scenario was not found for the scenarioName provided', function() {
-      return TryOneCommand.run({ }, ['foo']).catch(function(error) {
+    it('throws if a scenario was not found for the scenarioName provided', () => {
+      return TryOneCommand.run({ }, ['foo']).catch((error) => {
         expect(error).to.match(/requires a scenario specified in the config/);
       });
     });
 
-    it('sets command on task init', function() {
+    it('sets command on task init', () => {
       testCommandSetsTheseAsCommandArgs('try:one default', []);
       testCommandSetsTheseAsCommandArgs('try:one default --- ember help', ['ember', 'help']);
       testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json', ['ember', 'help', '--json']);
@@ -75,7 +75,7 @@ describe('commands/try-one', function() {
 });
 
 function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
-  var additionalArgs = command.split(' ');
+  let additionalArgs = command.split(' ');
   function MockTask(opts) {
     expect(opts.commandArgs).to.eql(expectedArgs);
   }
@@ -85,7 +85,7 @@ function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
   TryOneCommand._commandLineArguments = function() {
     return [].concat(['/usr/local/Cellar/node/5.3.0/bin/node',
       '/usr/local/bin/ember'],
-                     additionalArgs);
+    additionalArgs);
   };
 
   TryOneCommand._getConfig = function() {

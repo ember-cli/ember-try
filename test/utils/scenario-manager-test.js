@@ -1,76 +1,76 @@
 'use strict';
 
-var expect = require('chai').expect;
-var ScenarioManager = require('../../lib/utils/scenario-manager');
-var CoreObject = require('core-object');
-var RSVP = require('rsvp');
+let expect = require('chai').expect;
+let ScenarioManager = require('../../lib/utils/scenario-manager');
+let CoreObject = require('core-object');
+let RSVP = require('rsvp');
 
-describe('scenarioManager', function() {
+describe('scenarioManager', () => {
 
-  describe('#setup', function() {
-    it('sets up each of the dependency managers', function() {
-      var calledFirstAdapter = false;
-      var calledSecondAdapter = false;
-      var fakeAdapters = [
+  describe('#setup', () => {
+    it('sets up each of the dependency managers', () => {
+      let calledFirstAdapter = false;
+      let calledSecondAdapter = false;
+      let fakeAdapters = [
         new CoreObject({
-          setup: function() {
+          setup() {
             calledFirstAdapter = true;
-          }
+          },
         }),
         new CoreObject({
-          setup: function() {
+          setup() {
             calledSecondAdapter = true;
-          }
-        })
+          },
+        }),
       ];
 
-      return new ScenarioManager({ dependencyManagerAdapters: fakeAdapters }).setup().then(function() {
+      return new ScenarioManager({ dependencyManagerAdapters: fakeAdapters }).setup().then(() => {
         expect(calledFirstAdapter).to.equal(true);
         expect(calledSecondAdapter).to.equal(true);
       });
     });
   });
 
-  describe('#changeTo', function() {
-    it('changes dependency sets on each of the managers, and concats results', function() {
-      var fakeAdapters = [
+  describe('#changeTo', () => {
+    it('changes dependency sets on each of the managers, and concats results', () => {
+      let fakeAdapters = [
         new CoreObject({
-          changeToDependencySet: function() {
+          changeToDependencySet() {
             return RSVP.resolve(['a', 'b', 'r']);
-          }
+          },
         }),
         new CoreObject({
-          changeToDependencySet: function() {
+          changeToDependencySet() {
             return RSVP.resolve(['u', 'q', 'a']);
-          }
-        })
+          },
+        }),
       ];
 
-      var manager = new ScenarioManager({ dependencyManagerAdapters: fakeAdapters });
-      return manager.changeTo({}).then(function(results) {
+      let manager = new ScenarioManager({ dependencyManagerAdapters: fakeAdapters });
+      return manager.changeTo({}).then((results) => {
         expect(results).to.eql(['a', 'b', 'r', 'u', 'q', 'a']);
       });
     });
   });
 
-  describe('#cleanup', function() {
-    it('cleans up each dependency manager', function() {
-      var calledFirstAdapter = false;
-      var calledSecondAdapter = false;
-      var fakeAdapters = [
+  describe('#cleanup', () => {
+    it('cleans up each dependency manager', () => {
+      let calledFirstAdapter = false;
+      let calledSecondAdapter = false;
+      let fakeAdapters = [
         new CoreObject({
-          cleanup: function() {
+          cleanup() {
             calledFirstAdapter = true;
-          }
+          },
         }),
         new CoreObject({
-          cleanup: function() {
+          cleanup() {
             calledSecondAdapter = true;
-          }
-        })
+          },
+        }),
       ];
 
-      return new ScenarioManager({ dependencyManagerAdapters: fakeAdapters }).cleanup().then(function() {
+      return new ScenarioManager({ dependencyManagerAdapters: fakeAdapters }).cleanup().then(() => {
         expect(calledFirstAdapter).to.equal(true);
         expect(calledSecondAdapter).to.equal(true);
       });

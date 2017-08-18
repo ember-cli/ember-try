@@ -98,8 +98,8 @@ module.exports = {
 
     /*** ECMAScript 6 ***/
 
-    'arrow-body-style': 2,
-    'arrow-parens': [2, 'as-needed'],
+    'arrow-body-style': [2, 'always'],
+    'arrow-parens': [2, 'always'],
     'arrow-spacing': 2,
     'generator-star-spacing': 2,
     'no-confusing-arrow': [2, {
