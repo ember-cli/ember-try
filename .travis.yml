@@ -3,6 +3,7 @@ language: node_js
 node_js:
   - "4"
   - "7"
+  - "8"
 #  - "6" - The test that includes coverage runs with 6
 
 sudo: false
@@ -22,6 +23,8 @@ matrix:
   - node_js: "4"
     env: NPM_SCRIPT=smoke-test
   - node_js: "6"
+    env: NPM_SCRIPT=smoke-test
+  - node_js: "8"
     env: NPM_SCRIPT=smoke-test
 
 before_install:
