@@ -12,7 +12,7 @@ install:
   # Get the latest stable version of Node 0.STABLE.latest
   - ps: Install-Product node $env:nodejs_version
   # Install PhantomJS
-  - npm install phantomjs-prebuilt
+  - npm install -g phantomjs-prebuilt
   - npm install mocha-appveyor-reporter
   - npm install -g bower
   # Typical npm stuff.
