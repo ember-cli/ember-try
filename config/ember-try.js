@@ -74,7 +74,7 @@ module.exports = {
       }
     },
     {
-      name: 'ember-default',
+      name: 'default',
       npm: {
         devDependencies: {}
       }
