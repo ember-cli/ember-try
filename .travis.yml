@@ -7,6 +7,10 @@ node_js:
 #  - "6" - The test that includes coverage runs with 6
 
 sudo: false
+dist: trusty
+
+addons:
+  chrome: stable
 
 env:
   - NPM_SCRIPT=node-test
