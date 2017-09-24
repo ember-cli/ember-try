@@ -12,8 +12,6 @@ tmp/
 .eslintignore
 .eslintrc.js
 .gitignore
-.jscsrc
-.jshintrc
 .travis.yml
 .watchmanconfig
 bower.json

@@ -1,20 +1,20 @@
 'use strict';
 
-var expect = require('chai').expect;
-var RSVP = require('rsvp');
-var TryEmberCommand = require('../../lib/commands/try-ember');
+let expect = require('chai').expect;
+let RSVP = require('rsvp');
+let TryEmberCommand = require('../../lib/commands/try-ember');
 
-var origTryEachTask = TryEmberCommand._TryEachTask;
-var origGetConfig = TryEmberCommand._getConfig;
+let origTryEachTask = TryEmberCommand._TryEachTask;
+let origGetConfig = TryEmberCommand._getConfig;
 
-describe('commands/try-ember', function() {
-  describe('#run', function() {
-    var mockConfig;
+describe('commands/try-ember', () => {
+  describe('#run', () => {
+    let mockConfig;
 
     function MockTryEachTask() { }
     MockTryEachTask.prototype.run = function() { };
 
-    beforeEach(function() {
+    beforeEach(() => {
       TryEmberCommand._getConfig = function() {
         return RSVP.resolve(mockConfig || { scenarios: [] });
       };
@@ -22,14 +22,14 @@ describe('commands/try-ember', function() {
       TryEmberCommand._TryEachTask = MockTryEachTask;
     });
 
-    afterEach(function() {
+    afterEach(() => {
       TryEmberCommand._TryEachTask = origTryEachTask;
       TryEmberCommand._getConfig = origGetConfig;
       mockConfig = null;
     });
 
-    it('passes the configPath to _getConfig', function() {
-      var configPath;
+    it('passes the configPath to _getConfig', () => {
+      let configPath;
       TryEmberCommand._getConfig = function(options) {
         configPath = options.configPath;
 
@@ -40,8 +40,8 @@ describe('commands/try-ember', function() {
       expect(configPath).to.equal('foo/bar/widget.js');
     });
 
-    it('passes ember semver statement to _getConfig', function() {
-      var versionCompatibility;
+    it('passes ember semver statement to _getConfig', () => {
+      let versionCompatibility;
       TryEmberCommand._getConfig = function(options) {
         versionCompatibility = options.versionCompatibility;
 
