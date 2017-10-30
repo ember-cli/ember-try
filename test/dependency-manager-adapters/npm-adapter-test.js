@@ -49,14 +49,14 @@ describe('npmAdapter', function() {
         writeJSONFile('package.json', fixturePackage);
         var runCount = 0;
         var stubbedRun = generateMockRun([{
-          command: 'npm install',
+          command: 'npm install --no-shrinkwrap',
           callback: function(command, args, opts) {
             runCount++;
             expect(opts).to.have.property('cwd', tmpdir);
             return RSVP.resolve();
           }
         }, {
-          command: 'npm prune',
+          command: 'npm prune --no-shrinkwrap',
           callback: function(command, args, opts) {
             runCount++;
             expect(opts).to.have.property('cwd', tmpdir);
@@ -79,13 +79,13 @@ describe('npmAdapter', function() {
         writeJSONFile('package.json', fixturePackage);
         var runCount = 0;
         var stubbedRun = generateMockRun([{
-          command: 'npm install --no-shrinkwrap=true',
+          command: 'npm install --no-optional --no-shrinkwrap',
           callback: function() {
             runCount++;
             return RSVP.resolve();
           }
         }, {
-          command: 'npm prune --no-shrinkwrap=true',
+          command: 'npm prune --no-optional --no-shrinkwrap',
           callback: function() {
             runCount++;
             return RSVP.resolve();
@@ -95,7 +95,7 @@ describe('npmAdapter', function() {
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-          managerOptions: ['--no-shrinkwrap=true']
+          managerOptions: ['--no-optional']
         })._install().then(function() {
           expect(runCount).to.equal(2, 'Both commands should run');
         }).catch(function(err) {
