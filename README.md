@@ -234,13 +234,13 @@ If no `config/ember-try.js` file is present, the default config will be used. Th
 }
 ```
 
-##### A note on npm scenarios / "What about yarn?"
+##### Yarn
 
-If you include `useYarn: true` in your `ember-try` config, all npm scenarios will use `yarn` for install with the `--no-lockfile` option.
-If the project has a `yarn.lock`, it will be used *only* on cleanup to restore the project to a clean state. 
+If you include `useYarn: true` in your `ember-try` config, all npm scenarios will use `yarn` for install with the `--no-lockfile` option. At cleanup, your dependencies will be restored to their prior state.
  
-###### But I use yarn, why `--no-lockfile`?
+##### A note on npm scenarios with lockfiles
 
+Lockfiles are ignored by `ember-try`. (`yarn` will run with `--no-lockfile` and `npm` will be run with `--no-shrinkwrap`).
 When testing various scenarios, it's important to "float" dependencies so that the scenarios are run with the latest satisfying versions of dependencies a user of the project would get.
 
 ### Video
