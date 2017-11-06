@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.2.18](https://github.com/ember-cli/ember-try/tree/v0.2.18) (2017-11-05)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.17...v0.2.18)
+
+- Pass --no-shrinkwrap option to ignore package-lock.json on npm >=5 ([\#152](https://github.com/ember-cli/ember-try/pull/152))
+
 ## [v0.2.17](https://github.com/ember-cli/ember-try/tree/v0.2.17) (2017-09-08)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.16...v0.2.17)
 
