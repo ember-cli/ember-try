@@ -32,7 +32,7 @@ describe('scenarioManager', function() {
   });
 
   describe('#changeTo', function() {
-    it('changes dependency sets on each of the managers, and concats results', function() {
+    it('changes dependency sets on each of the managers, in order, and concats results', function() {
       var fakeAdapters = [
         new CoreObject({
           changeToDependencySet: function() {

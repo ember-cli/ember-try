@@ -121,33 +121,23 @@ describe('bowerAdapter', function() {
       return new BowerAdapter({ cwd: tmpdir, run: stubbedRun })._install();
     });
 
-    it('runs bower install with global bower if local bower is not found', function() {
-      var actualCommand, actualArgs, actualOpts;
-
+    it('rejects if local bower is not found', function() {
       var doNotFindLocalBower = function() {
+        return RSVP.reject('no local bower found');
+      };
+
+      var stubbedRun = function() {
         return RSVP.reject();
-      };
-
-      var findGlobalBower = function() {
-        return RSVP.resolve();
-      };
-
-      var stubbedRun = function(command, args, opts) {
-        actualCommand = command;
-        actualArgs = args;
-        actualOpts = opts;
-        return RSVP.resolve();
       };
 
       return new BowerAdapter({
         cwd: tmpdir,
         _findBowerPath: doNotFindLocalBower,
-        _checkForGlobalBower: findGlobalBower,
         run: stubbedRun
       })._install().then(function() {
-        expect(actualCommand).to.equal('bower');
-        expect(actualArgs).to.eql(['install', '--config.interactive=false']);
-        expect(actualOpts).to.have.property('cwd', tmpdir);
+        expect.fail(true, false, 'unreachable: _install promise rejects');
+      }, function(error) {
+        expect(error).to.equal('no local bower found');
       });
     });
 
@@ -280,34 +270,6 @@ describe('bowerAdapter', function() {
     it('returns the correct bower path', function() {
       return new BowerAdapter({ cwd: tmpdir })._findBowerPath().then(function(path) {
         expect(path).to.include('node_modules/bower/bin/bower');
-      });
-    });
-  });
-
-  describe('#_checkForGlobalBower()', function() {
-    it('runs bower -v to see if bower exists', function() {
-      let actualCommand, actualArgs, actualOpts;
-      var stubbedRun = function(command, args, opts) {
-        actualCommand = command;
-        actualArgs = args;
-        actualOpts = opts;
-        return RSVP.resolve();
-      };
-
-      return new BowerAdapter({ cwd: tmpdir, run: stubbedRun })._checkForGlobalBower().then(function() {
-        expect(actualCommand).to.equal('bower');
-        expect(actualArgs).to.eql(['-v']);
-        expect(actualOpts.stdio).to.equal('ignore');
-      });
-    });
-
-    it('throws if running bower -v fails', function() {
-      var stubbedRun = function() {
-        return RSVP.reject();
-      };
-
-      return new BowerAdapter({ cwd: tmpdir, run: stubbedRun })._checkForGlobalBower().catch(function(err) {
-        expect(err).to.match(/Bower must be installed either locally or globally to have bower scenarios/);
       });
     });
   });
