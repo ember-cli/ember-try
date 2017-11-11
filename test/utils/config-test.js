@@ -96,48 +96,88 @@ describe('utils/config', function() {
 
     it('is used if there is no config file', function() {
       return getConfig({ project: project }).then(function(config) {
-        expect(config).to.eql(
-          {
-            scenarios: [
-              { name: 'default', bower: { dependencies: {} } },
-              { name: 'ember-beta', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } } },
-              { name: 'ember-canary', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } } },
-              { name: 'ember-2.2.0', bower: { dependencies: { ember: '2.2.0' } } }
-            ]
-          }
-        );
+        expect(config).to.eql({
+          scenarios: [
+            { name: 'default', bower: { dependencies: {} } },
+            {
+              name: 'ember-beta',
+              allowedToFail: true,
+              bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } },
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+            {
+              name: 'ember-canary',
+              allowedToFail: true,
+              bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } },
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+            {
+              name: 'ember-2.2.0',
+              bower: { dependencies: { ember: '2.2.0' } },
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+          ],
+        });
       });
     });
 
     it('is always used if passed in and behaves as if config file has "useVersionCompatibility: true"', function() {
       generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };');
       return getConfig({ project: project, versionCompatibility: { ember: '1.13.0' } }).then(function(config) {
-        expect(config).to.eql(
-          {
-            scenarios: [
-              { name: 'default', bower: { dependencies: {} } },
-              { name: 'ember-beta', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } } },
-              { name: 'ember-canary', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } } },
-              { name: 'ember-1.13.0', bower: { dependencies: { ember: '1.13.0' } } },
-              { foo: 'bar' }
-            ]
-          }
-        );
+        expect(config).to.eql({
+          scenarios: [
+            { name: 'default', bower: { dependencies: {} } },
+            {
+              name: 'ember-beta',
+              allowedToFail: true,
+              bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } },
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+            {
+              name: 'ember-canary',
+              allowedToFail: true,
+              bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } },
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+            {
+              name: 'ember-1.13.0',
+              bower: { dependencies: { ember: '1.13.0' } },
+
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+            { foo: 'bar' },
+          ],
+        });
       });
     });
 
     it('can be overridden by passed in versionCompatibility', function() {
       return getConfig({ project: project, versionCompatibility: { ember: '1.13.0' } }).then(function(config) {
-        expect(config).to.eql(
-          {
-            scenarios: [
-              { name: 'default', bower: { dependencies: {} } },
-              { name: 'ember-beta', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } } },
-              { name: 'ember-canary', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } } },
-              { name: 'ember-1.13.0', bower: { dependencies: { ember: '1.13.0' } } }
-            ]
-          }
-        );
+        expect(config).to.eql({
+          scenarios: [
+            { name: 'default', bower: { dependencies: {} } },
+            {
+              name: 'ember-beta',
+              allowedToFail: true,
+              bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } },
+
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+            {
+              name: 'ember-canary',
+              allowedToFail: true,
+              bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } },
+
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+            {
+              name: 'ember-1.13.0',
+              bower: { dependencies: { ember: '1.13.0' } },
+
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+          ],
+        });
       });
     });
 
@@ -153,31 +193,65 @@ describe('utils/config', function() {
     it('is merged with config if config does not have scenarios', function() {
       generateConfigFile('module.exports = { bowerOptions: ["--allow-root=true"] };');
       return getConfig({ project: project }).then(function(config) {
-        expect(config).to.eql(
-          {
-            bowerOptions: ['--allow-root=true'],
-            scenarios: [
-              { name: 'default', bower: { dependencies: {} } },
-              { name: 'ember-beta', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } } },
-              { name: 'ember-canary', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } } },
-              { name: 'ember-2.2.0', bower: { dependencies: { ember: '2.2.0' } } }
-            ]
-          }
-        );
+        expect(config).to.eql({
+          bowerOptions: ['--allow-root=true'],
+          scenarios: [
+            { name: 'default', bower: { dependencies: {} } },
+            {
+              name: 'ember-beta',
+              allowedToFail: true,
+              bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } },
+
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+            {
+              name: 'ember-canary',
+              allowedToFail: true,
+              bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } },
+
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+            {
+              name: 'ember-2.2.0',
+              bower: { dependencies: { ember: '2.2.0' } },
+
+              npm: { devDependencies: { 'ember-source': null } },
+            },
+          ],
+        });
       });
     });
 
     it('is merged with config if config has useVersionCompatibility', function() {
-      generateConfigFile('module.exports = { useVersionCompatibility: true, bowerOptions: ["--allow-root=true"], scenarios: [ { name: "bar" }, { name: "ember-beta", allowedToFail: false } ] };');
+      generateConfigFile(
+        'module.exports = { useVersionCompatibility: true, bowerOptions: ["--allow-root=true"], scenarios: [ { name: "bar" }, { name: "ember-beta", allowedToFail: false } ] };'
+      );
       return getConfig({ project: project }).then(function(config) {
         expect(config.useVersionCompatibility).to.equal(true);
         expect(config.bowerOptions).to.eql(['--allow-root=true']);
         expect(config.scenarios).to.eql([
           { name: 'default', bower: { dependencies: {} } },
-          { name: 'ember-beta', allowedToFail: false, bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } } },
-          { name: 'ember-canary', allowedToFail: true, bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } } },
-          { name: 'ember-2.2.0', bower: { dependencies: { ember: '2.2.0' } } },
-          { name: 'bar' }
+          {
+            name: 'ember-beta',
+            allowedToFail: false,
+            bower: { dependencies: { ember: 'components/ember#beta' }, resolutions: { ember: 'beta' } },
+
+            npm: { devDependencies: { 'ember-source': null } },
+          },
+          {
+            name: 'ember-canary',
+            allowedToFail: true,
+            bower: { dependencies: { ember: 'components/ember#canary' }, resolutions: { ember: 'canary' } },
+
+            npm: { devDependencies: { 'ember-source': null } },
+          },
+          {
+            name: 'ember-2.2.0',
+            bower: { dependencies: { ember: '2.2.0' } },
+
+            npm: { devDependencies: { 'ember-source': null } },
+          },
+          { name: 'bar' },
         ]);
       });
     });
