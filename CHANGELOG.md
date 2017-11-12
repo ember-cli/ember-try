@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.2.19](https://github.com/ember-cli/ember-try/tree/v0.2.19) (2017-11-12)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.18...v0.2.19)
+
+- Fix usage of `ember-try` on projects with versions of npm >= 5, without `bower` but that have `bower` scenarios ([\#157](https://github.com/ember-cli/ember-try/pull/157)) @hjdivad
+- Update `ember-try-config` dependency ([\#156](https://github.com/ember-cli/ember-try/pull/156))
+- Fix usage of `ember-try` within directory paths containing spaces or parentheses ([\#154](https://github.com/ember-cli/ember-try/pull/154))
+
 ## [v0.2.18](https://github.com/ember-cli/ember-try/tree/v0.2.18) (2017-11-05)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.17...v0.2.18)
 
