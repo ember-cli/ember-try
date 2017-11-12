@@ -280,7 +280,6 @@ describe('tryEach', function() {
       });
     });
 
-
     it('fails scenarios when scenario\'s tests fail', function() {
       this.timeout(300000);
 

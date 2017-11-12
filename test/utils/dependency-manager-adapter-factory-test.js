@@ -17,7 +17,7 @@ describe('DependencyManagerAdapterFactory', function() {
       expect(adapters.length).to.equal(1);
     });
 
-    it('creates both adapters when it has both keys', function() {
+    it('creates both adapters, with npm first, when it has both keys', function() {
       var adapters = DependencyManagerAdapterFactory.generateFromConfig({ scenarios: [{ bower: {}, npm: {} }] }, 'here');
       expect(adapters[0].configKey).to.equal('npm');
       expect(adapters[1].configKey).to.equal('bower');
