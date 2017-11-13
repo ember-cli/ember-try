@@ -89,7 +89,7 @@ describe('bowerAdapter', function() {
   });
 
   describe('#changeToDependencySet', function() {
-    it('if bower dependencies are not dependencies, nothing is done', function() {
+    it('if there are no bower dependencies, nothing is done', function() {
       var stubbedRun = function() {
         throw new Error('Should not run anything');
       };
@@ -118,14 +118,12 @@ describe('bowerAdapter', function() {
       };
 
       let adapter = new BowerAdapter({ cwd: tmpdir, run: stubbedRun });
-
       return adapter.setup()
         .then(function() {
           return adapter.changeToDependencySet({ dependencies: { 'ember': '*' } });
         })
         .then(function() {
           expect(stubbedRunRan).to.equal(true);
-          debugger
           return adapter.cleanup();
         });
     });
@@ -211,7 +209,6 @@ describe('bowerAdapter', function() {
 
   describe('#_writeBowerFileWithDepSetChanges', function() {
     it('writes bower.json with dep set changes', function() {
-      debugger
       var bowerJSON = { dependencies: { jquery: '1.11.1' }, resolutions: {} };
       var depSet = { dependencies: { jquery: '2.1.3' } };
       writeJSONFile('bower.json', bowerJSON);
