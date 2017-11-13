@@ -48,7 +48,7 @@
     "glob": "^7.0.0",
     "istanbul": "1.0.0-alpha.2",
     "loader.js": "^4.0.1",
-    "mocha": "^2.2.5",
+    "mocha": "^4.0.0",
     "mockery": "^1.4.0",
     "tmp-sync": "^1.1.0"
   },
