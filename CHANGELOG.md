@@ -1,145 +1,412 @@
-# Changelog
+# Change Log
+
+## [0.2.20](https://github.com/ember-cli/ember-try/tree/0.2.20) (2017-11-13)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.19...0.2.20)
+
+**Fixed bugs:**
+
+- Error: Cannot find module 'bower' [\#161](https://github.com/ember-cli/ember-try/issues/161)
+-  Ensure `bower` is not required when no bower dependencies are present. [\#164](https://github.com/ember-cli/ember-try/pull/164) ([rwjblue](https://github.com/rwjblue))
+
+**Closed issues:**
+
+- bower version [\#131](https://github.com/ember-cli/ember-try/issues/131)
+- Ember-try uses `Yarn` in Travis CI Trusty Build [\#125](https://github.com/ember-cli/ember-try/issues/125)
+- Allow user to disable beta, canary when using versionCompatability [\#86](https://github.com/ember-cli/ember-try/issues/86)
+
+**Merged pull requests:**
+
+- Clean up all-commands.sh to remove deprecated commands [\#160](https://github.com/ember-cli/ember-try/pull/160) ([kategengler](https://github.com/kategengler))
 
 ## [v0.2.19](https://github.com/ember-cli/ember-try/tree/v0.2.19) (2017-11-12)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.18...v0.2.19)
 
-- Fix usage of `ember-try` on projects with versions of npm >= 5, without `bower` but that have `bower` scenarios ([\#157](https://github.com/ember-cli/ember-try/pull/157)) @hjdivad
-- Update `ember-try-config` dependency ([\#156](https://github.com/ember-cli/ember-try/pull/156))
-- Fix usage of `ember-try` within directory paths containing spaces or parentheses ([\#154](https://github.com/ember-cli/ember-try/pull/154))
+**Fixed bugs:**
 
-## [v0.2.18](https://github.com/ember-cli/ember-try/tree/v0.2.18) (2017-11-05)
+- versionCompatibility caching [\#112](https://github.com/ember-cli/ember-try/issues/112)
+
+**Closed issues:**
+
+- Scenarios missing their deps when no bower and no package-lock.json [\#150](https://github.com/ember-cli/ember-try/issues/150)
+- try:each fails with paths containing spaces and parens [\#149](https://github.com/ember-cli/ember-try/issues/149)
+- ember-cli module directory emptied of files [\#141](https://github.com/ember-cli/ember-try/issues/141)
+
+**Merged pull requests:**
+
+- Implicitly add an npm dev dependency on bower [\#157](https://github.com/ember-cli/ember-try/pull/157) ([hjdivad](https://github.com/hjdivad))
+- Bump ember-try-config [\#156](https://github.com/ember-cli/ember-try/pull/156) ([hjdivad](https://github.com/hjdivad))
+- Put quotes around paths  [\#154](https://github.com/ember-cli/ember-try/pull/154) ([kategengler](https://github.com/kategengler))
+
+## [v0.2.18](https://github.com/ember-cli/ember-try/tree/v0.2.18) (2017-11-06)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.17...v0.2.18)
 
-- Pass --no-shrinkwrap option to ignore package-lock.json on npm >=5 ([\#152](https://github.com/ember-cli/ember-try/pull/152))
+**Implemented enhancements:**
+
+- Order versionCompatibility scenarios by semver [\#128](https://github.com/ember-cli/ember-try/issues/128)
+
+**Closed issues:**
+
+- Ignore package-lock.json by default [\#144](https://github.com/ember-cli/ember-try/issues/144)
+- yarn detection isn't complete [\#133](https://github.com/ember-cli/ember-try/issues/133)
+
+**Merged pull requests:**
+
+- Update README to indicate lockfiles are ignored for npm as well as yarn [\#153](https://github.com/ember-cli/ember-try/pull/153) ([kategengler](https://github.com/kategengler))
+- Use --no-shrinkwrap option to npm [\#152](https://github.com/ember-cli/ember-try/pull/152) ([kategengler](https://github.com/kategengler))
 
 ## [v0.2.17](https://github.com/ember-cli/ember-try/tree/v0.2.17) (2017-09-08)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.16...v0.2.17)
 
-- Fix Yarn detection to look for lockfile @backspace
+**Closed issues:**
+
+- `useYarn: true` causes `ember try:each` to fail [\#147](https://github.com/ember-cli/ember-try/issues/147)
+
+**Merged pull requests:**
+
+- Update travis.yml to test against node 8 [\#146](https://github.com/ember-cli/ember-try/pull/146) ([kategengler](https://github.com/kategengler))
+- fix indentation [\#139](https://github.com/ember-cli/ember-try/pull/139) ([kellyselden](https://github.com/kellyselden))
+- Change Yarn detection to look for lockfile [\#138](https://github.com/ember-cli/ember-try/pull/138) ([backspace](https://github.com/backspace))
 
 ## [v0.2.16](https://github.com/ember-cli/ember-try/tree/v0.2.16) (2017-07-16)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.15...v0.2.16)
 
-- add --ignore-engines to yarn default options
+**Fixed bugs:**
+
+- npm@5 issues [\#130](https://github.com/ember-cli/ember-try/issues/130)
+
+**Closed issues:**
+
+- ember-try fails with default addon app + ember-cli-sass [\#126](https://github.com/ember-cli/ember-try/issues/126)
+- Does `ember-try-config` need to be a dev dependency? [\#77](https://github.com/ember-cli/ember-try/issues/77)
+
+**Merged pull requests:**
+
+- add npm badge to README [\#136](https://github.com/ember-cli/ember-try/pull/136) ([kellyselden](https://github.com/kellyselden))
+- add --ignore-engines to yarn default options [\#135](https://github.com/ember-cli/ember-try/pull/135) ([kellyselden](https://github.com/kellyselden))
+- fix default value [\#134](https://github.com/ember-cli/ember-try/pull/134) ([kellyselden](https://github.com/kellyselden))
 
 ## [v0.2.15](https://github.com/ember-cli/ember-try/tree/v0.2.15) (2017-05-31)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.14...v0.2.15)
 
-- Loosen engine constraints, assume new versions are compatible
+**Merged pull requests:**
 
-## [v0.2.14](https://github.com/ember-cli/ember-try/tree/v0.2.14) (2017-04-25)
+- loosen engine constraints, assume new versions are compatible. [\#129](https://github.com/ember-cli/ember-try/pull/129) ([stefanpenner](https://github.com/stefanpenner))
+- Remove sync-exec as it is not used anymore [\#127](https://github.com/ember-cli/ember-try/pull/127) ([polarctos](https://github.com/polarctos))
+
+## [v0.2.14](https://github.com/ember-cli/ember-try/tree/v0.2.14) (2017-04-22)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.13...v0.2.14)
 
-- Move ember-cli-babel to a dev dependency (it is unused at runtime).
+**Merged pull requests:**
 
-## [v0.2.13](https://github.com/ember-cli/ember-try/tree/v0.2.13) (2017-03-27)
+- Move ember-cli-babel to a devDependency. [\#124](https://github.com/ember-cli/ember-try/pull/124) ([rwjblue](https://github.com/rwjblue))
+- Make "ember-cli-babel" dev dependency [\#123](https://github.com/ember-cli/ember-try/pull/123) ([Turbo87](https://github.com/Turbo87))
+
+## [v0.2.13](https://github.com/ember-cli/ember-try/tree/v0.2.13) (2017-03-28)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.12...v0.2.13)
 
-- Bugfix: When using npm 2 (node 4), scenarios failed trying to require (./../utils/results-summary) 
+**Closed issues:**
 
-## [v0.2.12](https://github.com/ember-cli/ember-try/tree/v0.2.12) (2017-03-23)
+- Failing in Travis with `Error: Cannot find module './../utils/result-summary'` [\#121](https://github.com/ember-cli/ember-try/issues/121)
+
+**Merged pull requests:**
+
+- Require ResultSummary before any npm scenarios run [\#122](https://github.com/ember-cli/ember-try/pull/122) ([kategengler](https://github.com/kategengler))
+
+## [v0.2.12](https://github.com/ember-cli/ember-try/tree/v0.2.12) (2017-03-24)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.11...v0.2.12)
 
-- Use yarn for install for npm scenarios, when available. Cleanup respects yarn.lock if present. ([\#117](https://github.com/ember-cli/ember-try/pull/117) Thanks @canufeel) 
+**Merged pull requests:**
 
-#v0.2.11
+- Add tests for using yarn when available [\#120](https://github.com/ember-cli/ember-try/pull/120) ([kategengler](https://github.com/kategengler))
+- Minimal yarn support [\#117](https://github.com/ember-cli/ember-try/pull/117) ([canufeel](https://github.com/canufeel))
 
-- Support having scenarios needing `bower` dependencies, without having a `bower.json` initially.
+## [v0.2.11](https://github.com/ember-cli/ember-try/tree/v0.2.11) (2017-03-16)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.10...v0.2.11)
 
-#v0.2.10
+**Closed issues:**
 
-- Fix bug around SIGINT handlers when used with ember-cli@2.13.
+- Support running bower scenarios even if the app does not initially have a bower.json [\#110](https://github.com/ember-cli/ember-try/issues/110)
 
-#v0.2.9
-- Lazily install bower if necessary
+**Merged pull requests:**
 
-#v0.2.8
-- Bugfix: Support any command `sh -c` or `cmd /d /s /c` can take.
+- clarify that reset cleans up npm stuff too [\#119](https://github.com/ember-cli/ember-try/pull/119) ([ibroadfo](https://github.com/ibroadfo))
+- fix CI client-test cache problem [\#118](https://github.com/ember-cli/ember-try/pull/118) ([canufeel](https://github.com/canufeel))
+- Switch from eslint & jscs to just eslint [\#116](https://github.com/ember-cli/ember-try/pull/116) ([kategengler](https://github.com/kategengler))
+- Support having bower scenarios without having a bower.json initially [\#115](https://github.com/ember-cli/ember-try/pull/115) ([kategengler](https://github.com/kategengler))
 
-#v0.2.7
-- Support peerDependencies
-- Support removing packages in scenarios
+## [v0.2.10](https://github.com/ember-cli/ember-try/tree/v0.2.10) (2017-02-21)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.9...v0.2.10)
 
-#v0.2.6
-- Update .npmignore
+**Closed issues:**
 
-#v0.2.5
-- No longer use 'latest' as version for the ember-try-config dependency
+- Having trouble figuring out how to try versions of ember-data  [\#111](https://github.com/ember-cli/ember-try/issues/111)
 
-#v0.2.4
+**Merged pull requests:**
 
-- Bugfix: Prevent deprecation with recent versions of `core-object`.
+- Leverage command return value instead of process.exit. [\#114](https://github.com/ember-cli/ember-try/pull/114) ([rwjblue](https://github.com/rwjblue))
 
-#v0.2.3
+## [v0.2.9](https://github.com/ember-cli/ember-try/tree/v0.2.9) (2017-01-15)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.8...v0.2.9)
 
-- Bugfix: Reduce ember-cli load time, but only performing work when running an `ember try:*` command.
+**Merged pull requests:**
 
-#v0.2.2
-- Bugfix: Config should not clobber `ember try:ember` arguments
+- Install bower if not installed and required by scenarios [\#109](https://github.com/ember-cli/ember-try/pull/109) ([kategengler](https://github.com/kategengler))
 
-#v0.2.1
-- Feature: Ability for addons to set Ember compatibility in a key in `package.json` to run against many Ember versions, see README.
-- Feature: New command `ember try:ember <semver-range>`, runs specified command for each Ember verson in the semver range
-- Feature: New command `ember try:config`, shows the config that `ember-try` will run with
-- Feature: Config file can now export a function that will receive the ember-cli project as a variable
-- Feature: Output header at the top of each scenario run to make output easier to parse
+## [v0.2.8](https://github.com/ember-cli/ember-try/tree/v0.2.8) (2016-11-01)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.7...v0.2.8)
 
-#v0.2.0
-- Feature: New command `ember try:one <scenario-name>`, replacement for `ember try <scenario-name>` with different command line signature to better accommodate passing options to the command that is run.
-- Feature: New command `ember try:each`, replacement for `ember try:testall`, but with a better name for what it can now do. 
-- Feature: New configuration option, `command`, top level and within each scenario to set the command that wil be used by `ember-try`.
-- Feature: New configuration option, per scenario, `allowedToFail`. If set, `ember-try` will not fail the overall command if the scenario fails.
-- Feature: New configuration options, `bowerOptions` and `npmOptions`; these are passed to `bower` and `npm`, respectively, when used by `ember-try`.
-- Deprecation: `ember try <scenario-name>` command is deprecated and replaced with `ember try:one <scenario-name>`
-- Deprecation: `ember try:testall` command is deprecated and replaced with `ember try:each`.
+**Closed issues:**
 
-#v0.1.3
-- Bugfix: Passing options to `ember try <scenario> <command>` was broken.  
+- Command from config cannot include multiple command with | or && [\#94](https://github.com/ember-cli/ember-try/issues/94)
+- Allow using environment variables in command. [\#87](https://github.com/ember-cli/ember-try/issues/87)
 
-#v0.1.2
-- Exposes which scenario is currently running via  `EMBER_TRY_CURRENT_SCENARIO`
-  env var
-- Bugfix: Sometimes the table for display at the end wouldn't align 
-- Both are thanks to @rwjblue 
+**Merged pull requests:**
 
-#v0.1.1
-- New configuration option `--config-file` courtesy of @rwjblue
+- Allow chained commands and setting env vars in commands [\#107](https://github.com/ember-cli/ember-try/pull/107) ([kategengler](https://github.com/kategengler))
+- Run a subset of commands in Windows CI as a smoke-test [\#97](https://github.com/ember-cli/ember-try/pull/97) ([kategengler](https://github.com/kategengler))
 
-#v0.1.0
-- Feature: Support npm dependencies as well as bower
-- Feature: Improved results output
+## [v0.2.7](https://github.com/ember-cli/ember-try/tree/v0.2.7) (2016-10-30)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.6...v0.2.7)
 
-#v0.0.8
-- Feature: Support devDependencies in scenarios (Thanks @martndemus)
- 
-#v0.0.7
-- Bugfix: Configure bower to be interactive:false
+**Closed issues:**
 
-#v0.0.6
-- npmignore /tmp
-- Upgrade ember-cli
+- Add API for removing packages [\#104](https://github.com/ember-cli/ember-try/issues/104)
+- A [\#103](https://github.com/ember-cli/ember-try/issues/103)
+- Add ability for `yarn` to replace `bower` executable [\#102](https://github.com/ember-cli/ember-try/issues/102)
+- make bower optional [\#101](https://github.com/ember-cli/ember-try/issues/101)
+- Running command silently contains ember-try installation output [\#99](https://github.com/ember-cli/ember-try/issues/99)
+- `ember-try-config` messing with shrinkwrap [\#80](https://github.com/ember-cli/ember-try/issues/80)
+- Can we use bower's programmatic api? [\#42](https://github.com/ember-cli/ember-try/issues/42)
 
-#v0.0.5
-- Pass through arguments to commands (allows `ember try ember-canary test --server`)
-- `--skip-cleanup` option for commands `try` and `try:testall` to not restore the default bower dependency set. This is useful in CI environments when the build is being thrown out and not deployed.
-- Change built-in scenarios: Now the default includes Ember release, beta and canary as well as a default scenario which uses the version(s) specified in bower.json
+**Merged pull requests:**
 
-#v0.0.4
-- Do not require global `bower` or `ember` commands.
+- Allow removing packages from bower config [\#108](https://github.com/ember-cli/ember-try/pull/108) ([kategengler](https://github.com/kategengler))
+- allow removing npm packages [\#106](https://github.com/ember-cli/ember-try/pull/106) ([kellyselden](https://github.com/kellyselden))
+- add support for npm peerDependencies [\#105](https://github.com/ember-cli/ember-try/pull/105) ([kellyselden](https://github.com/kellyselden))
+- Upgrade to ember-cli 2.8 [\#98](https://github.com/ember-cli/ember-try/pull/98) ([kategengler](https://github.com/kategengler))
+- Updating help text for try:one [\#90](https://github.com/ember-cli/ember-try/pull/90) ([thoov](https://github.com/thoov))
 
-#v0.0.3
-- Bugfix: `ember try` was always returning non-zero
-- Can now specify resolutions under each scenario
-- Remove runtime dependency on `ember-cli`
-- Remove dependency on git
+## [v0.2.6](https://github.com/ember-cli/ember-try/tree/v0.2.6) (2016-09-28)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.5...v0.2.6)
 
-#v0.0.2
-- Make use of bower resolutions to avoid prompts during install
-- Warn instead of error if versions specified do not match those in `bower_components/<packageName>/bower.json`
-- Update default config to include new Ember versions (Thanks @rwjblue)
+**Fixed bugs:**
 
-#v0.0.1
-- Initial version
+- Deprecation warning for Ember CLI below v2.6.0 [\#83](https://github.com/ember-cli/ember-try/issues/83)
+
+**Merged pull requests:**
+
+- Skipping deprecation warning if ember-cli is below 2.6 [\#96](https://github.com/ember-cli/ember-try/pull/96) ([gmurphey](https://github.com/gmurphey))
+- readme missing backticks [\#93](https://github.com/ember-cli/ember-try/pull/93) ([kellyselden](https://github.com/kellyselden))
+- readme typo [\#92](https://github.com/ember-cli/ember-try/pull/92) ([kellyselden](https://github.com/kellyselden))
+- NPM packaging cleanup [\#89](https://github.com/ember-cli/ember-try/pull/89) ([Turbo87](https://github.com/Turbo87))
+
+## [v0.2.5](https://github.com/ember-cli/ember-try/tree/v0.2.5) (2016-08-03)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.4...v0.2.5)
+
+**Fixed bugs:**
+
+- Deprecation warning for Ember CLI below v2.6.0 [\#84](https://github.com/ember-cli/ember-try/issues/84)
+
+**Merged pull requests:**
+
+- Don't use "latest" as strategy in package.json [\#85](https://github.com/ember-cli/ember-try/pull/85) ([cibernox](https://github.com/cibernox))
+- Fix spelling [\#82](https://github.com/ember-cli/ember-try/pull/82) ([xomaczar](https://github.com/xomaczar))
+- Remove typo in deprecation message [\#78](https://github.com/ember-cli/ember-try/pull/78) ([dmuneras](https://github.com/dmuneras))
+
+## [v0.2.4](https://github.com/ember-cli/ember-try/tree/v0.2.4) (2016-06-21)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.3...v0.2.4)
+
+**Merged pull requests:**
+
+- CoreObject 1.x and 2.x compat [\#76](https://github.com/ember-cli/ember-try/pull/76) ([stefanpenner](https://github.com/stefanpenner))
+
+## [v0.2.3](https://github.com/ember-cli/ember-try/tree/v0.2.3) (2016-06-21)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.2...v0.2.3)
+
+**Closed issues:**
+
+- slow require times [\#74](https://github.com/ember-cli/ember-try/issues/74)
+- ember try is grabbing more than release/beta [\#72](https://github.com/ember-cli/ember-try/issues/72)
+- When using `ember try:each`, `npm install` doesn't always seem to be executed [\#70](https://github.com/ember-cli/ember-try/issues/70)
+- \[Proposal\] Blueprinted scenarios  [\#55](https://github.com/ember-cli/ember-try/issues/55)
+
+**Merged pull requests:**
+
+- Move costly requires to be lazy. [\#75](https://github.com/ember-cli/ember-try/pull/75) ([rwjblue](https://github.com/rwjblue))
+- Fix deprecation message for `ember try` command. [\#73](https://github.com/ember-cli/ember-try/pull/73) ([rwjblue](https://github.com/rwjblue))
+- Warn if addon or app is using ember-try in package.json, it's now included in ember-cli [\#71](https://github.com/ember-cli/ember-try/pull/71) ([kategengler](https://github.com/kategengler))
+- Update README.md [\#69](https://github.com/ember-cli/ember-try/pull/69) ([MiguelMadero](https://github.com/MiguelMadero))
+- Added "How to use EmberTry" from Global Ember Meetup [\#68](https://github.com/ember-cli/ember-try/pull/68) ([taras](https://github.com/taras))
+
+## [v0.2.2](https://github.com/ember-cli/ember-try/tree/v0.2.2) (2016-03-15)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.1...v0.2.2)
+
+## [v0.2.1](https://github.com/ember-cli/ember-try/tree/v0.2.1) (2016-03-13)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.0...v0.2.1)
+
+**Merged pull requests:**
+
+- Add some output between scenarios to make the output easier to parse in case of failures [\#67](https://github.com/ember-cli/ember-try/pull/67) ([kategengler](https://github.com/kategengler))
+- Make config file able to export a function [\#66](https://github.com/ember-cli/ember-try/pull/66) ([kategengler](https://github.com/kategengler))
+- Add ability to auto-generate scenarios from a `versionCompatibility` statement in package.json [\#65](https://github.com/ember-cli/ember-try/pull/65) ([kategengler](https://github.com/kategengler))
+- Some reorganization + adding debug [\#64](https://github.com/ember-cli/ember-try/pull/64) ([kategengler](https://github.com/kategengler))
+- Add coverage & codeclimate config [\#63](https://github.com/ember-cli/ember-try/pull/63) ([kategengler](https://github.com/kategengler))
+
+## [v0.2.0](https://github.com/ember-cli/ember-try/tree/v0.2.0) (2016-02-20)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.1.3...v0.2.0)
+
+**Closed issues:**
+
+- ember try:testall should honor all or a subset of 'ember test' arguments [\#43](https://github.com/ember-cli/ember-try/issues/43)
+- Add a parameter to the scenarios to warn on failure instead of fail [\#4](https://github.com/ember-cli/ember-try/issues/4)
+
+**Merged pull requests:**
+
+- New configuration option `allowedToFail` per scenario. [\#62](https://github.com/ember-cli/ember-try/pull/62) ([kategengler](https://github.com/kategengler))
+- Add 'bowerOptions' and 'npmOptions' as top level configuration options [\#61](https://github.com/ember-cli/ember-try/pull/61) ([kategengler](https://github.com/kategengler))
+- Add `ember try:one \<scenario\> \(...options\) --- \<command\>` [\#60](https://github.com/ember-cli/ember-try/pull/60) ([kategengler](https://github.com/kategengler))
+- Make commands configurable and add `try:each` command, soft-deprecating `testall` [\#59](https://github.com/ember-cli/ember-try/pull/59) ([kategengler](https://github.com/kategengler))
+
+## [v0.1.3](https://github.com/ember-cli/ember-try/tree/v0.1.3) (2016-02-16)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.1.2...v0.1.3)
+
+**Closed issues:**
+
+- \[enhancement\] Enable writing test results to file [\#30](https://github.com/ember-cli/ember-try/issues/30)
+
+**Merged pull requests:**
+
+- Fix bug: options were not being passed to the command run by `try` [\#58](https://github.com/ember-cli/ember-try/pull/58) ([kategengler](https://github.com/kategengler))
+- Quiet npm warnings by appeasing it with changes to the fixture package.json [\#57](https://github.com/ember-cli/ember-try/pull/57) ([kategengler](https://github.com/kategengler))
+- Just passing --skip-cleanup isn't enough [\#56](https://github.com/ember-cli/ember-try/pull/56) ([kategengler](https://github.com/kategengler))
+- Refactor so that ScenarioManager doesn't need to know about config [\#54](https://github.com/ember-cli/ember-try/pull/54) ([kategengler](https://github.com/kategengler))
+
+## [v0.1.2](https://github.com/ember-cli/ember-try/tree/v0.1.2) (2016-02-04)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.1.1...v0.1.2)
+
+**Closed issues:**
+
+- Table cell width / alignment issues in some scenarios. [\#46](https://github.com/ember-cli/ember-try/issues/46)
+
+**Merged pull requests:**
+
+- Expose environment variable for currently running scenario. [\#52](https://github.com/ember-cli/ember-try/pull/52) ([rwjblue](https://github.com/rwjblue))
+- Use cli-table2. [\#51](https://github.com/ember-cli/ember-try/pull/51) ([rwjblue](https://github.com/rwjblue))
+
+## [v0.1.1](https://github.com/ember-cli/ember-try/tree/v0.1.1) (2016-02-01)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.1.0...v0.1.1)
+
+**Closed issues:**
+
+- `bower.json` reset to first run, not initial value. [\#47](https://github.com/ember-cli/ember-try/issues/47)
+- \[enhancement\] Handle ember and ember data as addons [\#44](https://github.com/ember-cli/ember-try/issues/44)
+
+**Merged pull requests:**
+
+- Allow --config-path to be specified to ember-try commands. [\#50](https://github.com/ember-cli/ember-try/pull/50) ([rwjblue](https://github.com/rwjblue))
+- Remove `.only` so all node tests can run. [\#49](https://github.com/ember-cli/ember-try/pull/49) ([rwjblue](https://github.com/rwjblue))
+- Simplify npm scripts. [\#48](https://github.com/ember-cli/ember-try/pull/48) ([rwjblue](https://github.com/rwjblue))
+
+## [v0.1.0](https://github.com/ember-cli/ember-try/tree/v0.1.0) (2016-01-29)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.0.8...v0.1.0)
+
+**Closed issues:**
+
+- What is the most convenient way to execute ember-try builds concurrently on Linux? [\#40](https://github.com/ember-cli/ember-try/issues/40)
+- CI Pipeline [\#38](https://github.com/ember-cli/ember-try/issues/38)
+
+**Merged pull requests:**
+
+- Support for npm dependencies + improved output [\#45](https://github.com/ember-cli/ember-try/pull/45) ([kategengler](https://github.com/kategengler))
+- JSHint and JSCS [\#39](https://github.com/ember-cli/ember-try/pull/39) ([mike-north](https://github.com/mike-north))
+- Update ember-cli to 1.13.6 [\#37](https://github.com/ember-cli/ember-try/pull/37) ([mike-north](https://github.com/mike-north))
+
+## [v0.0.8](https://github.com/ember-cli/ember-try/tree/v0.0.8) (2015-07-24)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.0.7...v0.0.8)
+
+**Closed issues:**
+
+- Removing ember-data causes error [\#35](https://github.com/ember-cli/ember-try/issues/35)
+- Failing on Travis [\#27](https://github.com/ember-cli/ember-try/issues/27)
+- try:testall  does not appear in help [\#22](https://github.com/ember-cli/ember-try/issues/22)
+
+**Merged pull requests:**
+
+- Add support for dev dependencies [\#36](https://github.com/ember-cli/ember-try/pull/36) ([martndemus](https://github.com/martndemus))
+- Update to ember-cli 0.2.7 [\#29](https://github.com/ember-cli/ember-try/pull/29) ([mike-north](https://github.com/mike-north))
+- Here's a test suite [\#28](https://github.com/ember-cli/ember-try/pull/28) ([mike-north](https://github.com/mike-north))
+
+## [v0.0.7](https://github.com/ember-cli/ember-try/tree/v0.0.7) (2015-06-03)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.0.6...v0.0.7)
+
+**Merged pull requests:**
+
+- Disable bower install interactivity [\#25](https://github.com/ember-cli/ember-try/pull/25) ([knownasilya](https://github.com/knownasilya))
+
+## [v0.0.6](https://github.com/ember-cli/ember-try/tree/v0.0.6) (2015-06-02)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.0.5...v0.0.6)
+
+**Closed issues:**
+
+- Add `tmp` dir to the .npmignore. [\#23](https://github.com/ember-cli/ember-try/issues/23)
+
+**Merged pull requests:**
+
+- add tmp dir to npmignore fix \#23 [\#24](https://github.com/ember-cli/ember-try/pull/24) ([odoe](https://github.com/odoe))
+
+## [v0.0.5](https://github.com/ember-cli/ember-try/tree/v0.0.5) (2015-04-20)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.0.4...v0.0.5)
+
+**Closed issues:**
+
+- Killing ember-try while it's running leaves bower.json modified [\#20](https://github.com/ember-cli/ember-try/issues/20)
+- Ability to configure a minimum version for "testall" [\#19](https://github.com/ember-cli/ember-try/issues/19)
+- Add a hook for after successful test [\#15](https://github.com/ember-cli/ember-try/issues/15)
+- Add ability to pass command line options when using `ember try beta \<command\>`. [\#10](https://github.com/ember-cli/ember-try/issues/10)
+
+**Merged pull requests:**
+
+- Change default scenarios to use Ember's channels. [\#21](https://github.com/ember-cli/ember-try/pull/21) ([rwjblue](https://github.com/rwjblue))
+- Added an option to --skip-cleanup [\#18](https://github.com/ember-cli/ember-try/pull/18) ([jrjohnson](https://github.com/jrjohnson))
+- Update README.md [\#16](https://github.com/ember-cli/ember-try/pull/16) ([martndemus](https://github.com/martndemus))
+- Upgraded Ember 1.11.1 scenario [\#14](https://github.com/ember-cli/ember-try/pull/14) ([taras](https://github.com/taras))
+- Allow all command arguments to be passed through. [\#13](https://github.com/ember-cli/ember-try/pull/13) ([rwjblue](https://github.com/rwjblue))
+
+## [v0.0.4](https://github.com/ember-cli/ember-try/tree/v0.0.4) (2015-04-05)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.0.3...v0.0.4)
+
+**Closed issues:**
+
+- Fails when Bower is not globally installed. [\#11](https://github.com/ember-cli/ember-try/issues/11)
+- New version? [\#7](https://github.com/ember-cli/ember-try/issues/7)
+
+**Merged pull requests:**
+
+- Do not require global `bower` or `ember` commands. [\#12](https://github.com/ember-cli/ember-try/pull/12) ([rwjblue](https://github.com/rwjblue))
+
+## [v0.0.3](https://github.com/ember-cli/ember-try/tree/v0.0.3) (2015-04-04)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.0.2...v0.0.3)
+
+**Closed issues:**
+
+- Running an individual scenario with `ember try` returns a nonzero exit code when all tests pass [\#5](https://github.com/ember-cli/ember-try/issues/5)
+- Allow testing of `beta` and `canary` versions. [\#3](https://github.com/ember-cli/ember-try/issues/3)
+
+**Merged pull requests:**
+
+- Remove dependency on git; manage original version of bower.json [\#9](https://github.com/ember-cli/ember-try/pull/9) ([kategengler](https://github.com/kategengler))
+- Replace Task model with CoreObject [\#8](https://github.com/ember-cli/ember-try/pull/8) ([kategengler](https://github.com/kategengler))
+- fixes \#3: remove actual version check and preserve resolutions [\#6](https://github.com/ember-cli/ember-try/pull/6) ([habdelra](https://github.com/habdelra))
+
+## [v0.0.2](https://github.com/ember-cli/ember-try/tree/v0.0.2) (2015-03-31)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.0.1...v0.0.2)
+
+**Merged pull requests:**
+
+- Update for 1.11.0 and 1.12.0-beta.1. [\#2](https://github.com/ember-cli/ember-try/pull/2) ([rwjblue](https://github.com/rwjblue))
+- Consistent quotes [\#1](https://github.com/ember-cli/ember-try/pull/1) ([jbrown](https://github.com/jbrown))
+
+## [v0.0.1](https://github.com/ember-cli/ember-try/tree/v0.0.1) (2015-03-24)
 
 
 \* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
