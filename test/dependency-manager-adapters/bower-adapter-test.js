@@ -88,6 +88,47 @@ describe('bowerAdapter', function() {
     });
   });
 
+  describe('#changeToDependencySet', function() {
+    it('if there are no bower dependencies, nothing is done', function() {
+      var stubbedRun = function() {
+        throw new Error('Should not run anything');
+      };
+
+      let adapter = new BowerAdapter({ cwd: tmpdir, run: stubbedRun });
+
+      return adapter.setup()
+        .then(function() {
+          return adapter.changeToDependencySet({ });
+        })
+        .then(function() {
+          return adapter.cleanup();
+        });
+    });
+
+    it('if bower dependencies are the root of the dep set they are detected', function() {
+      let stubbedRunRan = false;
+      var stubbedRun = function(command, args, opts) {
+        expect(command).to.equal('node');
+        expect(args[0]).to.match(/bower/);
+        expect(args[1]).to.equal('install');
+        expect(args[2]).to.equal('--config.interactive=false');
+        expect(opts).to.have.property('cwd', tmpdir);
+        stubbedRunRan = true;
+        return RSVP.resolve();
+      };
+
+      let adapter = new BowerAdapter({ cwd: tmpdir, run: stubbedRun });
+      return adapter.setup()
+        .then(function() {
+          return adapter.changeToDependencySet({ dependencies: { 'ember': '*' } });
+        })
+        .then(function() {
+          expect(stubbedRunRan).to.equal(true);
+          return adapter.cleanup();
+        });
+    });
+  });
+
   describe('#_install', function() {
     it('removes bower_components', function() {
       var stubbedRun = function() {
@@ -174,6 +215,7 @@ describe('bowerAdapter', function() {
       writeJSONFile('bower.json.ember-try', bowerJSON);
 
       new BowerAdapter({ cwd: tmpdir })._writeBowerFileWithDepSetChanges(depSet);
+
       assertFileContainsJSON('bower.json', {
         dependencies: {
           jquery: '2.1.3'
