@@ -147,6 +147,8 @@ describe('tryEach', function() {
         _on: function() {}
       });
 
+      writeJSONFile('package.json', fixturePackage);
+      fs.mkdirSync('node_modules');
       writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(legacyConfig.scenarios, {}).then(function(exitCode) {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
@@ -191,6 +193,8 @@ describe('tryEach', function() {
         _on: function() {}
       });
 
+      writeJSONFile('package.json', fixturePackage);
+      fs.mkdirSync('node_modules');
       writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(legacyConfig.scenarios, {}).then(function(exitCode) {
         expect(exitCode).to.equal(1);
@@ -230,6 +234,9 @@ describe('tryEach', function() {
         config: legacyConfig,
         _on: function() {}
       });
+
+      writeJSONFile('package.json', fixturePackage);
+      fs.mkdirSync('node_modules');
 
       expect(fs.existsSync('bower.json')).to.eql(false);
       return tryEachTask.run(legacyConfig.scenarios, {}).then(function() {
