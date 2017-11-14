@@ -61,7 +61,6 @@
     "cli-table2": "^0.2.0",
     "core-object": "^1.1.0",
     "debug": "^2.2.0",
-    "ember-cli-version-checker": "^2.1.0",
     "ember-try-config": "^2.2.0",
     "extend": "^3.0.0",
     "fs-extra": "^0.26.0",
