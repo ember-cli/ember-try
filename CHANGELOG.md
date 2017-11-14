@@ -1,7 +1,14 @@
 # Change Log
 
-## [0.2.21](https://github.com/ember-cli/ember-try/tree/0.2.21) (2017-11-14)
-[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.20...0.2.21)
+## [0.2.22](https://github.com/ember-cli/ember-try/tree/0.2.22) (2017-11-14)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.21...0.2.22)
+
+**Merged pull requests:**
+
+- Do not issue warning when including ember-try in project's package.json. [\#166](https://github.com/ember-cli/ember-try/pull/166) ([rwjblue](https://github.com/rwjblue))
+
+## [v0.2.21](https://github.com/ember-cli/ember-try/tree/v0.2.21) (2017-11-14)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.20...v0.2.21)
 
 **Merged pull requests:**
 
