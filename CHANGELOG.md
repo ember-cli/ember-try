@@ -1,7 +1,14 @@
 # Change Log
 
-## [0.2.20](https://github.com/ember-cli/ember-try/tree/0.2.20) (2017-11-13)
-[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.19...0.2.20)
+## [0.2.21](https://github.com/ember-cli/ember-try/tree/0.2.21) (2017-11-14)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.20...0.2.21)
+
+**Merged pull requests:**
+
+- update ember-cli-version-checker [\#165](https://github.com/ember-cli/ember-try/pull/165) ([ef4](https://github.com/ef4))
+
+## [v0.2.20](https://github.com/ember-cli/ember-try/tree/v0.2.20) (2017-11-13)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.19...v0.2.20)
 
 **Fixed bugs:**
 
