@@ -56,7 +56,7 @@ describe('npmAdapter', function() {
             return RSVP.resolve();
           }
         }, {
-          command: 'npm prune --no-shrinkwrap',
+          command: 'npm prune',
           callback: function(command, args, opts) {
             runCount++;
             expect(opts).to.have.property('cwd', tmpdir);
@@ -85,7 +85,7 @@ describe('npmAdapter', function() {
             return RSVP.resolve();
           }
         }, {
-          command: 'npm prune --no-optional --no-shrinkwrap',
+          command: 'npm prune --no-optional',
           callback: function() {
             runCount++;
             return RSVP.resolve();
