@@ -85,7 +85,7 @@ describe('npmAdapter', function() {
             return RSVP.resolve();
           }
         }, {
-          command: 'npm prune --no-optional',
+          command: 'npm prune',
           callback: function() {
             runCount++;
             return RSVP.resolve();
