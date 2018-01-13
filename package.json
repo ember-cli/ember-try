@@ -45,7 +45,7 @@
     "ember-load-initializers": "^1.0.0",
     "ember-resolver": "^4.0.0",
     "ember-source": "~2.18.0",
-    "eslint": "^3.16.1",
+    "eslint": "^4.15.0",
     "eslint-plugin-ember": "^5.0.0",
     "eslint-plugin-node": "^5.2.1",
     "glob": "^7.0.0",

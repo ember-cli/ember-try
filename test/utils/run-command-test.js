@@ -1,24 +1,24 @@
 'use strict';
 
-var expect = require('chai').expect;
-var mockery = require('mockery');
-var RSVP = require('rsvp');
+let expect = require('chai').expect;
+let mockery = require('mockery');
+let RSVP = require('rsvp');
 
-describe('utils/run-command', function() {
-  beforeEach(function() {
+describe('utils/run-command', () => {
+  beforeEach(() => {
     mockery.enable({
       warnOnUnregistered: false,
-      useCleanCache: true
+      useCleanCache: true,
     });
   });
 
-  afterEach(function() {
+  afterEach(() => {
     mockery.deregisterAll();
     mockery.disable();
   });
 
-  it('passes arguments to run', function() {
-    var mockedRun = function(command, args) {
+  it('passes arguments to run', () => {
+    let mockedRun = function(command, args) {
       expect(command).to.equal('node');
       expect(args[0]).to.match(/.*\/ember/);
       expect(args[1]).to.equal('help');
@@ -29,9 +29,9 @@ describe('utils/run-command', function() {
 
     mockery.registerMock('./run', mockedRun);
 
-    var runCommand = require('../../lib/utils/run-command');
+    let runCommand = require('../../lib/utils/run-command');
 
-    return runCommand('rootPath', ['ember', 'help', '--json', 'true'], {}).then(function(result) {
+    return runCommand('rootPath', ['ember', 'help', '--json', 'true'], {}).then((result) => {
       expect(result).to.equal(true);
     });
   });

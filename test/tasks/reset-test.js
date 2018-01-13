@@ -1,43 +1,43 @@
 'use strict';
 
-var tmp = require('tmp-sync');
-var path = require('path');
-var RSVP = require('rsvp');
-var fs = require('fs-extra');
-var fixtureBower = require('../fixtures/bower.json');
-var writeJSONFile = require('../helpers/write-json-file');
+let tmp = require('tmp-sync');
+let path = require('path');
+let RSVP = require('rsvp');
+let fs = require('fs-extra');
+let fixtureBower = require('../fixtures/bower.json');
+let writeJSONFile = require('../helpers/write-json-file');
 
-var remove = RSVP.denodeify(fs.remove);
-var root = process.cwd();
-var tmproot = path.join(root, 'tmp');
-var tmpdir;
+let remove = RSVP.denodeify(fs.remove);
+let root = process.cwd();
+let tmproot = path.join(root, 'tmp');
+let tmpdir;
 
-describe('reset', function() {
-  beforeEach(function() {
+describe('reset', () => {
+  beforeEach(() => {
     tmpdir = tmp.in(tmproot);
     process.chdir(tmpdir);
   });
 
-  afterEach(function() {
+  afterEach(() => {
     process.chdir(root);
     return remove(tmproot);
   });
 
   it('runs without blowing up', function() {
     this.timeout(15000);
-    var config = {
+    let config = {
       scenarios: [{
         name: 'first',
         dependencies: {
-          ember: '1.13.0'
-        }
-      }]
+          ember: '1.13.0',
+        },
+      }],
     };
 
-    var ResetTask = require('../../lib/tasks/reset');
-    var resetTask = new ResetTask({
+    let ResetTask = require('../../lib/tasks/reset');
+    let resetTask = new ResetTask({
       project: { root: tmpdir },
-      config: config
+      config,
     });
 
     writeJSONFile('bower.json', fixtureBower);
