@@ -7,6 +7,10 @@ node_js:
 #  - "6" - The test that includes coverage runs with 6
 
 sudo: false
+dist: trusty
+
+addons:
+  chrome: stable
 
 addons:
   chrome: stable
@@ -40,7 +44,6 @@ before_install:
 
 install:
   - npm install
-  - bower install
 
 script:
   - npm run-script $NPM_SCRIPT
