@@ -52,7 +52,7 @@
     "istanbul": "1.0.0-alpha.2",
     "loader.js": "^4.2.3",
     "mocha": "^4.0.0",
-    "mockery": "^1.4.0",
+    "mockery": "^2.1.0",
     "tmp-sync": "^1.1.0"
   },
   "keywords": [
