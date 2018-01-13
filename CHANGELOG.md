@@ -1,7 +1,22 @@
 # Change Log
 
-## [0.2.22](https://github.com/ember-cli/ember-try/tree/0.2.22) (2017-11-14)
-[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.21...0.2.22)
+## [v0.2.23](https://github.com/ember-cli/ember-try/tree/v0.2.23) (2018-01-13)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.22...v0.2.23)
+
+**Fixed bugs:**
+
+- Support config files returning a promise [\#173](https://github.com/ember-cli/ember-try/pull/173) ([kategengler](https://github.com/kategengler))
+
+**Closed issues:**
+
+- Feature Request: support promises in dependencies... [\#172](https://github.com/ember-cli/ember-try/issues/172)
+
+**Merged pull requests:**
+
+- Stop using phantom for test runs... [\#175](https://github.com/ember-cli/ember-try/pull/175) ([rwjblue](https://github.com/rwjblue))
+
+## [v0.2.22](https://github.com/ember-cli/ember-try/tree/v0.2.22) (2017-11-14)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.21...v0.2.22)
 
 **Merged pull requests:**
 
