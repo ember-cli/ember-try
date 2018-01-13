@@ -166,6 +166,22 @@ describe('utils/config', function() {
     });
   });
 
+  it('config file can return a promise', function() {
+    var configFile = 'module.exports = function() {' +
+                     '  return new Promise(function (resolve) {' +
+                     '    var scenarios = [' +
+                     '      { bar: "baz" }' +
+                     '    ];' +
+                     '    resolve({ scenarios: scenarios });' +
+                     '  });' +
+                     '};';
+    generateConfigFile(configFile);
+    return getConfig({ project: project }).then(function(config) {
+      expect(config.scenarios).to.have.lengthOf(1);
+      expect(config.scenarios[0].bar).to.equal('baz');
+    });
+  });
+
   it('config file exporting a function is passed the project', function() {
     generateConfigFile('module.exports =  function(project) { return { scenarios: [ { foo: project.blah }] } };');
 
