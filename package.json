@@ -60,7 +60,7 @@
     "testing"
   ],
   "dependencies": {
-    "chalk": "^1.0.0",
+    "chalk": "^2.3.0",
     "cli-table2": "^0.2.0",
     "core-object": "^1.1.0",
     "debug": "^2.2.0",
