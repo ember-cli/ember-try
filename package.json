@@ -14,7 +14,7 @@
     "client-test": "./all-commands.sh",
     "node-test": "mocha test/**/*.js",
     "all-test": "npm run-script node-test && npm run-script smoke-test",
-    "node-test-with-coverage": "istanbul cover _mocha test/**/*.js && ./upload-coverage.sh",
+    "node-test-with-coverage": "nyc --reporter lcov npm run-script node-test && node_modules/.bin/codecov",
     "smoke-test": "./smoke-test.sh",
     "lint": "eslint lib test"
   },
@@ -28,7 +28,7 @@
     "bower": "^1.8.2",
     "broccoli-asset-rev": "^2.4.5",
     "chai": "^4.1.2",
-    "codeclimate-test-reporter": "^0.3.1",
+    "codecov": "^3.0.0",
     "ember-cli": "~2.18.0",
     "ember-cli-babel": "^6.6.0",
     "ember-cli-dependency-checker": "^2.0.0",
@@ -48,10 +48,10 @@
     "eslint-plugin-ember": "^5.0.0",
     "eslint-plugin-node": "^5.2.1",
     "glob": "^7.0.0",
-    "istanbul": "1.0.0-alpha.2",
     "loader.js": "^4.2.3",
     "mocha": "^4.0.0",
     "mockery": "^2.1.0",
+    "nyc": "^11.4.1",
     "tmp-sync": "^1.1.0"
   },
   "keywords": [

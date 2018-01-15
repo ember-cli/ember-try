@@ -18,7 +18,6 @@ testem.js
 all-commands.sh
 smoke-test.sh
 testem.json
-upload-coverage.sh
 
 # ember-try
 .node_modules.ember-try/
