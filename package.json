@@ -1,6 +1,6 @@
 {
   "name": "ember-try",
-  "version": "0.2.23",
+  "version": "0.3.0-alpha",
   "description": "An ember-cli addon to test against multiple bower dependencies, such as ember and ember-data.",
   "directories": {
     "doc": "doc",
@@ -15,7 +15,7 @@
     "node-test": "mocha test/**/*.js",
     "all-test": "npm run-script node-test && npm run-script smoke-test",
     "node-test-with-coverage": "nyc --reporter lcov npm run-script node-test && node_modules/.bin/codecov",
-    "smoke-test": "./smoke-test.sh",
+    "smoke-test": "cd smoke-test-app && yarn install && ./smoke-test.sh",
     "lint": "eslint lib test"
   },
   "repository": "ember-cli/ember-try",
@@ -69,8 +69,7 @@
     "promise-map-series": "^0.2.1",
     "resolve": "^1.1.6",
     "rimraf": "^2.3.2",
-    "rsvp": "^4.7.0",
-    "semver": "^5.1.0"
+    "rsvp": "^4.7.0"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"

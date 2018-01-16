@@ -15,14 +15,11 @@ install:
   # Typical npm stuff.
   - npm version
   - npm install
-  - bower install
   - npm link
   - npm link ember-try
 
 cache:
   - '%APPDATA%\npm-cache'
-  - '%APPDATA%\Roaming\bower'
-
 
 # Post-install test scripts.
 test_script:
