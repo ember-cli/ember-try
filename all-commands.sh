@@ -8,10 +8,10 @@ rm -rf node_modules/ember-try
 npm link
 npm link ember-try
 
-# try:each
+# try:each using default config
 ember try:each
 
-# skip-cleanup option
+# skip-cleanup option using default config
 ember try:each --skip-cleanup
 
 # config-path option
