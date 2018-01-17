@@ -193,8 +193,12 @@ describe('utils/config', function() {
   });
 
   it('uses default config if project.root/config/ember-try.js is not present and no versionCompatibility', function() {
-    return getConfig({ project: project }).then(function(config) {
-      expect(config).to.eql(defaultConfig());
+    return RSVP.hash({
+      config: getConfig({ project: project }),
+      defaultConfig: defaultConfig(),
+    })
+    .then(function(results) {
+      expect(results.config).to.eql(results.defaultConfig);
     });
   });
 
