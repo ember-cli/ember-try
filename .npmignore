@@ -4,6 +4,8 @@
 /tests
 /tmp
 /smoke-test-app
+/.nyc-output
+/.idea
 **/.gitkeep
 .bowerrc
 .codeclimate.yml
@@ -17,6 +19,9 @@ bower.json
 ember-cli-build.js
 testem.js
 all-commands.sh
+run-smoke-test.sh
+fail-if-no-foo.sh
+*.tgz
 testem.json
 
 # ember-try

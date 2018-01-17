@@ -15,7 +15,7 @@
     "node-test": "mocha test/**/*.js",
     "all-test": "npm run-script node-test && npm run-script smoke-test",
     "node-test-with-coverage": "nyc --reporter lcov npm run-script node-test && node_modules/.bin/codecov",
-    "smoke-test": "cd smoke-test-app && yarn install && ./smoke-test.sh",
+    "smoke-test": "./run-smoke-test.sh",
     "lint": "eslint lib test"
   },
   "repository": "ember-cli/ember-try",

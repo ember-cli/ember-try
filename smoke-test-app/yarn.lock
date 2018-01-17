@@ -2352,6 +2352,22 @@ ember-try-config@^2.2.0:
     rsvp "^3.2.1"
     semver "^5.1.0"
 
+ember-try@../ember-try-1516164944.tgz:
+  version "0.3.0-alpha"
+  resolved "../ember-try-1516164944.tgz#80aab23e60625a84c50a63cbfd888116880489aa"
+  dependencies:
+    chalk "^2.3.0"
+    cli-table2 "^0.2.0"
+    core-object "^3.1.5"
+    debug "^3.1.0"
+    ember-try-config "^2.2.0"
+    extend "^3.0.0"
+    fs-extra "^5.0.0"
+    promise-map-series "^0.2.1"
+    resolve "^1.1.6"
+    rimraf "^2.3.2"
+    rsvp "^4.7.0"
+
 ember-try@^0.2.15:
   version "0.2.23"
   resolved "https://registry.yarnpkg.com/ember-try/-/ember-try-0.2.23.tgz#39b57141b4907541d0ac8b503d211e6946b08718"
@@ -2368,21 +2384,6 @@ ember-try@^0.2.15:
     rimraf "^2.3.2"
     rsvp "^3.0.17"
     semver "^5.1.0"
-
-"ember-try@file:../.":
-  version "0.3.0-alpha"
-  dependencies:
-    chalk "^2.3.0"
-    cli-table2 "^0.2.0"
-    core-object "^3.1.5"
-    debug "^3.1.0"
-    ember-try-config "^2.2.0"
-    extend "^3.0.0"
-    fs-extra "^5.0.0"
-    promise-map-series "^0.2.1"
-    resolve "^1.1.6"
-    rimraf "^2.3.2"
-    rsvp "^4.7.0"
 
 encodeurl@~1.0.1:
   version "1.0.1"

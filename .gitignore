@@ -17,6 +17,7 @@ npm-debug.log*
 yarn-error.log
 testem.log
 /.nyc_output
+*.tgz
 
 # ember-try
 .node_modules.ember-try/

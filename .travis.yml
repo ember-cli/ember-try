@@ -43,7 +43,7 @@ before_install:
   - bower --version
 
 install:
-  - npm install
+  - yarn install --no-lockfile
 
 script:
   - npm run-script $NPM_SCRIPT
