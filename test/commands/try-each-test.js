@@ -1,20 +1,20 @@
 'use strict';
 
-var expect = require('chai').expect;
-var RSVP = require('rsvp');
-var TryEachCommand = require('../../lib/commands/try-each');
+let expect = require('chai').expect;
+let RSVP = require('rsvp');
+let TryEachCommand = require('../../lib/commands/try-each');
 
-var origTryEachTask = TryEachCommand._TryEachTask;
-var origGetConfig = TryEachCommand._getConfig;
+let origTryEachTask = TryEachCommand._TryEachTask;
+let origGetConfig = TryEachCommand._getConfig;
 
-describe('commands/try-each', function() {
-  describe('#run', function() {
-    var mockConfig;
+describe('commands/try-each', () => {
+  describe('#run', () => {
+    let mockConfig;
 
     function MockTryEachTask() { }
     MockTryEachTask.prototype.run = function() { };
 
-    beforeEach(function() {
+    beforeEach(() => {
       TryEachCommand._getConfig = function() {
         return RSVP.resolve(mockConfig || { scenarios: [] });
       };
@@ -22,14 +22,14 @@ describe('commands/try-each', function() {
       TryEachCommand._TryEachTask = MockTryEachTask;
     });
 
-    afterEach(function() {
+    afterEach(() => {
       TryEachCommand._TryEachTask = origTryEachTask;
       TryEachCommand._getConfig = origGetConfig;
       mockConfig = null;
     });
 
-    it('passes the configPath to _getConfig', function() {
-      var configPath;
+    it('passes the configPath to _getConfig', () => {
+      let configPath;
       TryEachCommand._getConfig = function(options) {
         configPath = options.configPath;
 
