@@ -19,45 +19,6 @@ let root = process.cwd();
 let tmproot = path.join(root, 'tmp');
 let tmpdir;
 
-let legacyConfig = {
-  scenarios: [
-    {
-      name: 'default',
-      dependencies: {},
-    },
-    {
-      name: 'first',
-      dependencies: {
-        ember: '1.13.0',
-      },
-    },
-    {
-      name: 'second',
-      dependencies: {
-        ember: '2.0.0',
-      },
-    },
-    {
-      name: 'with-dev-deps',
-      dependencies: {
-        ember: '2.0.0',
-      },
-      devDependencies: {
-        jquery: '1.11.3',
-      },
-    },
-    {
-      name: 'with-resolutions',
-      dependencies: {
-        ember: 'components/ember#beta',
-      },
-      resolutions: {
-        ember: 'beta',
-      },
-    },
-  ],
-};
-
 let config = {
   scenarios: [
     {
@@ -125,94 +86,6 @@ describe('tryEach', () => {
     return remove(tmproot);
   });
 
-  describe('with legacy config', () => {
-    it('succeeds when scenario\'s tests succeed', function() {
-      this.timeout(30000);
-
-      let mockedRun = generateMockRun('ember test', () => {
-        return RSVP.resolve(0);
-      });
-      mockery.registerMock('./run', mockedRun);
-
-      let output = [];
-      let outputFn = function(log) {
-        output.push(log);
-      };
-
-      let TryEachTask = require('../../lib/tasks/try-each');
-      let tryEachTask = new TryEachTask({
-        ui: { writeLine: outputFn },
-        project: { root: tmpdir },
-        config: legacyConfig,
-        _on() {},
-      });
-
-      writeJSONFile('package.json', fixturePackage);
-      fs.mkdirSync('node_modules');
-      writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(legacyConfig.scenarios, {}).then((exitCode) => {
-        expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
-        expect(output).to.include('Scenario default: SUCCESS');
-        expect(output).to.include('Scenario first: SUCCESS');
-        expect(output).to.include('Scenario second: SUCCESS');
-        expect(output).to.include('Scenario with-dev-deps: SUCCESS');
-        expect(output).to.include('Scenario with-resolutions: SUCCESS');
-
-        expect(output).to.include('All 5 scenarios succeeded');
-      }).catch((err) => {
-        console.log(err);
-        expect(true).to.equal(false, 'Assertions should run');
-      });
-    });
-
-    it('fails scenarios when scenario\'s tests fail', function() {
-      this.timeout(30000);
-
-      let runTestCount = 0;
-      let mockedRun = generateMockRun('ember test', () => {
-        runTestCount++;
-        if (runTestCount === 1) {
-          return RSVP.reject(1);
-        } else {
-          return RSVP.resolve(0);
-        }
-      });
-
-      mockery.registerMock('./run', mockedRun);
-
-      let output = [];
-      let outputFn = function(log) {
-        output.push(log);
-      };
-
-      let TryEachTask = require('../../lib/tasks/try-each');
-      let tryEachTask = new TryEachTask({
-        ui: { writeLine: outputFn },
-        project: { root: tmpdir },
-        config: legacyConfig,
-        _on() {},
-      });
-
-      writeJSONFile('package.json', fixturePackage);
-      fs.mkdirSync('node_modules');
-      writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(legacyConfig.scenarios, {}).then((exitCode) => {
-        expect(exitCode).to.equal(1);
-        expect(output).to.include('Scenario default: FAIL');
-        expect(output).to.include('Scenario first: SUCCESS');
-        expect(output).to.include('Scenario second: SUCCESS');
-        expect(output).to.include('Scenario with-dev-deps: SUCCESS');
-        expect(output).to.include('Scenario with-resolutions: SUCCESS');
-        expect(output).to.include('1 scenarios failed');
-        expect(output).to.include('4 scenarios succeeded');
-        expect(output).to.include('5 scenarios run');
-      }).catch((err) => {
-        console.log(err);
-        expect(true).to.equal(false, 'Assertions should run');
-      });
-    });
-  });
-
   describe('with bower scenarios', () => {
     it('works without an initial bower.json', function() {
       this.timeout(30000);
@@ -231,7 +104,7 @@ describe('tryEach', () => {
       let tryEachTask = new TryEachTask({
         ui: { writeLine: outputFn },
         project: { root: tmpdir },
-        config: legacyConfig,
+        config,
         _on() {},
       });
 
@@ -239,8 +112,8 @@ describe('tryEach', () => {
       fs.mkdirSync('node_modules');
 
       expect(fs.existsSync('bower.json')).to.eql(false);
-      return tryEachTask.run(legacyConfig.scenarios, {}).then(() => {
-        expect(output).to.include('All 5 scenarios succeeded');
+      return tryEachTask.run(config.scenarios, {}).then(() => {
+        expect(output).to.include('All 3 scenarios succeeded');
         expect(fs.existsSync('bower.json')).to.eql(false);
         expect(fs.existsSync('bower_components')).to.eql(false);
       });
