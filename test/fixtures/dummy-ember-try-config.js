@@ -4,7 +4,7 @@ module.exports = {
       name: 'test1',
       bower: {
         dependencies: {
-          ember: '1.10.0'
+          ember: '2.11.0'
         }
       }
     }
