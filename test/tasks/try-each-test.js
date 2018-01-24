@@ -88,7 +88,7 @@ describe('tryEach', () => {
 
   describe('with bower scenarios', () => {
     it('works without an initial bower.json', function() {
-      this.timeout(30000);
+      this.timeout(50000);
 
       let mockedRun = generateMockRun('ember test', () => {
         return RSVP.resolve(0);
