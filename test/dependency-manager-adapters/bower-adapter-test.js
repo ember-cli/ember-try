@@ -41,53 +41,6 @@ describe('bowerAdapter', () => {
     });
   });
 
-  describe('#_getDependencySetAccountingForDeprecatedTopLevelKeys', () => {
-
-    it('accounts for legacy format', () => {
-      let scenarioDepSet = {
-        dependencies: {
-          ember: 'components/ember#beta',
-        },
-        devDependencies: {
-          'ember-data': '~2.2.0',
-        },
-        resolutions: {
-          ember: 'beta',
-        },
-      };
-      let results = new BowerAdapter({ cwd: tmpdir })._getDependencySetAccountingForDeprecatedTopLevelKeys(scenarioDepSet);
-      expect(results).to.eql(scenarioDepSet);
-    });
-
-    it('uses dep set from bower key if present', () => {
-      let scenarioDepSet = {
-        bower: {
-          dependencies: {
-            ember: 'components/ember#release',
-          },
-          devDependencies: {
-            'ember-data': '~2.1.0',
-          },
-          resolutions: {
-            ember: 'release',
-          },
-        },
-        dependencies: {
-          ember: 'components/ember#beta',
-        },
-        devDependencies: {
-          'ember-data': '~2.2.0',
-        },
-        resolutions: {
-          ember: 'beta',
-        },
-      };
-
-      let results = new BowerAdapter({ cwd: tmpdir })._getDependencySetAccountingForDeprecatedTopLevelKeys(scenarioDepSet);
-      expect(results).to.eql(scenarioDepSet.bower);
-    });
-  });
-
   describe('#changeToDependencySet', () => {
     it('if there are no bower dependencies, nothing is done', () => {
       let stubbedRun = function() {
@@ -105,7 +58,7 @@ describe('bowerAdapter', () => {
         });
     });
 
-    it('if bower dependencies are the root of the dep set they are detected', () => {
+    it('if bower dependencies in dep set, they install is run', () => {
       let stubbedRunRan = false;
       let stubbedRun = function(command, args, opts) {
         expect(command).to.equal('node');
@@ -120,7 +73,7 @@ describe('bowerAdapter', () => {
       let adapter = new BowerAdapter({ cwd: tmpdir, run: stubbedRun });
       return adapter.setup()
         .then(() => {
-          return adapter.changeToDependencySet({ dependencies: { 'ember': '*' } });
+          return adapter.changeToDependencySet({ bower: { dependencies: { 'ember': '*' } } });
         })
         .then(() => {
           expect(stubbedRunRan).to.equal(true);

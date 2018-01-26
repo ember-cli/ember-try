@@ -71,15 +71,6 @@ Runs `ember test` or the command in config for each version of Ember that is pos
 
 Displays the configuration that will be used. Also takes an optional `--config-path`.
 
-#### (DEPRECATED) `ember try:testall`
-
-This command was renamed to `ember try:each` to better reflect what it does. This command still works, though.
-
-#### (DEPRECATED) `ember try <scenario> <command (Default: test)>`
-
-This command is deprecated in favor of `ember try:one`. There are several bugs with passing options to the specified command that will not be fixed.
-
-
 ### Config
 
 ##### versionCompatibility
