@@ -1,9 +1,11 @@
 /bower_components
 /config/ember-try.js
 /dist
+/test
 /tests
 /tmp
 /smoke-test-app
+/coverage
 /.nyc-output
 /.idea
 **/.gitkeep
@@ -15,12 +17,11 @@
 .gitignore
 .watchmanconfig
 .travis.yml
+appveyor.yml
 bower.json
 ember-cli-build.js
 testem.js
-all-commands.sh
 run-smoke-test.sh
-fail-if-no-foo.sh
 *.tgz
 testem.json
 
