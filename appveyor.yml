@@ -30,10 +30,10 @@ test_script:
   - cmd: yarn install
   - cmd: node_modules/.bin/ember try:each
   - cmd: node_modules/.bin/ember try:ember "> 1.13.0 < 2.0.0"
-  - cmd: node_modules/.bin/ember try:config --config-path="test/fixtures/dummy-ember-try-config.js"
+  - cmd: node_modules/.bin/ember try:config --config-path="../test/fixtures/dummy-ember-try-config.js"
   - cmd: node_modules/.bin/ember try:one default
   - cmd: node_modules/.bin/ember try:one default --- ember help
-  - cmd: node_modules/.bin/ember try:one test1 --config-path="test/fixtures/dummy-ember-try-config.js"
+  - cmd: node_modules/.bin/ember try:one test1 --config-path="../test/fixtures/dummy-ember-try-config.js"
   - cmd: node_modules/.bin/ember try:one default --skip-cleanup --- ember help --json
   - cmd: node_modules/.bin/ember try:reset
 
