@@ -53,3 +53,6 @@ ember try:one default --- FOO=5 ./fail-if-no-foo.sh
 
 # Custom, compound commands
 ember try:one default --- 'echo 1 && echo 2'
+
+# Environment variables from config
+ember try:each --config-path='../test/fixtures/dummy-ember-try-config-different-env-vars.js'
