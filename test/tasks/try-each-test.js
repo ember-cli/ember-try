@@ -204,7 +204,6 @@ describe('tryEach', () => {
         expect(true).to.equal(false, 'Assertions should run');
       });
     });
-
   });
 
   describe('with stubbed dependency manager', () => {
@@ -463,7 +462,7 @@ describe('tryEach', () => {
         });
       });
 
-      it('allows passing in of the command to run', function() {
+      it('allows passing in of the command to run (overrides config file)', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
         this.timeout(1200);
 
@@ -613,6 +612,58 @@ describe('tryEach', () => {
         }).catch((err) => {
           console.log(err);
           expect(true).to.equal(false, 'Assertions should run');
+        });
+      });
+    });
+
+    describe('configurable env', () => {
+      it('runs command with env from config', function() {
+        // With stubbed dependency manager, timing out is warning for accidentally not using the stub
+        this.timeout(1200);
+
+        let config = {
+          scenarios: [{
+            name: 'first',
+            command: 'true',
+            env: {
+              USE_THIS: 'yep',
+            },
+          }, {
+            name: 'second',
+            command: 'true',
+          }],
+        };
+
+        process.env['THIS_SHOULD_EXIST_IN_CMD_OPTS'] = 'true';
+        let actualOptions = [];
+        let mockedRun = generateMockRun('true', (actualCommand, actualArgs, opts) => {
+          actualOptions.push(opts);
+          return RSVP.resolve(0);
+        });
+        mockery.registerMock('./run', mockedRun);
+
+        let output = [];
+        let outputFn = function(log) {
+          output.push(log);
+        };
+
+        let TryEachTask = require('../../lib/tasks/try-each');
+        let tryEachTask = new TryEachTask({
+          ui: { writeLine: outputFn },
+          project: { root: tmpdir },
+          config,
+          dependencyManagerAdapters: [new StubDependencyAdapter()],
+          _on() {},
+        });
+
+        return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
+          expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
+
+          expect(output).to.include('Scenario first: SUCCESS');
+          expect(output).to.include('Scenario second: SUCCESS');
+
+          expect(actualOptions[0].env).to.include({ USE_THIS: 'yep', 'THIS_SHOULD_EXIST_IN_CMD_OPTS': 'true' });
+          expect(actualOptions[1].env).to.eql(undefined);
         });
       });
     });

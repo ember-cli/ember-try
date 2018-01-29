@@ -135,10 +135,17 @@ module.exports = function() {
         },
       },
       {
-        name: 'Ember 1.11.0-beta.5',
-        bower: {
-          dependencies: {
-            'ember': '1.11.0-beta.5'
+        name: 'Ember 2.11.0',
+        /*
+          `env` can be set per scenario, with environment variables to set for the command being run.
+          This will be merged with process.env
+       */
+        env: {
+          ENABLE_NEW_DASHBOARD: true
+        },
+        npm: {
+          devDependencies: {
+            'ember-source': '2.11.0'
           }
         }
       },
