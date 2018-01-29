@@ -191,47 +191,6 @@ module.exports = function() {
 Scenarios are sets of dependencies (`bower` and `npm` only). They can be specified exactly as in the `bower.json` or `package.json`
 The `name` can be used to try just one scenario using the `ember try:one` command.
 
-If no `config/ember-try.js` file is present, the default config will be used. This is the current default config:
-
-```js
-{
-  scenarios: [
-    {
-      name: 'default',
-      bower: {
-        dependencies: { } /* No dependencies needed as the
-                             default is already specified in
-                             the consuming app's bower.json */
-      }
-    },
-    {
-      name: 'ember-release',
-      bower: {
-        dependencies: {
-          ember: 'release'
-        }
-      }
-    },
-    {
-      name: 'ember-beta',
-      bower: {
-        dependencies: {
-          ember: 'beta'
-        }
-      }
-    },
-    {
-      name: 'ember-canary',
-      bower: {
-        dependencies: {
-          ember: 'canary'
-        }
-      }
-    }
-  ]
-}
-```
-
 ##### Yarn
 
 If you include `useYarn: true` in your `ember-try` config, all npm scenarios will use `yarn` for install with the `--no-lockfile` option. At cleanup, your dependencies will be restored to their prior state.

@@ -8,7 +8,6 @@ let tmp = require('tmp-sync');
 let fixturePackage = require('../fixtures/package.json');
 let writeJSONFile = require('../helpers/write-json-file');
 let getConfig = require('../../lib/utils/config');
-let defaultConfig = getConfig._defaultConfig;
 let addImplicitBowerToScenarios = getConfig._addImplicitBowerToScenarios;
 
 let remove = RSVP.denodeify(fs.remove);
@@ -192,9 +191,9 @@ describe('utils/config', () => {
     });
   });
 
-  it('uses default config if project.root/config/ember-try.js is not present and no versionCompatibility', () => {
-    return getConfig({ project }).then((config) => {
-      expect(config).to.eql(defaultConfig());
+  it('throws error if project.root/config/ember-try.js is not present and no versionCompatibility', () => {
+    return getConfig({ project }).catch((error) => {
+      expect(error).to.match(/No ember-try configuration found\. Please see the README for configuration options/);
     });
   });
 

@@ -1,6 +1,7 @@
-# http://www.appveyor.com/docs/appveyor-yml
+# https://www.appveyor.com/docs/appveyor-yml/
 
 # Test against these versions of Node.js.
+skip_branch_with_pr: true
 environment:
   MOCHA_REPORTER: "mocha-appveyor-reporter"
   matrix:
@@ -8,29 +9,31 @@ environment:
 
 # Install scripts. (runs after repo cloning)
 install:
-  - git rev-parse HEAD
-  # Get the latest stable version of Node 0.STABLE.latest
   - ps: Install-Product node $env:nodejs_version
-  - npm install mocha-appveyor-reporter
-  # Typical npm stuff.
-  - npm version
-  - npm install
-  - npm link
-  - npm link ember-try
+  - appveyor-retry npm i -g npm@^4
+  - appveyor-retry yarn
+  - appveyor-retry yarn add mocha-appveyor-reporter # must be installed locally.
 
 cache:
-  - '%APPDATA%\npm-cache'
+  - '%LOCALAPPDATA%\Yarn'
+  - '%APPDATA%\Roaming\bower'
 
 # Post-install test scripts.
 test_script:
-  # Output useful info for debugging.
   - npm version
+  - cmd: del "ember-try*.tgz" >nul 2>&1
+  - cmd: npm pack
+  - cmd: set ran=%RANDOM%
+  - cmd: move "ember-try*.tgz" "ember-try-%ran%.tgz"
+  - cmd: cd smoke-test-app
+  - cmd: yarn upgrade "ember-try@../ember-try-%ran%.tgz"
+  - cmd: yarn install
   - cmd: node_modules/.bin/ember try:each
   - cmd: node_modules/.bin/ember try:ember "> 1.13.0 < 2.0.0"
-  - cmd: node_modules/.bin/ember try:config --config-path="test/fixtures/dummy-ember-try-config.js"
+  - cmd: node_modules/.bin/ember try:config --config-path="../test/fixtures/dummy-ember-try-config.js"
   - cmd: node_modules/.bin/ember try:one default
   - cmd: node_modules/.bin/ember try:one default --- ember help
-  - cmd: node_modules/.bin/ember try:one test1 --config-path="test/fixtures/dummy-ember-try-config.js"
+  - cmd: node_modules/.bin/ember try:one test1 --config-path="../test/fixtures/dummy-ember-try-config.js"
   - cmd: node_modules/.bin/ember try:one default --skip-cleanup --- ember help --json
   - cmd: node_modules/.bin/ember try:reset
 
