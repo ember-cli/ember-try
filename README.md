@@ -91,6 +91,8 @@ If `useVersionCompatibility` is set to `true` in the config file, the autogenera
 
 To keep this from getting out of hand, `ember-try` will limit the versions of Ember used to the lasted point release per minor version. For example, ">1.11.0 <=2.0.0", would (as of writing) run with versions ['1.11.4', '1.12.2', '1.13.13', '2.0.0'].
 
+As of v1.0.0, This will only work for projects starting with ember provided by npm, not bower. 
+
 ##### Configuration Files
 
 Configuration will be read from a file in your ember app in `config/ember-try.js`. Here are the possible options:
