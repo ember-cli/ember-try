@@ -1,10 +1,10 @@
 'use strict';
 
-var extend = require('extend');
+let extend = require('extend');
 
 module.exports = function generateMockRun() {
-  var mockedRuns = [];
-  var options = { allowPassthrough: true };
+  let mockedRuns = [];
+  let options = { allowPassthrough: true };
   if (typeof arguments[0] === 'string') {
     mockedRuns.push({ command: arguments[0], callback: arguments[1] });
   } else {
@@ -13,25 +13,25 @@ module.exports = function generateMockRun() {
   }
 
   return function mockRun(actualCommand, actualArgs, opts) {
-    var matchingRuns = mockedRuns.filter(function(mockedRun) {
+    let matchingRuns = mockedRuns.filter((mockedRun) => {
       return isCommandMocked(mockedRun, actualCommand, actualArgs);
     });
-    var matchingRun = matchingRuns[0];
+    let matchingRun = matchingRuns[0];
 
     if (matchingRun) {
       return matchingRun.callback(actualCommand, actualArgs, opts);
     } else if (options.allowPassthrough) {
       return passthrough().apply(this, arguments);
     } else {
-      throw new Error(actualCommand + ' ' + actualArgs.join(' ') + ' not stubbed and not allowed to passthrough');
+      throw new Error(`${actualCommand} ${actualArgs.join(' ')} not stubbed and not allowed to passthrough`);
     }
   };
 };
 
 function isCommandMocked(mockedRun, actualCommand, actualArgs) {
-  var mockedRunParts = mockedRun.command.split(' ');
-  var mockedCommand = mockedRunParts[0];
-  var mockedArgs = mockedRunParts.slice(1);
+  let mockedRunParts = mockedRun.command.split(' ');
+  let mockedCommand = mockedRunParts[0];
+  let mockedArgs = mockedRunParts.slice(1);
   return mockedCommandIsEmberAndArgumentsMatch(mockedCommand, mockedArgs, actualCommand, actualArgs) ||
          commandIsMocked(mockedCommand, mockedArgs, actualCommand, actualArgs);
 }
@@ -57,7 +57,7 @@ function arraysAreEqual(firstArr, secondArr) {
     return false;
   }
 
-  for (var i = 0; i < secondArr.length; i++) {
+  for (let i = 0; i < secondArr.length; i++) {
     if (firstArr[i] !== secondArr[i]) {
       return false;
     }

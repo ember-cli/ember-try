@@ -14,7 +14,7 @@ module.exports = {
       command: 'ember test',
       npm: {
         dependencies: {
-          'ember-feature-flags': '3.0.0'
+          'ember-moment': '7.5.0'
         }
       }
     }

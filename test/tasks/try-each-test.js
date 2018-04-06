@@ -1,287 +1,160 @@
 'use strict';
 
-var expect = require('chai').expect;
-var tmp = require('tmp-sync');
-var path = require('path');
-var RSVP = require('rsvp');
-var fs = require('fs-extra');
-var fixtureBower = require('../fixtures/bower.json');
-var fixturePackage = require('../fixtures/package.json');
-var writeJSONFile = require('../helpers/write-json-file');
-var mockery = require('mockery');
+let expect = require('chai').expect;
+let tmp = require('tmp-sync');
+let path = require('path');
+let RSVP = require('rsvp');
+let fs = require('fs-extra');
+let fixtureBower = require('../fixtures/bower.json');
+let fixturePackage = require('../fixtures/package.json');
+let writeJSONFile = require('../helpers/write-json-file');
+let mockery = require('mockery');
 
 /* Some of the tests in this file intentionally DO NOT stub dependency manager adapter*/
-var StubDependencyAdapter = require('../helpers/stub-dependency-manager-adapter');
-var generateMockRun = require('../helpers/generate-mock-run');
+let StubDependencyAdapter = require('../helpers/stub-dependency-manager-adapter');
+let generateMockRun = require('../helpers/generate-mock-run');
 
-var remove = RSVP.denodeify(fs.remove);
-var root = process.cwd();
-var tmproot = path.join(root, 'tmp');
-var tmpdir;
+let remove = RSVP.denodeify(fs.remove);
+let root = process.cwd();
+let tmproot = path.join(root, 'tmp');
+let tmpdir;
 
-var legacyConfig = {
-  scenarios: [
-    {
-      name: 'default',
-      dependencies: {}
-    },
-    {
-      name: 'first',
-      dependencies: {
-        ember: '1.13.0'
-      }
-    },
-    {
-      name: 'second',
-      dependencies: {
-        ember: '2.0.0'
-      }
-    },
-    {
-      name: 'with-dev-deps',
-      dependencies: {
-        ember: '2.0.0'
-      },
-      devDependencies: {
-        jquery: '1.11.3'
-      }
-    },
-    {
-      name: 'with-resolutions',
-      dependencies: {
-        ember: 'components/ember#beta'
-      },
-      resolutions: {
-        ember: 'beta'
-      }
-    }
-  ]
-};
-
-var config = {
+let config = {
   scenarios: [
     {
       name: 'first',
       bower: {
         dependencies: {
           ember: '1.13.0',
-          bootstrap: null
-        }
+          bootstrap: null,
+        },
       },
       npm: {
         dependencies: {
-          'ember-cli-deploy': '0.5.0'
-        }
-      }
+          'ember-cli-deploy': '0.5.0',
+        },
+      },
     }, {
       name: 'second',
       bower: {
         dependencies: {
-          ember: '2.0.0'
+          ember: '2.0.0',
         },
         devDependencies: {
-          jquery: '1.11.3'
-        }
+          jquery: '1.11.3',
+        },
       },
       npm: {
         devDependencies: {
-          'ember-cli-deploy': '0.5.1'
-        }
-      }
+          'ember-cli-deploy': '0.5.1',
+        },
+      },
     },
     {
       name: 'with-bower-resolutions',
       bower: {
         dependencies: {
-          ember: 'components/ember#beta'
+          ember: 'components/ember#beta',
         },
         resolutions: {
-          ember: 'beta'
-        }
+          ember: 'beta',
+        },
       },
       npm: {
         dependencies: {
-          'ember-cli-deploy': '0.5.1'
-        }
-      }
-    }]
+          'ember-cli-deploy': '0.5.1',
+        },
+      },
+    }],
 };
 
-describe('tryEach', function() {
-  beforeEach(function() {
+describe('tryEach', () => {
+  beforeEach(() => {
     tmpdir = tmp.in(tmproot);
     process.chdir(tmpdir);
     mockery.enable({
       warnOnUnregistered: false,
-      useCleanCache: true
+      useCleanCache: true,
     });
     require('chalk').enabled = false;
   });
 
-  afterEach(function() {
+  afterEach(() => {
     mockery.deregisterAll();
     mockery.disable();
     process.chdir(root);
     return remove(tmproot);
   });
 
-  describe('with legacy config', function() {
-    it('succeeds when scenario\'s tests succeed', function() {
-      this.timeout(30000);
-
-      var mockedRun = generateMockRun('ember test', function() {
-        return RSVP.resolve(0);
-      });
-      mockery.registerMock('./run', mockedRun);
-
-      var output = [];
-      var outputFn = function(log) {
-        output.push(log);
-      };
-
-      var TryEachTask = require('../../lib/tasks/try-each');
-      var tryEachTask = new TryEachTask({
-        ui: { writeLine: outputFn },
-        project: { root: tmpdir },
-        config: legacyConfig,
-        _on: function() {}
-      });
-
-      writeJSONFile('package.json', fixturePackage);
-      fs.mkdirSync('node_modules');
-      writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(legacyConfig.scenarios, {}).then(function(exitCode) {
-        expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
-        expect(output).to.include('Scenario default: SUCCESS');
-        expect(output).to.include('Scenario first: SUCCESS');
-        expect(output).to.include('Scenario second: SUCCESS');
-        expect(output).to.include('Scenario with-dev-deps: SUCCESS');
-        expect(output).to.include('Scenario with-resolutions: SUCCESS');
-
-        expect(output).to.include('All 5 scenarios succeeded');
-      }).catch(function(err) {
-        console.log(err);
-        expect(true).to.equal(false, 'Assertions should run');
-      });
-    });
-
-    it('fails scenarios when scenario\'s tests fail', function() {
-      this.timeout(30000);
-
-      var runTestCount = 0;
-      var mockedRun = generateMockRun('ember test', function() {
-        runTestCount++;
-        if (runTestCount === 1) {
-          return RSVP.reject(1);
-        } else {
-          return RSVP.resolve(0);
-        }
-      });
-
-      mockery.registerMock('./run', mockedRun);
-
-      var output = [];
-      var outputFn = function(log) {
-        output.push(log);
-      };
-
-      var TryEachTask = require('../../lib/tasks/try-each');
-      var tryEachTask = new TryEachTask({
-        ui: { writeLine: outputFn },
-        project: { root: tmpdir },
-        config: legacyConfig,
-        _on: function() {}
-      });
-
-      writeJSONFile('package.json', fixturePackage);
-      fs.mkdirSync('node_modules');
-      writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(legacyConfig.scenarios, {}).then(function(exitCode) {
-        expect(exitCode).to.equal(1);
-        expect(output).to.include('Scenario default: FAIL');
-        expect(output).to.include('Scenario first: SUCCESS');
-        expect(output).to.include('Scenario second: SUCCESS');
-        expect(output).to.include('Scenario with-dev-deps: SUCCESS');
-        expect(output).to.include('Scenario with-resolutions: SUCCESS');
-        expect(output).to.include('1 scenarios failed');
-        expect(output).to.include('4 scenarios succeeded');
-        expect(output).to.include('5 scenarios run');
-      }).catch(function(err) {
-        console.log(err);
-        expect(true).to.equal(false, 'Assertions should run');
-      });
-    });
-  });
-
-  describe('with bower scenarios', function() {
+  describe('with bower scenarios', () => {
     it('works without an initial bower.json', function() {
-      this.timeout(30000);
+      this.timeout(300000);
 
-      var mockedRun = generateMockRun('ember test', function() {
+      let mockedRun = generateMockRun('ember test', () => {
         return RSVP.resolve(0);
       });
       mockery.registerMock('./run', mockedRun);
 
-      var output = [];
-      var outputFn = function(log) {
+      let output = [];
+      let outputFn = function(log) {
         output.push(log);
       };
 
-      var TryEachTask = require('../../lib/tasks/try-each');
-      var tryEachTask = new TryEachTask({
+      let TryEachTask = require('../../lib/tasks/try-each');
+      let tryEachTask = new TryEachTask({
         ui: { writeLine: outputFn },
         project: { root: tmpdir },
-        config: legacyConfig,
-        _on: function() {}
+        config,
+        _on() {},
       });
 
       writeJSONFile('package.json', fixturePackage);
       fs.mkdirSync('node_modules');
 
       expect(fs.existsSync('bower.json')).to.eql(false);
-      return tryEachTask.run(legacyConfig.scenarios, {}).then(function() {
-        expect(output).to.include('All 5 scenarios succeeded');
+      return tryEachTask.run(config.scenarios, {}).then(() => {
+        expect(output).to.include('All 3 scenarios succeeded');
         expect(fs.existsSync('bower.json')).to.eql(false);
         expect(fs.existsSync('bower_components')).to.eql(false);
       });
     });
   });
 
-  describe('with both npm and bower', function() {
+  describe('with both npm and bower', () => {
     it('succeeds when scenario\'s tests succeed', function() {
       this.timeout(300000);
 
-      var mockedRun = generateMockRun('ember test', function() {
+      let mockedRun = generateMockRun('ember test', () => {
         return RSVP.resolve(0);
       });
 
       mockery.registerMock('./run', mockedRun);
 
-      var output = [];
-      var outputFn = function(log) {
+      let output = [];
+      let outputFn = function(log) {
         output.push(log);
       };
 
-      var TryEachTask = require('../../lib/tasks/try-each');
-      var tryEachTask = new TryEachTask({
+      let TryEachTask = require('../../lib/tasks/try-each');
+      let tryEachTask = new TryEachTask({
         ui: { writeLine: outputFn },
         project: { root: tmpdir },
-        config: config,
-        _on: function() {}
+        config,
+        _on() {},
       });
 
       writeJSONFile('package.json', fixturePackage);
       fs.writeFileSync('yarn.lock', '');
       fs.mkdirSync('node_modules');
       writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+      return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(output).to.include('Detected a yarn.lock file, add useYarn: true to your configuration if you want to use Yarn to install npm dependencies.');
         expect(output).to.include('Scenario first: SUCCESS');
         expect(output).to.include('Scenario second: SUCCESS');
         expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
         expect(output).to.include('All 3 scenarios succeeded');
-      }).catch(function(err) {
+      }).catch((err) => {
         console.log(err);
         expect(true).to.equal(false, 'Assertions should run');
       });
@@ -290,8 +163,8 @@ describe('tryEach', function() {
     it('fails scenarios when scenario\'s tests fail', function() {
       this.timeout(300000);
 
-      var runTestCount = 0;
-      var mockedRun = generateMockRun('ember test', function() {
+      let runTestCount = 0;
+      let mockedRun = generateMockRun('ember test', () => {
         runTestCount++;
         if (runTestCount === 1) {
           return RSVP.reject(1);
@@ -302,23 +175,23 @@ describe('tryEach', function() {
 
       mockery.registerMock('./run', mockedRun);
 
-      var output = [];
-      var outputFn = function(log) {
+      let output = [];
+      let outputFn = function(log) {
         output.push(log);
       };
 
-      var TryEachTask = require('../../lib/tasks/try-each');
-      var tryEachTask = new TryEachTask({
+      let TryEachTask = require('../../lib/tasks/try-each');
+      let tryEachTask = new TryEachTask({
         ui: { writeLine: outputFn },
         project: { root: tmpdir },
-        config: config,
-        _on: function() {}
+        config,
+        _on() {},
       });
 
       writeJSONFile('package.json', fixturePackage);
       fs.mkdirSync('node_modules');
       writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+      return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(1);
         expect(output).to.include('Scenario first: FAIL');
         expect(output).to.include('Scenario second: SUCCESS');
@@ -326,29 +199,28 @@ describe('tryEach', function() {
         expect(output).to.include('1 scenarios failed');
         expect(output).to.include('2 scenarios succeeded');
         expect(output).to.include('3 scenarios run');
-      }).catch(function(err) {
+      }).catch((err) => {
         console.log(err);
         expect(true).to.equal(false, 'Assertions should run');
       });
     });
-
   });
 
-  describe('with stubbed dependency manager', function() {
+  describe('with stubbed dependency manager', () => {
     it('passes along timeout options to run', function() {
       // With stubbed dependency manager, timing out is warning for accidentally not using the stub
       this.timeout(1200);
 
-      var config = {
+      let config = {
         scenarios: [{
           name: 'first',
           dependencies: {
-            ember: '1.13.0'
-          }
-        }]
+            ember: '1.13.0',
+          },
+        }],
       };
-      var passedInOptions = false;
-      var mockedRun = generateMockRun('ember serve', function(command, args, options) {
+      let passedInOptions = false;
+      let mockedRun = generateMockRun('ember serve', (command, args, options) => {
         if (options.timeout && options.timeout.length === 20000 && options.timeout.isSuccess) {
           passedInOptions = true;
         }
@@ -357,79 +229,79 @@ describe('tryEach', function() {
 
       mockery.registerMock('./run', mockedRun);
 
-      var output = [];
-      var outputFn = function(log) {
+      let output = [];
+      let outputFn = function(log) {
         output.push(log);
       };
 
-      var TryEachTask = require('../../lib/tasks/try-each');
-      var tryEachTask = new TryEachTask({
+      let TryEachTask = require('../../lib/tasks/try-each');
+      let tryEachTask = new TryEachTask({
         ui: { writeLine: outputFn },
         project: { root: tmpdir },
-        config: config,
+        config,
         commandArgs: ['ember', 'serve'],
         commandOptions: { timeout: { length: 20000, isSuccess: true } },
         dependencyManagerAdapters: [new StubDependencyAdapter()],
-        _on: function() {}
+        _on() {},
       });
 
       writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+      return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(output).to.include('Scenario first: SUCCESS');
         expect(passedInOptions).to.equal(true, 'Should pass the options all the way down to run');
-      }).catch(function(err) {
+      }).catch((err) => {
         console.log(err);
         expect(true).to.equal(false, 'Assertions should run');
       });
     });
 
-    describe('allowedToFail', function() {
+    describe('allowedToFail', () => {
       it('exits appropriately if all failures were allowedToFail', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
         this.timeout(1200);
 
-        var config = {
+        let config = {
           scenarios: [{
             name: 'first',
             allowedToFail: true,
             dependencies: {
-              ember: '1.13.0'
-            }
+              ember: '1.13.0',
+            },
           }, {
             name: 'second',
             allowedToFail: true,
             dependencies: {
-              ember: '2.2.0'
-            }
-          }]
+              ember: '2.2.0',
+            },
+          }],
         };
 
-        var mockedRun = generateMockRun('ember test', function() {
+        let mockedRun = generateMockRun('ember test', () => {
           return RSVP.reject(1);
         });
         mockery.registerMock('./run', mockedRun);
 
-        var output = [];
-        var outputFn = function(log) {
+        let output = [];
+        let outputFn = function(log) {
           output.push(log);
         };
 
-        var TryEachTask = require('../../lib/tasks/try-each');
-        var tryEachTask = new TryEachTask({
+        let TryEachTask = require('../../lib/tasks/try-each');
+        let tryEachTask = new TryEachTask({
           ui: { writeLine: outputFn },
           project: { root: tmpdir },
-          config: config,
+          config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {}
+          _on() {},
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+        return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(output).to.include('Scenario first: FAIL (Allowed)');
           expect(output).to.include('Scenario second: FAIL (Allowed)');
           expect(output).to.include('2 scenarios failed (2 allowed)');
           expect(exitCode).to.equal(0, 'exits 0 when all failures were allowed');
-        }).catch(function(err) {
+        }).catch((err) => {
           console.log(err);
           expect(true).to.equal(false, 'Assertions should run');
         });
@@ -439,46 +311,46 @@ describe('tryEach', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
         this.timeout(1200);
 
-        var config = {
+        let config = {
           scenarios: [{
             name: 'first',
             dependencies: {
-              ember: '1.13.0'
-            }
+              ember: '1.13.0',
+            },
           }, {
             name: 'second',
             allowedToFail: true,
             dependencies: {
-              ember: '2.2.0'
-            }
-          }]
+              ember: '2.2.0',
+            },
+          }],
         };
 
-        var mockedRun = generateMockRun('ember test', function() {
+        let mockedRun = generateMockRun('ember test', () => {
           return RSVP.reject(1);
         });
         mockery.registerMock('./run', mockedRun);
 
-        var output = [];
-        var outputFn = function(log) {
+        let output = [];
+        let outputFn = function(log) {
           output.push(log);
         };
 
-        var TryEachTask = require('../../lib/tasks/try-each');
-        var tryEachTask = new TryEachTask({
+        let TryEachTask = require('../../lib/tasks/try-each');
+        let tryEachTask = new TryEachTask({
           ui: { writeLine: outputFn },
           project: { root: tmpdir },
-          config: config,
+          config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {}
+          _on() {},
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+        return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(output).to.include('Scenario first: FAIL');
           expect(output).to.include('Scenario second: FAIL (Allowed)');
           expect(output).to.include('2 scenarios failed (1 allowed)');
           expect(exitCode).to.equal(1, 'exits 1 when any failures were NOT allowed');
-        }).catch(function(err) {
+        }).catch((err) => {
           console.log(err);
           expect(true).to.equal(false, 'Assertions should run');
         });
@@ -488,47 +360,47 @@ describe('tryEach', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
         this.timeout(1200);
 
-        var config = {
+        let config = {
           scenarios: [{
             name: 'first',
             allowedToFail: true,
             dependencies: {
-              ember: '1.13.0'
-            }
+              ember: '1.13.0',
+            },
           }, {
             name: 'second',
             allowedToFail: true,
             dependencies: {
-              ember: '2.2.0'
-            }
-          }]
+              ember: '2.2.0',
+            },
+          }],
         };
 
-        var mockedRun = generateMockRun('ember test', function() {
+        let mockedRun = generateMockRun('ember test', () => {
           return RSVP.resolve(0);
         });
         mockery.registerMock('./run', mockedRun);
 
-        var output = [];
-        var outputFn = function(log) {
+        let output = [];
+        let outputFn = function(log) {
           output.push(log);
         };
 
-        var TryEachTask = require('../../lib/tasks/try-each');
-        var tryEachTask = new TryEachTask({
+        let TryEachTask = require('../../lib/tasks/try-each');
+        let tryEachTask = new TryEachTask({
           ui: { writeLine: outputFn },
           project: { root: tmpdir },
-          config: config,
+          config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {}
+          _on() {},
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+        return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(output).to.include('Scenario first: SUCCESS');
           expect(output).to.include('Scenario second: SUCCESS');
           expect(output).to.include('All 2 scenarios succeeded');
           expect(exitCode).to.equal(0, 'exits 0 when all pass');
-        }).catch(function(err) {
+        }).catch((err) => {
           console.log(err);
           expect(true).to.equal(false, 'Assertions should run');
         });
@@ -536,100 +408,100 @@ describe('tryEach', function() {
 
     });
 
-    describe('configurable command', function() {
+    describe('configurable command', () => {
       it('defaults to `ember test`', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
         this.timeout(1200);
 
-        var config = {
+        let config = {
           scenarios: [{
             name: 'first',
             dependencies: {
-              ember: '1.13.0'
-            }
+              ember: '1.13.0',
+            },
           }, {
             name: 'second',
             dependencies: {
-              ember: '2.2.0'
-            }
-          }]
+              ember: '2.2.0',
+            },
+          }],
         };
 
-        var ranDefaultCommand = false;
+        let ranDefaultCommand = false;
 
-        var mockedRun = generateMockRun('ember test', function() {
+        let mockedRun = generateMockRun('ember test', () => {
           ranDefaultCommand = true;
           return RSVP.resolve(0);
         });
 
         mockery.registerMock('./run', mockedRun);
 
-        var output = [];
-        var outputFn = function(log) {
+        let output = [];
+        let outputFn = function(log) {
           output.push(log);
         };
 
-        var TryEachTask = require('../../lib/tasks/try-each');
-        var tryEachTask = new TryEachTask({
+        let TryEachTask = require('../../lib/tasks/try-each');
+        let tryEachTask = new TryEachTask({
           ui: { writeLine: outputFn },
           project: { root: tmpdir },
-          config: config,
+          config,
           commandArgs: [],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {}
+          _on() {},
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+        return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
           expect(output).to.include('Scenario first: SUCCESS');
           expect(output).to.include('Scenario second: SUCCESS');
 
           expect(ranDefaultCommand).to.equal(true, 'Should run the default command');
-        }).catch(function() {
+        }).catch(() => {
           expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
-      it('allows passing in of the command to run', function() {
+      it('allows passing in of the command to run (overrides config file)', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
         this.timeout(1200);
 
-        var config = {
+        let config = {
           command: 'ember test-this',
           scenarios: [{
             name: 'first',
             dependencies: {
-              ember: '1.13.0'
-            }
-          }]
+              ember: '1.13.0',
+            },
+          }],
         };
-        var ranPassedInCommand = false;
-        var mockedRun = generateMockRun('ember serve', function() {
+        let ranPassedInCommand = false;
+        let mockedRun = generateMockRun('ember serve', () => {
           ranPassedInCommand = true;
           return RSVP.resolve(0);
         });
         mockery.registerMock('./run', mockedRun);
 
-        var output = [];
-        var outputFn = function(log) {
+        let output = [];
+        let outputFn = function(log) {
           output.push(log);
         };
 
-        var TryEachTask = require('../../lib/tasks/try-each');
-        var tryEachTask = new TryEachTask({
+        let TryEachTask = require('../../lib/tasks/try-each');
+        let tryEachTask = new TryEachTask({
           ui: { writeLine: outputFn },
           project: { root: tmpdir },
-          config: config,
+          config,
           commandArgs: ['ember', 'serve'],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {}
+          _on() {},
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+        return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
           expect(output).to.include('Scenario first: SUCCESS');
           expect(ranPassedInCommand).to.equal(true, 'Should run the passed in command');
-        }).catch(function(err) {
+        }).catch((err) => {
           console.log(err);
           expect(true).to.equal(false, 'Assertions should run');
         });
@@ -639,59 +511,59 @@ describe('tryEach', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
         this.timeout(1200);
 
-        var config = {
+        let config = {
           command: 'ember test --test-port=2345',
           scenarios: [{
             name: 'first',
             dependencies: {
-              ember: '1.13.0'
-            }
+              ember: '1.13.0',
+            },
           }, {
             name: 'second',
             dependencies: {
-              ember: '2.2.0'
-            }
+              ember: '2.2.0',
+            },
           }, {
             name: 'different',
             command: 'npm run-script different',
             dependencies: {
-              ember: '2.0.0'
-            }
-          }]
+              ember: '2.0.0',
+            },
+          }],
         };
 
-        var ranDefaultCommandCount = 0;
-        var ranScenarioCommandCount = 0;
-        var mockedRun = generateMockRun([{
+        let ranDefaultCommandCount = 0;
+        let ranScenarioCommandCount = 0;
+        let mockedRun = generateMockRun([{
           command: 'ember test --test-port=2345',
-          callback: function() {
+          callback() {
             ranDefaultCommandCount++;
             return RSVP.resolve(0);
-          }
+          },
         }, {
           command: 'npm run-script different',
-          callback: function() {
+          callback() {
             ranScenarioCommandCount++;
             return RSVP.resolve(0);
-          }
+          },
         }]);
         mockery.registerMock('./run', mockedRun);
 
-        var output = [];
-        var outputFn = function(log) {
+        let output = [];
+        let outputFn = function(log) {
           output.push(log);
         };
 
-        var TryEachTask = require('../../lib/tasks/try-each');
-        var tryEachTask = new TryEachTask({
+        let TryEachTask = require('../../lib/tasks/try-each');
+        let tryEachTask = new TryEachTask({
           ui: { writeLine: outputFn },
           project: { root: tmpdir },
-          config: config,
+          config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {}
+          _on() {},
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+        return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
 
           expect(output).to.include('Scenario first: SUCCESS');
@@ -700,7 +572,7 @@ describe('tryEach', function() {
 
           expect(ranDefaultCommandCount).to.equal(2, 'Should run the default command scenarios without their own commands specified');
           expect(ranScenarioCommandCount).to.equal(1, 'Should run the scenario command for scenario that specified it');
-        }).catch(function(err) {
+        }).catch((err) => {
           console.log(err);
           expect(true).to.equal(false, 'Assertions should run');
         });
@@ -710,36 +582,88 @@ describe('tryEach', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
         this.timeout(10000);
 
-        var config = {
+        let config = {
           scenarios: [{
             name: 'first',
             dependencies: {
-              ember: '1.13.0'
-            }
-          }]
+              ember: '1.13.0',
+            },
+          }],
         };
 
-        var output = [];
-        var outputFn = function(log) {
+        let output = [];
+        let outputFn = function(log) {
           output.push(log);
         };
 
-        var TryEachTask = require('../../lib/tasks/try-each');
-        var tryEachTask = new TryEachTask({
+        let TryEachTask = require('../../lib/tasks/try-each');
+        let tryEachTask = new TryEachTask({
           ui: { writeLine: outputFn },
           project: { root: tmpdir },
-          config: config,
+          config,
           commandArgs: ['ember', 'help', '--json', 'true'],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on: function() {}
+          _on() {},
         });
 
-        return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+        return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
           expect(output).to.include('Scenario first: SUCCESS', 'Passing scenario means options were passed along');
-        }).catch(function(err) {
+        }).catch((err) => {
           console.log(err);
           expect(true).to.equal(false, 'Assertions should run');
+        });
+      });
+    });
+
+    describe('configurable env', () => {
+      it('runs command with env from config', function() {
+        // With stubbed dependency manager, timing out is warning for accidentally not using the stub
+        this.timeout(1200);
+
+        let config = {
+          scenarios: [{
+            name: 'first',
+            command: 'true',
+            env: {
+              USE_THIS: 'yep',
+            },
+          }, {
+            name: 'second',
+            command: 'true',
+          }],
+        };
+
+        process.env['THIS_SHOULD_EXIST_IN_CMD_OPTS'] = 'true';
+        let actualOptions = [];
+        let mockedRun = generateMockRun('true', (actualCommand, actualArgs, opts) => {
+          actualOptions.push(opts);
+          return RSVP.resolve(0);
+        });
+        mockery.registerMock('./run', mockedRun);
+
+        let output = [];
+        let outputFn = function(log) {
+          output.push(log);
+        };
+
+        let TryEachTask = require('../../lib/tasks/try-each');
+        let tryEachTask = new TryEachTask({
+          ui: { writeLine: outputFn },
+          project: { root: tmpdir },
+          config,
+          dependencyManagerAdapters: [new StubDependencyAdapter()],
+          _on() {},
+        });
+
+        return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
+          expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
+
+          expect(output).to.include('Scenario first: SUCCESS');
+          expect(output).to.include('Scenario second: SUCCESS');
+
+          expect(actualOptions[0].env).to.include({ USE_THIS: 'yep', 'THIS_SHOULD_EXIST_IN_CMD_OPTS': 'true' });
+          expect(actualOptions[1].env).to.eql(undefined);
         });
       });
     });
@@ -748,44 +672,44 @@ describe('tryEach', function() {
       // With stubbed dependency manager, timing out is warning for accidentally not using the stub
       this.timeout(1200);
 
-      var config = {
+      let config = {
         scenarios: [{
           name: 'first',
           dependencies: {
-            ember: '1.13.0'
-          }
-        }]
+            ember: '1.13.0',
+          },
+        }],
       };
 
-      var output = [];
-      var outputFn = function(log) {
+      let output = [];
+      let outputFn = function(log) {
         output.push(log);
       };
 
-      var scenarios = [];
-      var mockRunCommand = function() {
-        var currentScenario = process.env.EMBER_TRY_CURRENT_SCENARIO;
+      let scenarios = [];
+      let mockRunCommand = function() {
+        let currentScenario = process.env.EMBER_TRY_CURRENT_SCENARIO;
         scenarios.push(currentScenario);
         return RSVP.resolve(true);
       };
 
-      var TryEachTask = require('../../lib/tasks/try-each');
-      var tryEachTask = new TryEachTask({
+      let TryEachTask = require('../../lib/tasks/try-each');
+      let tryEachTask = new TryEachTask({
         ui: { writeLine: outputFn },
         project: { root: tmpdir },
-        config: config,
+        config,
         dependencyManagerAdapters: [new StubDependencyAdapter()],
-        _on: function() {},
-        _runCommand: mockRunCommand
+        _on() {},
+        _runCommand: mockRunCommand,
       });
 
       writeJSONFile('bower.json', fixtureBower);
-      return tryEachTask.run(config.scenarios, {}).then(function(exitCode) {
+      return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(scenarios).to.eql(['first']);
-        var currentScenarioIsUndefined = process.env.EMBER_TRY_CURRENT_SCENARIO === undefined;
+        let currentScenarioIsUndefined = process.env.EMBER_TRY_CURRENT_SCENARIO === undefined;
         expect(currentScenarioIsUndefined).to.equal(true);
-      }).catch(function(err) {
+      }).catch((err) => {
         console.log(err);
         expect(true).to.equal(false, 'Assertions should run');
       });

@@ -1,5 +1,22 @@
 # Change Log
 
+## [v1.0.0-beta.1](https://github.com/ember-cli/ember-try/tree/v1.0.0-beta.1)
+
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.0.0-beta.0...v1.0.0-beta.1)
+
+**Merged pull requests:**
+
+- Breaking change: To use `versionCompatibility` projects must be consuming ember from npm. Upgrade ember-try-config to 3.0 [\#185](https://github.com/ember-cli/ember-try/pull/185) ([kategengler](https://github.com/kategengler))
+
+## [v1.0.0-beta.0](https://github.com/ember-cli/ember-try/tree/v1.0.0-beta.0)
+
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.0.0-beta.0...HEAD)
+
+- Allow setting env vars per scenario, independent of defining a command [\#181](https://github.com/ember-cli/ember-try/pull/181) ([kategengler](https://github.com/kategengler))
+- Remove default config [\#184](https://github.com/ember-cli/ember-try/pull/184) ([kategengler](https://github.com/kategengler))
+- Remove deprecated commands and config options [\#178](https://github.com/ember-cli/ember-try/pull/178) ([kategengler](https://github.com/kategengler))
+- Upgrade ember-cli, ember & other deps [\#174](https://github.com/ember-cli/ember-try/pull/174) ([kategengler](https://github.com/kategengler))
+
 ## [v0.2.23](https://github.com/ember-cli/ember-try/tree/v0.2.23) (2018-01-13)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.22...v0.2.23)
 
