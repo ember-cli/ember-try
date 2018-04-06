@@ -57,7 +57,7 @@ describe('npmAdapter', () => {
           },
         }, {
           command: 'npm prune',
-          callback: function(command, args, opts) {
+          callback(command, args, opts) {
             runCount++;
             expect(opts).to.have.property('cwd', tmpdir);
             return RSVP.resolve();
@@ -86,7 +86,7 @@ describe('npmAdapter', () => {
           },
         }, {
           command: 'npm prune',
-          callback: function() {
+          callback() {
             runCount++;
             return RSVP.resolve();
           },
