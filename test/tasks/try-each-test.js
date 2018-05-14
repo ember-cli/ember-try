@@ -90,7 +90,7 @@ describe('tryEach', () => {
     it('works without an initial bower.json', function() {
       this.timeout(300000);
 
-      let mockedRun = generateMockRun('ember test', () => {
+      let mockedRun = generateMockRun('npm test', () => {
         return RSVP.resolve(0);
       });
       mockery.registerMock('./run', mockedRun);
@@ -124,7 +124,7 @@ describe('tryEach', () => {
     it('succeeds when scenario\'s tests succeed', function() {
       this.timeout(300000);
 
-      let mockedRun = generateMockRun('ember test', () => {
+      let mockedRun = generateMockRun('npm test', () => {
         return RSVP.resolve(0);
       });
 
@@ -164,7 +164,7 @@ describe('tryEach', () => {
       this.timeout(300000);
 
       let runTestCount = 0;
-      let mockedRun = generateMockRun('ember test', () => {
+      let mockedRun = generateMockRun('npm test', () => {
         runTestCount++;
         if (runTestCount === 1) {
           return RSVP.reject(1);
@@ -277,7 +277,7 @@ describe('tryEach', () => {
           }],
         };
 
-        let mockedRun = generateMockRun('ember test', () => {
+        let mockedRun = generateMockRun('npm test', () => {
           return RSVP.reject(1);
         });
         mockery.registerMock('./run', mockedRun);
@@ -326,7 +326,7 @@ describe('tryEach', () => {
           }],
         };
 
-        let mockedRun = generateMockRun('ember test', () => {
+        let mockedRun = generateMockRun('npm test', () => {
           return RSVP.reject(1);
         });
         mockery.registerMock('./run', mockedRun);
@@ -376,7 +376,7 @@ describe('tryEach', () => {
           }],
         };
 
-        let mockedRun = generateMockRun('ember test', () => {
+        let mockedRun = generateMockRun('npm test', () => {
           return RSVP.resolve(0);
         });
         mockery.registerMock('./run', mockedRun);
@@ -409,7 +409,7 @@ describe('tryEach', () => {
     });
 
     describe('configurable command', () => {
-      it('defaults to `ember test`', function() {
+      it('defaults to `npm test`', function() {
         // With stubbed dependency manager, timing out is warning for accidentally not using the stub
         this.timeout(1200);
 
@@ -429,7 +429,7 @@ describe('tryEach', () => {
 
         let ranDefaultCommand = false;
 
-        let mockedRun = generateMockRun('ember test', () => {
+        let mockedRun = generateMockRun('npm test', () => {
           ranDefaultCommand = true;
           return RSVP.resolve(0);
         });

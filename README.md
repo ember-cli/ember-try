@@ -16,7 +16,7 @@ This addon provides a few commands:
 
 ### `ember try:each`
 
-This command will run `ember test` or the configured command with each scenario's specified in the config and exit appropriately.
+This command will run `npm test` or the configured command with each scenario's specified in the config and exit appropriately.
 
 This command is especially useful to use on CI to test against multiple `ember` versions.
 
@@ -30,9 +30,9 @@ the `--config-path` option.
 If you need to know the scenario that is being run (i.e. to customize a test output file name) you can use the `EMBER_TRY_CURRENT_SCENARIO`
 environment variable.
 
-#### `ember try:one <scenario> (...options) --- <command (Default: ember test)>`
+#### `ember try:one <scenario> (...options) --- <command (Default: npm test)>`
 
-This command will run any `ember-cli` command with the specified scenario. The command will default to `ember test`, if no command is specified on the command-line or in configuration.
+This command will run any `ember-cli` command with the specified scenario. The command will default to `npm test`, if no command is specified on the command-line or in configuration.
 
 For example:
 
@@ -65,7 +65,7 @@ This command restores the original `bower.json` from `bower.json.ember-try`, `pa
 
 #### `ember try:ember <semver-string>`
 
-Runs `ember test` or the command in config for each version of Ember that is possible under the semver string given. Configuration follows the rules given under the `versionCompatibility` heading below.
+Runs `npm test` or the command in config for each version of Ember that is possible under the semver string given. Configuration follows the rules given under the `versionCompatibility` heading below.
 
 #### `ember try:config`
 
