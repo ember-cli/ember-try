@@ -1,8 +1,8 @@
 'use strict';
 
-let expect = require('chai').expect;
-let mockery = require('mockery');
-let RSVP = require('rsvp');
+const expect = require('chai').expect;
+const mockery = require('mockery');
+const RSVP = require('rsvp');
 
 describe('utils/run-command', () => {
   beforeEach(() => {
