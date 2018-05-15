@@ -154,9 +154,6 @@ describe('tryEach', () => {
         expect(output).to.include('Scenario second: SUCCESS');
         expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
         expect(output).to.include('All 3 scenarios succeeded');
-      }).catch((err) => {
-        console.log(err);
-        expect(true).to.equal(false, 'Assertions should run');
       });
     });
 
@@ -199,9 +196,6 @@ describe('tryEach', () => {
         expect(output).to.include('1 scenarios failed');
         expect(output).to.include('2 scenarios succeeded');
         expect(output).to.include('3 scenarios run');
-      }).catch((err) => {
-        console.log(err);
-        expect(true).to.equal(false, 'Assertions should run');
       });
     });
   });
@@ -250,9 +244,6 @@ describe('tryEach', () => {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(output).to.include('Scenario first: SUCCESS');
         expect(passedInOptions).to.equal(true, 'Should pass the options all the way down to run');
-      }).catch((err) => {
-        console.log(err);
-        expect(true).to.equal(false, 'Assertions should run');
       });
     });
 
@@ -301,9 +292,6 @@ describe('tryEach', () => {
           expect(output).to.include('Scenario second: FAIL (Allowed)');
           expect(output).to.include('2 scenarios failed (2 allowed)');
           expect(exitCode).to.equal(0, 'exits 0 when all failures were allowed');
-        }).catch((err) => {
-          console.log(err);
-          expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
@@ -350,9 +338,6 @@ describe('tryEach', () => {
           expect(output).to.include('Scenario second: FAIL (Allowed)');
           expect(output).to.include('2 scenarios failed (1 allowed)');
           expect(exitCode).to.equal(1, 'exits 1 when any failures were NOT allowed');
-        }).catch((err) => {
-          console.log(err);
-          expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
@@ -400,12 +385,8 @@ describe('tryEach', () => {
           expect(output).to.include('Scenario second: SUCCESS');
           expect(output).to.include('All 2 scenarios succeeded');
           expect(exitCode).to.equal(0, 'exits 0 when all pass');
-        }).catch((err) => {
-          console.log(err);
-          expect(true).to.equal(false, 'Assertions should run');
         });
       });
-
     });
 
     describe('configurable command', () => {
@@ -457,8 +438,6 @@ describe('tryEach', () => {
           expect(output).to.include('Scenario second: SUCCESS');
 
           expect(ranDefaultCommand).to.equal(true, 'Should run the default command');
-        }).catch(() => {
-          expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
@@ -501,9 +480,6 @@ describe('tryEach', () => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
           expect(output).to.include('Scenario first: SUCCESS');
           expect(ranPassedInCommand).to.equal(true, 'Should run the passed in command');
-        }).catch((err) => {
-          console.log(err);
-          expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
@@ -572,9 +548,6 @@ describe('tryEach', () => {
 
           expect(ranDefaultCommandCount).to.equal(2, 'Should run the default command scenarios without their own commands specified');
           expect(ranScenarioCommandCount).to.equal(1, 'Should run the scenario command for scenario that specified it');
-        }).catch((err) => {
-          console.log(err);
-          expect(true).to.equal(false, 'Assertions should run');
         });
       });
 
@@ -609,9 +582,6 @@ describe('tryEach', () => {
         return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
           expect(output).to.include('Scenario first: SUCCESS', 'Passing scenario means options were passed along');
-        }).catch((err) => {
-          console.log(err);
-          expect(true).to.equal(false, 'Assertions should run');
         });
       });
     });
@@ -709,9 +679,6 @@ describe('tryEach', () => {
         expect(scenarios).to.eql(['first']);
         let currentScenarioIsUndefined = process.env.EMBER_TRY_CURRENT_SCENARIO === undefined;
         expect(currentScenarioIsUndefined).to.equal(true);
-      }).catch((err) => {
-        console.log(err);
-        expect(true).to.equal(false, 'Assertions should run');
       });
     });
   });

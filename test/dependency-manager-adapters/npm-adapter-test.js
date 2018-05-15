@@ -36,9 +36,6 @@ describe('npmAdapter', () => {
       }).setup().then(() => {
         assertFileContainsJSON('package.json.ember-try', { originalPackageJSON: true });
         assertFileContainsJSON('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
-      }).catch((err) => {
-        console.log(err);
-        expect(true).to.equal(false, 'Error should not happen');
       });
     });
   });
@@ -69,9 +66,6 @@ describe('npmAdapter', () => {
           run: stubbedRun,
         })._install().then(() => {
           expect(runCount).to.equal(2, 'Both commands should run');
-        }).catch((err) => {
-          console.log(err);
-          expect(true).to.equal(false, 'Error should not happen');
         });
       });
 
@@ -98,12 +92,10 @@ describe('npmAdapter', () => {
           managerOptions: ['--no-optional'],
         })._install().then(() => {
           expect(runCount).to.equal(2, 'Both commands should run');
-        }).catch((err) => {
-          console.log(err);
-          expect(true).to.equal(false, 'Error should not happen');
         });
       });
     });
+
     describe('with yarn', () => {
       it('runs yarn install', () => {
         writeJSONFile('package.json', fixturePackage);
@@ -158,9 +150,6 @@ describe('npmAdapter', () => {
       return new NpmAdapter({ cwd: tmpdir })._restoreOriginalDependencies().then(() => {
         assertFileContainsJSON('package.json', { originalPackageJSON: true });
         assertFileContainsJSON('node_modules/prove-it.json', { originalNodeModules: true });
-      }).catch((err) => {
-        console.log(err);
-        expect(true).to.equal(false, 'Error should not happen');
       });
     });
   });

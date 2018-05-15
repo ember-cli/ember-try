@@ -35,9 +35,7 @@ describe('bowerAdapter', () => {
     });
 
     it('does not error if no bower.json', () => {
-      return new BowerAdapter({ cwd: tmpdir }).setup().catch(() => {
-        expect(true).to.eql(false);
-      });
+      return new BowerAdapter({ cwd: tmpdir }).setup();
     });
   });
 
