@@ -1,22 +1,22 @@
 'use strict';
 
-let expect = require('chai').expect;
-let RSVP = require('rsvp');
-let fs = require('fs-extra');
-let path = require('path');
-let tmp = require('tmp-sync');
-let fixturePackage = require('../fixtures/package.json');
-let writeJSONFile = require('../helpers/write-json-file');
-let getConfig = require('../../lib/utils/config');
-let addImplicitBowerToScenarios = getConfig._addImplicitBowerToScenarios;
+const expect = require('chai').expect;
+const RSVP = require('rsvp');
+const fs = require('fs-extra');
+const path = require('path');
+const tmp = require('tmp-sync');
+const fixturePackage = require('../fixtures/package.json');
+const writeJSONFile = require('../helpers/write-json-file');
+const getConfig = require('../../lib/utils/config');
+const addImplicitBowerToScenarios = getConfig._addImplicitBowerToScenarios;
 
-let remove = RSVP.denodeify(fs.remove);
-let root = process.cwd();
-let tmproot = path.join(root, 'tmp');
-let tmpdir;
+const remove = RSVP.denodeify(fs.remove);
+const root = process.cwd();
+const tmproot = path.join(root, 'tmp');
 
 describe('utils/config', () => {
   let project;
+  let tmpdir;
 
   beforeEach(() => {
     tmpdir = tmp.in(tmproot);

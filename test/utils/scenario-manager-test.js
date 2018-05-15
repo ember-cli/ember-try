@@ -1,9 +1,9 @@
 'use strict';
 
-let expect = require('chai').expect;
-let ScenarioManager = require('../../lib/utils/scenario-manager');
-let CoreObject = require('core-object');
-let RSVP = require('rsvp');
+const expect = require('chai').expect;
+const ScenarioManager = require('../../lib/utils/scenario-manager');
+const CoreObject = require('core-object');
+const RSVP = require('rsvp');
 
 describe('scenarioManager', () => {
 

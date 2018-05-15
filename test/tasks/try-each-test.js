@@ -1,25 +1,24 @@
 'use strict';
 
-let expect = require('chai').expect;
-let tmp = require('tmp-sync');
-let path = require('path');
-let RSVP = require('rsvp');
-let fs = require('fs-extra');
-let fixtureBower = require('../fixtures/bower.json');
-let fixturePackage = require('../fixtures/package.json');
-let writeJSONFile = require('../helpers/write-json-file');
-let mockery = require('mockery');
+const expect = require('chai').expect;
+const tmp = require('tmp-sync');
+const path = require('path');
+const RSVP = require('rsvp');
+const fs = require('fs-extra');
+const fixtureBower = require('../fixtures/bower.json');
+const fixturePackage = require('../fixtures/package.json');
+const writeJSONFile = require('../helpers/write-json-file');
+const mockery = require('mockery');
 
 /* Some of the tests in this file intentionally DO NOT stub dependency manager adapter*/
-let StubDependencyAdapter = require('../helpers/stub-dependency-manager-adapter');
-let generateMockRun = require('../helpers/generate-mock-run');
+const StubDependencyAdapter = require('../helpers/stub-dependency-manager-adapter');
+const generateMockRun = require('../helpers/generate-mock-run');
 
-let remove = RSVP.denodeify(fs.remove);
-let root = process.cwd();
-let tmproot = path.join(root, 'tmp');
-let tmpdir;
+const remove = RSVP.denodeify(fs.remove);
+const root = process.cwd();
+const tmproot = path.join(root, 'tmp');
 
-let config = {
+const config = {
   scenarios: [
     {
       name: 'first',
@@ -69,6 +68,8 @@ let config = {
 };
 
 describe('tryEach', () => {
+  let tmpdir;
+
   beforeEach(() => {
     tmpdir = tmp.in(tmproot);
     process.chdir(tmpdir);

@@ -1,7 +1,7 @@
 'use strict';
 
-let expect = require('chai').expect;
-let DependencyManagerAdapterFactory = require('../../lib/utils/dependency-manager-adapter-factory');
+const expect = require('chai').expect;
+const DependencyManagerAdapterFactory = require('../../lib/utils/dependency-manager-adapter-factory');
 
 describe('DependencyManagerAdapterFactory', () => {
   describe('generateFromConfig', () => {

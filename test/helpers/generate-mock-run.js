@@ -1,6 +1,6 @@
 'use strict';
 
-let extend = require('extend');
+const extend = require('extend');
 
 module.exports = function generateMockRun() {
   let mockedRuns = [];

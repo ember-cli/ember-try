@@ -1,11 +1,11 @@
 'use strict';
 
-let expect = require('chai').expect;
-let RSVP = require('rsvp');
-let TryEachCommand = require('../../lib/commands/try-each');
+const expect = require('chai').expect;
+const RSVP = require('rsvp');
+const TryEachCommand = require('../../lib/commands/try-each');
 
-let origTryEachTask = TryEachCommand._TryEachTask;
-let origGetConfig = TryEachCommand._getConfig;
+const origTryEachTask = TryEachCommand._TryEachTask;
+const origGetConfig = TryEachCommand._getConfig;
 
 describe('commands/try-each', () => {
   describe('#run', () => {
