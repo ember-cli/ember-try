@@ -1,9 +1,9 @@
----
 language: node_js
 node_js:
-  - "10"
+- '10'
 
 sudo: false
+
 dist: trusty
 
 addons:
@@ -13,41 +13,55 @@ cache:
   yarn: true
 
 before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH=$HOME/.yarn/bin:$PATH
-  - yarn --version
-  - npm install -g bower
-  - bower --version
+- curl -o- -L https://yarnpkg.com/install.sh | bash
+- export PATH=$HOME/.yarn/bin:$PATH
+- yarn --version
+- npm install -g bower
+- bower --version
 
 install:
-  - yarn install
+- yarn install
+
+branches:
+  only:
+  - master
+  # npm version tags
+  - /^v\d+\.\d+\.\d+/
 
 jobs:
   fail_fast: true
   include:
-    - stage: tests
-      name: "Node 10 With Coverage"
-      script:
-      - yarn lint
-      - yarn node-test-with-coverage
-
-    - stage: additional tests
-      name: floating dependencies
-      install: yarn install --no-lockfile
-
-    - name: "All Commands Smoke Test"
-      script:
-      - yarn client-test
-
-    - name: "Node 6 Smoke Test"
-      node_js: "6"
-      script:
-      - yarn smoke-test
-
-    - name: "Node 8 Smoke Test"
-      node_js: "8"
-      script:
-      - yarn smoke-test
-
+  - stage: tests
+    name: Node 10 With Coverage
+    script:
+    - yarn lint
+    - yarn node-test-with-coverage
+  - stage: additional tests
+    name: floating dependencies
+    install: yarn install --no-lockfile
+  - name: All Commands Smoke Test
+    script:
+    - yarn client-test
+  - name: Node 6 Smoke Test
+    node_js: '6'
+    script:
+    - yarn smoke-test
+  - name: Node 8 Smoke Test
+    node_js: '8'
+    script:
+    - yarn smoke-test
+  - stage: deploy
+    if: tag IS present
+    node_js: "10"
+    install: yarn global add auto-dist-tag
+    script: auto-dist-tag --write
+    deploy:
+      provider: npm
+      email: ember-try@kmg.io
+      api_key:
+        secure: MvdwFee93YPXIBBaPenex2kxABycu41NC+BrvhdJyGiPmDRRLxJbIZM0q4ys3mgpgAbHUIjzuA+O37ex4Pzw6Fr791sECWkv4aDgvElEzo7GmobxduLQnWrQazgAhDj5QTYMZvXgGWVVKdUrSOl3WexxRxH3LLPbc+RJoFSUv10=
+      on:
+        tags: true
+        repo: ember-cli/ember-try
 script:
-  - yarn node-test
+- yarn node-test
