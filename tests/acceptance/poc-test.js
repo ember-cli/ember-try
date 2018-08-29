@@ -1,13 +1,13 @@
-import Ember from 'ember';
-import { test } from 'qunit';
-import moduleForAcceptance from '../helpers/module-for-acceptance';
+import { module, test } from 'qunit';
+import { visit, currentURL } from '@ember/test-helpers';
+import { setupApplicationTest } from 'ember-qunit';
 
-moduleForAcceptance('Acceptance Test - To use to try running included commands');
+module('Acceptance Test - To use to try running included commands', function(hooks) {
+  setupApplicationTest(hooks);
 
-test('visiting /', function(assert) {
-  visit('/');
+  test('visiting /', async function(assert) {
+    await visit('/');
 
-  andThen(function() {
     assert.equal(currentURL(), '/');
   });
 });

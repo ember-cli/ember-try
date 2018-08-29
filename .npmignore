@@ -21,6 +21,7 @@ appveyor.yml
 bower.json
 ember-cli-build.js
 testem.js
+yarn.lock
 run-smoke-test.sh
 *.tgz
 testem.json
