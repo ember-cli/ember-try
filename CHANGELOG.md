@@ -3,12 +3,13 @@
 ## [v1.0.0](https://github.com/ember-cli/ember-try/tree/v1.0.0) (2018-08-30)
 
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.23...v1.0.0)
-
+                           
 **Merged pull requests:**
 
 - [BREAKING] Remove deprecated commands and config options [\#178](https://github.com/ember-cli/ember-try/pull/178) ([kategengler](https://github.com/kategengler))
 - [BREAKING] Remove default config [\#184](https://github.com/ember-cli/ember-try/pull/184) ([kategengler](https://github.com/kategengler))
   `ember-try` previously provided a default configuration for those without a configuration file or `versionCompatibility`. It has been removed.
+- Drops support for Node 4
 - [FEATURE] Allow setting env vars per scenario, independent of defining a command [\#181](https://github.com/ember-cli/ember-try/pull/181) ([kategengler](https://github.com/kategengler))  
 - Use execa for subprocess support. [\#195](https://github.com/ember-cli/ember-try/pull/195) ([stefanpenner](https://github.com/stefanpenner))
 - Explicitly remove `--no-shrinkwrap` from the `npm prune` call [\#171](https://github.com/ember-cli/ember-try/pull/171) ([xcambar](https://github.com/xcambar))
