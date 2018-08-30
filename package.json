@@ -2,13 +2,9 @@
   "name": "ember-try",
   "version": "1.0.0-beta.3",
   "description": "An ember-cli addon to test against multiple bower dependencies, such as ember and ember-data.",
-  "directories": {
-    "doc": "doc",
-    "test": "tests"
-  },
   "scripts": {
     "build": "ember build",
-    "lint:js": "eslint ./*.js addon addon-test-support app config lib server test-support tests",
+    "lint:js": "eslint .",
     "start": "ember serve",
     "test": "npm run-script lint && npm run-script node-test && npm run-script client-test",
     "client-test": "./run-smoke-test.sh all-commands.sh",
@@ -18,32 +14,30 @@
     "smoke-test": "./run-smoke-test.sh smoke-test.sh",
     "lint": "eslint lib test"
   },
-  "repository": "ember-cli/ember-try",
   "engines": {
-    "node": "6.* || >= 7.*"
+    "node": "6.* || 8.* || >= 10.*"
   },
-  "author": "Katie Gengler",
-  "license": "MIT",
   "devDependencies": {
     "bower": "^1.8.2",
-    "broccoli-asset-rev": "^2.4.5",
+    "broccoli-asset-rev": "^2.7.0",
     "chai": "^4.1.2",
     "codecov": "^3.0.0",
-    "ember-cli": "~2.18.0",
+    "ember-cli": "~3.3.0",
     "ember-cli-babel": "^6.6.0",
     "ember-cli-dependency-checker": "^2.0.0",
     "ember-cli-htmlbars": "^2.0.1",
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.1",
-    "ember-cli-qunit": "^4.1.1",
+    "ember-cli-qunit": "^4.3.2",
     "ember-cli-shims": "^1.2.0",
     "ember-cli-sri": "^2.1.0",
     "ember-cli-uglify": "^2.0.0",
     "ember-disable-prototype-extensions": "^1.1.2",
     "ember-export-application-global": "^2.0.0",
-    "ember-load-initializers": "^1.0.0",
+    "ember-load-initializers": "^1.1.0",
+    "ember-maybe-import-regenerator": "^0.1.6",
     "ember-resolver": "^4.0.0",
-    "ember-source": "~2.18.0",
+    "ember-source": "~3.3.0",
     "eslint": "^5.4.0",
     "eslint-plugin-ember": "^5.0.0",
     "eslint-plugin-node": "^7.0.1",
@@ -58,6 +52,13 @@
     "ember-addon",
     "testing"
   ],
+  "repository": "ember-cli/ember-try",
+  "license": "MIT",
+  "author": "Katie Gengler",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
   "dependencies": {
     "chalk": "^2.3.0",
     "cli-table3": "^0.5.1",
