@@ -57,6 +57,7 @@ jobs:
     script: auto-dist-tag --write
     deploy:
       provider: npm
+      skip_cleanup: true
       email: ember-try@kmg.io
       api_key:
         secure: MvdwFee93YPXIBBaPenex2kxABycu41NC+BrvhdJyGiPmDRRLxJbIZM0q4ys3mgpgAbHUIjzuA+O37ex4Pzw6Fr791sECWkv4aDgvElEzo7GmobxduLQnWrQazgAhDj5QTYMZvXgGWVVKdUrSOl3WexxRxH3LLPbc+RJoFSUv10=
