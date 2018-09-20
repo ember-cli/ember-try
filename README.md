@@ -91,7 +91,7 @@ If `useVersionCompatibility` is set to `true` in the config file, the autogenera
 
 To keep this from getting out of hand, `ember-try` will limit the versions of Ember used to the lasted point release per minor version. For example, ">1.11.0 <=2.0.0", would (as of writing) run with versions ['1.11.4', '1.12.2', '1.13.13', '2.0.0'].
 
-As of v1.0.0, This will only work for projects starting with ember provided by npm, not bower. 
+As of v1.0.0, This will only work for projects starting with ember provided by npm, not bower.
 
 ##### Configuration Files
 
@@ -196,11 +196,17 @@ The `name` can be used to try just one scenario using the `ember try:one` comman
 ##### Yarn
 
 If you include `useYarn: true` in your `ember-try` config, all npm scenarios will use `yarn` for install with the `--no-lockfile` option. At cleanup, your dependencies will be restored to their prior state.
- 
+
 ##### A note on npm scenarios with lockfiles
 
 Lockfiles are ignored by `ember-try`. (`yarn` will run with `--no-lockfile` and `npm` will be run with `--no-shrinkwrap`).
 When testing various scenarios, it's important to "float" dependencies so that the scenarios are run with the latest satisfying versions of dependencies a user of the project would get.
+
+##### Workspaces
+
+If you include `useWorkspaces: true` in your `ember-try` config, `ember-try` will apply the diff to each individual workspace specified
+in `package.json`, allowing you to try scenarios in monorepo style repositories. See
+[Yarn's documentation of workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) for more details.
 
 ### Video
 [![How to use EmberTry](https://i.vimeocdn.com/video/559399937_500.jpg)](https://vimeo.com/157688157)
