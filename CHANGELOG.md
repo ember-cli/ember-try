@@ -1,19 +1,94 @@
 # Change Log
 
-## [v1.0.0](https://github.com/ember-cli/ember-try/tree/v1.0.0) (2018-08-30)
+## [v1.1.0](https://github.com/ember-cli/ember-try/tree/v1.1.0) (2018-09-25)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.0.0...v1.1.0)
 
-[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.23...v1.0.0)
-                           
+**Closed issues:**
+
+- \[Security\] Cut stable release with upgraded lodash or cli-table3 [\#200](https://github.com/ember-cli/ember-try/issues/200)
+- `npm prune --no-shrinkwrap` removes packages declared with `github:repo\#hash` syntax [\#170](https://github.com/ember-cli/ember-try/issues/170)
+
 **Merged pull requests:**
 
-- [BREAKING] Remove deprecated commands and config options [\#178](https://github.com/ember-cli/ember-try/pull/178) ([kategengler](https://github.com/kategengler))
-- [BREAKING] Remove default config [\#184](https://github.com/ember-cli/ember-try/pull/184) ([kategengler](https://github.com/kategengler))
-  `ember-try` previously provided a default configuration for those without a configuration file or `versionCompatibility`. It has been removed.
-- Drops support for Node 4
-- [FEATURE] Allow setting env vars per scenario, independent of defining a command [\#181](https://github.com/ember-cli/ember-try/pull/181) ([kategengler](https://github.com/kategengler))  
+- \[feat\] Adds support for Yarn/NPM workspaces [\#209](https://github.com/ember-cli/ember-try/pull/209) ([pzuraq](https://github.com/pzuraq))
+
+## [v1.0.0](https://github.com/ember-cli/ember-try/tree/v1.0.0) (2018-08-30)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.0.0-beta.6...v1.0.0)
+
+**Merged pull requests:**
+
+- Upgrade ember-cli & blueprint [\#206](https://github.com/ember-cli/ember-try/pull/206) ([kategengler](https://github.com/kategengler))
+- Update deps [\#205](https://github.com/ember-cli/ember-try/pull/205) ([kategengler](https://github.com/kategengler))
+
+## [v1.0.0-beta.6](https://github.com/ember-cli/ember-try/tree/v1.0.0-beta.6) (2018-08-30)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.0.0-beta.5...v1.0.0-beta.6)
+
+## [v1.0.0-beta.5](https://github.com/ember-cli/ember-try/tree/v1.0.0-beta.5) (2018-08-30)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.0.0-beta.4...v1.0.0-beta.5)
+
+## [v1.0.0-beta.4](https://github.com/ember-cli/ember-try/tree/v1.0.0-beta.4) (2018-08-30)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.0.0-beta.3...v1.0.0-beta.4)
+
+**Closed issues:**
+
+- A function in the Route to just leave current route, whatever it is. [\#199](https://github.com/ember-cli/ember-try/issues/199)
+- `ember try:ember` dies after first failed scenario with 1.0.0-beta.3 [\#197](https://github.com/ember-cli/ember-try/issues/197)
+- Tests not rebuilding on an ember try scenario [\#190](https://github.com/ember-cli/ember-try/issues/190)
+
+**Merged pull requests:**
+
+- Update to Travis Stages & Deploy from Travis [\#204](https://github.com/ember-cli/ember-try/pull/204) ([kategengler](https://github.com/kategengler))
+- Handle non-zero exit from commands run in a way needed by execa [\#203](https://github.com/ember-cli/ember-try/pull/203) ([kategengler](https://github.com/kategengler))
+- Update `cli-table2` to `cli-table3` [\#198](https://github.com/ember-cli/ember-try/pull/198) ([Turbo87](https://github.com/Turbo87))
+
+## [v1.0.0-beta.3](https://github.com/ember-cli/ember-try/tree/v1.0.0-beta.3) (2018-05-15)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.0.0-beta.2...v1.0.0-beta.3)
+
+## [v1.0.0-beta.2](https://github.com/ember-cli/ember-try/tree/v1.0.0-beta.2) (2018-05-15)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.0.0-beta.1...v1.0.0-beta.2)
+
+**Closed issues:**
+
+- Failing scenario for `1.13` after updating to `3.0` [\#187](https://github.com/ember-cli/ember-try/issues/187)
+- Travis and yarn issue on Ember 2.12 only [\#148](https://github.com/ember-cli/ember-try/issues/148)
+- Be smart about versions of Ember where version is provided by bower and where versions are provided by npm [\#91](https://github.com/ember-cli/ember-try/issues/91)
+
+**Merged pull requests:**
+
 - Use execa for subprocess support. [\#195](https://github.com/ember-cli/ember-try/pull/195) ([stefanpenner](https://github.com/stefanpenner))
+- move requires from let -\> const [\#194](https://github.com/ember-cli/ember-try/pull/194) ([stefanpenner](https://github.com/stefanpenner))
+- Let mocha handle rejected promises. [\#193](https://github.com/ember-cli/ember-try/pull/193) ([stefanpenner](https://github.com/stefanpenner))
 - Explicitly remove `--no-shrinkwrap` from the `npm prune` call [\#171](https://github.com/ember-cli/ember-try/pull/171) ([xcambar](https://github.com/xcambar))
+
+## [v1.0.0-beta.1](https://github.com/ember-cli/ember-try/tree/v1.0.0-beta.1) (2018-02-09)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.0.0-beta.0...v1.0.0-beta.1)
+
+**Merged pull requests:**
+
 - Upgrade ember-try-config to 3.0 [\#185](https://github.com/ember-cli/ember-try/pull/185) ([kategengler](https://github.com/kategengler))
+
+## [v1.0.0-beta.0](https://github.com/ember-cli/ember-try/tree/v1.0.0-beta.0) (2018-02-07)
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.23...v1.0.0-beta.0)
+
+**Implemented enhancements:**
+
+- Remove deprecated commands [\#163](https://github.com/ember-cli/ember-try/issues/163)
+
+**Closed issues:**
+
+- How might I get only one of my scenarios to run my after\_success deploy script? [\#180](https://github.com/ember-cli/ember-try/issues/180)
+- Remove "default config"? [\#177](https://github.com/ember-cli/ember-try/issues/177)
+- Deprecate support for top-level dependencies under a scenario [\#162](https://github.com/ember-cli/ember-try/issues/162)
+
+**Merged pull requests:**
+
+- Remove default config [\#184](https://github.com/ember-cli/ember-try/pull/184) ([kategengler](https://github.com/kategengler))
+- Update npmignore [\#183](https://github.com/ember-cli/ember-try/pull/183) ([kategengler](https://github.com/kategengler))
+- Add yarn.lock [\#182](https://github.com/ember-cli/ember-try/pull/182) ([kategengler](https://github.com/kategengler))
+- Allow setting env vars per scenario, independent of defining a command [\#181](https://github.com/ember-cli/ember-try/pull/181) ([kategengler](https://github.com/kategengler))
+- Use smoke-test-app for running all-commands.sh [\#179](https://github.com/ember-cli/ember-try/pull/179) ([kategengler](https://github.com/kategengler))
+- Remove deprecated commands and config options [\#178](https://github.com/ember-cli/ember-try/pull/178) ([kategengler](https://github.com/kategengler))
+- Upgrade ember-cli, ember & other deps [\#174](https://github.com/ember-cli/ember-try/pull/174) ([kategengler](https://github.com/kategengler))
 
 ## [v0.2.23](https://github.com/ember-cli/ember-try/tree/v0.2.23) (2018-01-13)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v0.2.22...v0.2.23)
