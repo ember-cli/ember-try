@@ -2,6 +2,7 @@
 
 const expect = require('chai').expect;
 const DependencyManagerAdapterFactory = require('../../lib/utils/dependency-manager-adapter-factory');
+const WorkspaceAdapter = require('../../lib/dependency-manager-adapters/workspace');
 
 describe('DependencyManagerAdapterFactory', () => {
   describe('generateFromConfig', () => {
@@ -38,6 +39,26 @@ describe('DependencyManagerAdapterFactory', () => {
       expect(adapters[0].configKey).to.equal('npm');
       expect(adapters[1].configKey).to.equal('bower');
       expect(adapters.length).to.equal(2);
+    });
+
+    it('creates only a workspace adapter when useWorkspaces is set to true', () => {
+      let adapters = DependencyManagerAdapterFactory.generateFromConfig({
+        useYarn: true,
+        useWorkspaces: true,
+        scenarios: [{ npm: {} }]
+      });
+      expect(adapters[0]).to.be.instanceOf(WorkspaceAdapter);
+      expect(adapters.length).to.equal(1);
+    });
+
+    it('throws an error when attempting to use workspaces with bower dependencies', () => {
+      expect(() => {
+        DependencyManagerAdapterFactory.generateFromConfig({
+          useYarn: true,
+          useWorkspaces: true,
+          scenarios: [{ bower: {} }]
+        });
+      }).to.throw(/bower is not supported when using workspaces/);
     });
   });
 });
