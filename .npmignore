@@ -1,32 +1,39 @@
-/bower_components
+# compiled output
+/dist/
+/tmp/
+
+# dependencies
+/bower_components/
+
+# misc
+/.bowerrc
+/.editorconfig
+/.ember-cli
+/.eslintignore
+/.eslintrc.js
+/.gitignore
+/.template-lintrc.js
+/.travis.yml
+/.watchmanconfig
+/bower.json
 /config/ember-try.js
-/dist
+/ember-cli-build.js
+/testem.js
+/tests/
+/yarn.lock
+.gitkeep
+
+# ember-try
+/.node_modules.ember-try/
+/bower.json.ember-try
+/package.json.ember-try
+
+# custom
 /test
-/tests
-/tmp
 /smoke-test-app
 /coverage
 /.nyc-output
 /.idea
-**/.gitkeep
-.bowerrc
-.codeclimate.yml
-.editorconfig
-.ember-cli
-.eslintrc.js
-.gitignore
-.watchmanconfig
-.travis.yml
 appveyor.yml
-bower.json
-ember-cli-build.js
-testem.js
-yarn.lock
 run-smoke-test.sh
 *.tgz
-testem.json
-
-# ember-try
-.node_modules.ember-try/
-bower.json.ember-try
-package.json.ember-try
