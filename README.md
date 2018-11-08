@@ -121,6 +121,11 @@ module.exports = function() {
       automatically generate scenarios that will deep merge with any in this configuration file.
     */
     useVersionCompatibility: true,
+    /*
+      If set to true, all npm scenarios will use `yarn` for install with the `--no-lockfile` option. At cleanup, your 
+      dependencies will be restored to their prior state.
+    */
+    useYarn: true,
     scenarios: [
       {
         name: 'Ember 1.10 with ember-data',
