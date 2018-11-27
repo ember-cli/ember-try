@@ -165,6 +165,61 @@ describe('npmAdapter', () => {
       expect(resultJSON.dependencies['ember-cli-babel']).to.equal('6.0.0');
     });
 
+    it('adds a resolution for the specified dependency version', () => {
+      let npmAdapter = new NpmAdapter({
+        cwd: tmpdir,
+        useYarnCommand: true
+      });
+      let packageJSON = {
+        dependencies: { 'ember-cli-babel': '5.0.0' },
+        devDependencies: { 'ember-data': '3.3.0' }
+      };
+      let depSet = {
+        dependencies: { 'ember-cli-babel': '6.0.0' },
+        devDependencies: { 'ember-data': '3.4.0' }
+      };
+
+      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+      expect(resultJSON.resolutions['ember-cli-babel']).to.equal('6.0.0');
+      expect(resultJSON.resolutions['ember-data']).to.equal('3.4.0');
+    });
+
+    it('deletes a resolution if the specified version is null', () => {
+      let npmAdapter = new NpmAdapter({
+        cwd: tmpdir,
+        useYarnCommand: true
+      });
+      let packageJSON = {
+        dependencies: { 'ember-cli-babel': '5.0.0' },
+        resolutions: { 'ember-cli-babel': '5.0.0' },
+      };
+      let depSet = { dependencies: { 'ember-cli-babel': null } };
+
+      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+      expect(resultJSON.resolutions['ember-cli-babel']).to.be.undefined;
+    });
+
+    it('doesnt add resolutions when not using yarn', () => {
+      let npmAdapter = new NpmAdapter({
+        cwd: tmpdir,
+        useYarnCommand: false
+      });
+      let packageJSON = {
+        dependencies: { 'ember-cli-babel': '5.0.0' },
+        devDependencies: { 'ember-data': '3.3.0' }
+      };
+      let depSet = {
+        dependencies: { 'ember-cli-babel': '6.0.0' },
+        devDependencies: { 'ember-data': '3.4.0' }
+      };
+
+      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+      expect(resultJSON.resolutions).to.be.undefined;
+    });
+
     it('changes specified npm dev dependency versions', () => {
       let npmAdapter = new NpmAdapter({ cwd: tmpdir });
       let packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0' } };
