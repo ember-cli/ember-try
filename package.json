@@ -74,7 +74,7 @@
     "resolve": "^1.1.6",
     "rimraf": "^2.3.2",
     "rsvp": "^4.7.0",
-    "walk-sync": "^0.3.3"
+    "walk-sync": "^1.0.1"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"

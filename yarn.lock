@@ -8693,6 +8693,14 @@ walk-sync@^0.3.0, walk-sync@^0.3.1, walk-sync@^0.3.2, walk-sync@^0.3.3:
     ensure-posix-path "^1.0.0"
     matcher-collection "^1.0.0"
 
+walk-sync@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/walk-sync/-/walk-sync-1.0.1.tgz#6f38270392e297e5fd7b51eec9241be4242557c8"
+  integrity sha512-4Fyvn+KDGOF90ugcpErAMsNEF7r9ogk4SCNHZFkvmP+kr1rMSjpLbq9aYbEnYsL4dvVduLBm95TIz8WmqRAAgg==
+  dependencies:
+    ensure-posix-path "^1.0.0"
+    matcher-collection "^1.0.0"
+
 walker@~1.0.5:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/walker/-/walker-1.0.7.tgz#2f7f9b8fd10d677262b18a884e28d19618e028fb"
