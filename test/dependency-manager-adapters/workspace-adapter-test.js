@@ -146,6 +146,7 @@ describe('workspaceAdapter', () => {
         devDependencies: { 'ember-feature-flags': '1.0.0' },
         dependencies: { 'ember-cli-babel': '5.0.0' },
         peerDependencies: { 'ember-cli-sass': '1.2.3' },
+        resolutions: { 'ember-data': '3.0.0' },
       });
 
       workspaceAdapter = new WorkspaceAdapter({
@@ -167,6 +168,7 @@ describe('workspaceAdapter', () => {
           devDependencies: { 'ember-feature-flags': '1.0.0' },
           dependencies: { 'ember-cli-babel': '6.0.0' },
           peerDependencies: { 'ember-cli-sass': '1.2.3' },
+          resolutions: { 'ember-data': '3.0.0' },
         });
       });
     });
@@ -181,6 +183,7 @@ describe('workspaceAdapter', () => {
           devDependencies: { 'ember-feature-flags': '2.0.1' },
           dependencies: { 'ember-cli-babel': '5.0.0' },
           peerDependencies: { 'ember-cli-sass': '1.2.3' },
+          resolutions: { 'ember-data': '3.0.0' },
         });
       });
     });
@@ -195,6 +198,22 @@ describe('workspaceAdapter', () => {
           devDependencies: { 'ember-feature-flags': '1.0.0' },
           dependencies: { 'ember-cli-babel': '5.0.0' },
           peerDependencies: { 'ember-cli-sass': '4.5.6' },
+          resolutions: { 'ember-data': '3.0.0' },
+        });
+      });
+    });
+
+    it('changes specified resolution versions', () => {
+      return workspaceAdapter.changeToDependencySet({
+        npm: {
+          resolutions: { 'ember-data': '3.5.0' },
+        },
+      }).then(() => {
+        assertFileContainsJSON('packages/test/package.json', {
+          devDependencies: { 'ember-feature-flags': '1.0.0' },
+          dependencies: { 'ember-cli-babel': '5.0.0' },
+          peerDependencies: { 'ember-cli-sass': '1.2.3' },
+          resolutions: { 'ember-data': '3.5.0' },
         });
       });
     });
@@ -209,6 +228,7 @@ describe('workspaceAdapter', () => {
           devDependencies: {},
           dependencies: { 'ember-cli-babel': '5.0.0' },
           peerDependencies: { 'ember-cli-sass': '1.2.3' },
+          resolutions: { 'ember-data': '3.0.0' },
         });
       });
     });
