@@ -3827,15 +3827,14 @@ ember-try-config@^3.0.0:
     rsvp "^4.8.1"
     semver "^5.5.0"
 
-ember-try@^1.0.0:
+"ember-try@file:../ember-try-1547739723.tgz":
   version "1.1.0"
-  resolved "https://registry.yarnpkg.com/ember-try/-/ember-try-1.1.0.tgz#194d5843a79b5a9fc0e4c07445ebc18c08a91e78"
-  integrity sha512-NL1rKPz2LuyVEqwoNV+SQD4c2w1/A0rrdeT6jqTYqlt/P7y3+SWcsxyReBnImebaIu7Drtz6p9yiAsrJq5Chyg==
+  resolved "file:../ember-try-1547739723.tgz#a575395ae0cd3d6437e99cd9576c082a6270d20d"
   dependencies:
     chalk "^2.3.0"
     cli-table3 "^0.5.1"
     core-object "^3.1.5"
-    debug "^3.1.0"
+    debug "^4.1.0"
     ember-try-config "^3.0.0"
     execa "^1.0.0"
     extend "^3.0.0"
@@ -3844,7 +3843,7 @@ ember-try@^1.0.0:
     resolve "^1.1.6"
     rimraf "^2.3.2"
     rsvp "^4.7.0"
-    walk-sync "^0.3.3"
+    walk-sync "^1.0.1"
 
 emit-function@0.0.2:
   version "0.0.2"
@@ -9209,7 +9208,7 @@ walk-sync@^0.3.3:
     ensure-posix-path "^1.0.0"
     matcher-collection "^1.0.0"
 
-walk-sync@^1.0.0:
+walk-sync@^1.0.0, walk-sync@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/walk-sync/-/walk-sync-1.0.1.tgz#6f38270392e297e5fd7b51eec9241be4242557c8"
   integrity sha512-4Fyvn+KDGOF90ugcpErAMsNEF7r9ogk4SCNHZFkvmP+kr1rMSjpLbq9aYbEnYsL4dvVduLBm95TIz8WmqRAAgg==
