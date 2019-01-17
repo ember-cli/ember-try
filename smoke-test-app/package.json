@@ -45,6 +45,9 @@
     "loader.js": "^4.7.0",
     "qunit-dom": "^0.8.0"
   },
+  "resolutions": {
+    "console-ui": "^3.0.0"
+  },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"
   }
