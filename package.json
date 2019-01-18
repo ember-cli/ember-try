@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@ember/optional-features": "^0.7.0",
-    "bower": "^1.8.2",
+    "bower": "^1.8.6",
     "broccoli-asset-rev": "^3.0.0",
     "chai": "^4.1.2",
     "codecov": "^3.0.0",

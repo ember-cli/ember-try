@@ -1741,10 +1741,10 @@ bower-endpoint-parser@0.2.2:
   resolved "https://registry.yarnpkg.com/bower-endpoint-parser/-/bower-endpoint-parser-0.2.2.tgz#00b565adbfab6f2d35addde977e97962acbcb3f6"
   integrity sha1-ALVlrb+rby01rd3pd+l5Yqy8s/Y=
 
-bower@^1.8.2:
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/bower/-/bower-1.8.4.tgz#e7876a076deb8137f7d06525dc5e8c66db82f28a"
-  integrity sha1-54dqB23rgTf30GUl3F6MZtuC8oo=
+bower@^1.8.6:
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/bower/-/bower-1.8.6.tgz#e47598fc05d4e17774a910906cc3d8b9bb8ba520"
+  integrity sha512-pX/kOlb+tJZnDKA3SI0pWB6UjRr1RGdfJ0XyX1CM+J60uva2w3zqV1wPXmpWYd0/H/rjJ9JNZXdG5697HOXtig==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
