@@ -29,7 +29,7 @@ test_script:
   - cmd: yarn upgrade "ember-try@../ember-try-%ran%.tgz"
   - cmd: yarn install
   - cmd: node_modules/.bin/ember try:each
-  - cmd: node_modules/.bin/ember try:ember "> 1.13.0 < 2.0.0"
+  - cmd: node_modules/.bin/ember try:ember "> 2.10.0 < 3.0.0"
   - cmd: node_modules/.bin/ember try:config --config-path="../test/fixtures/dummy-ember-try-config.js"
   - cmd: node_modules/.bin/ember try:one default
   - cmd: node_modules/.bin/ember try:one default --- ember help
