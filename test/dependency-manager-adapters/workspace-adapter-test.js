@@ -8,6 +8,7 @@ let tmp = require('tmp-sync');
 let fixtureWorkspaces = require('../fixtures/package-with-workspaces.json');
 let WorkspaceAdapter = require('../../lib/dependency-manager-adapters/workspace');
 let writeJSONFile = require('../helpers/write-json-file');
+let assertFileContainsJSON = require('../helpers/assert-file-contains-json');
 let generateMockRun = require('../helpers/generate-mock-run');
 
 let remove = RSVP.denodeify(fs.remove);
@@ -38,8 +39,8 @@ describe('workspaceAdapter', () => {
         cwd: tmpdir,
         useYarnCommand: true,
       }).setup().then(() => {
-        assertFileContainsJSON('packages/test/package.json.ember-try', { originalPackageJSON: true });
-        assertFileContainsJSON('packages/test/.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json.ember-try'), { originalPackageJSON: true });
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/.node_modules.ember-try/prove-it.json'), { originalNodeModules: true });
       });
     });
 
@@ -130,8 +131,8 @@ describe('workspaceAdapter', () => {
 
         return workspaceAdapter.cleanup();
       }).then(() => {
-        assertFileContainsJSON('packages/test/package.json', { originalPackageJSON: true });
-        assertFileContainsJSON('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), { originalPackageJSON: true });
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/node_modules/prove-it.json'), { originalNodeModules: true });
       });
     });
   });
@@ -162,7 +163,7 @@ describe('workspaceAdapter', () => {
           dependencies: { 'ember-cli-babel': '6.0.0' },
         },
       }).then(() => {
-        assertFileContainsJSON('packages/test/package.json', {
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
           devDependencies: { 'ember-feature-flags': '1.0.0' },
           dependencies: { 'ember-cli-babel': '6.0.0' },
           peerDependencies: { 'ember-cli-sass': '1.2.3' },
@@ -176,7 +177,7 @@ describe('workspaceAdapter', () => {
           devDependencies: { 'ember-feature-flags': '2.0.1' },
         },
       }).then(() => {
-        assertFileContainsJSON('packages/test/package.json', {
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
           devDependencies: { 'ember-feature-flags': '2.0.1' },
           dependencies: { 'ember-cli-babel': '5.0.0' },
           peerDependencies: { 'ember-cli-sass': '1.2.3' },
@@ -190,7 +191,7 @@ describe('workspaceAdapter', () => {
           peerDependencies: { 'ember-cli-sass': '4.5.6' },
         },
       }).then(() => {
-        assertFileContainsJSON('packages/test/package.json', {
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
           devDependencies: { 'ember-feature-flags': '1.0.0' },
           dependencies: { 'ember-cli-babel': '5.0.0' },
           peerDependencies: { 'ember-cli-sass': '4.5.6' },
@@ -204,7 +205,7 @@ describe('workspaceAdapter', () => {
           devDependencies: { 'ember-feature-flags': null },
         },
       }).then(() => {
-        assertFileContainsJSON('packages/test/package.json', {
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
           devDependencies: {},
           dependencies: { 'ember-cli-babel': '5.0.0' },
           peerDependencies: { 'ember-cli-sass': '1.2.3' },
@@ -213,18 +214,3 @@ describe('workspaceAdapter', () => {
     });
   });
 });
-
-function assertFileContainsJSON(filename, expectedObj) {
-  return assertFileContains(filename, JSON.stringify(expectedObj, null, 2));
-}
-
-function assertFileContains(filename, expectedContents) {
-  let regex = new RegExp(`${escapeForRegex(expectedContents)}($|\\W)`, 'gm');
-  let actualContents = fs.readFileSync(path.join(tmpdir, filename), { encoding: 'utf-8' });
-  let result = regex.test(actualContents);
-  expect(result).to.equal(true, `File ${filename} is expected to contain ${expectedContents}`);
-}
-
-function escapeForRegex(str) {
-  return str.replace(/[-[\]{}()*+?.,\\^$|#]/g, '\\$&');
-}

@@ -8,6 +8,7 @@ let tmp = require('tmp-sync');
 let fixturePackage = require('../fixtures/package.json');
 let NpmAdapter = require('../../lib/dependency-manager-adapters/npm');
 let writeJSONFile = require('../helpers/write-json-file');
+let assertFileContainsJSON = require('../helpers/assert-file-contains-json');
 let generateMockRun = require('../helpers/generate-mock-run');
 
 let remove = RSVP.denodeify(fs.remove);
@@ -34,8 +35,8 @@ describe('npmAdapter', () => {
       return new NpmAdapter({
         cwd: tmpdir,
       }).setup().then(() => {
-        assertFileContainsJSON('package.json.ember-try', { originalPackageJSON: true });
-        assertFileContainsJSON('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
+        assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), { originalPackageJSON: true });
+        assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), { originalNodeModules: true });
       });
     });
   });
@@ -148,8 +149,8 @@ describe('npmAdapter', () => {
       fs.mkdirSync('.node_modules.ember-try');
       writeJSONFile('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
       return new NpmAdapter({ cwd: tmpdir })._restoreOriginalDependencies().then(() => {
-        assertFileContainsJSON('package.json', { originalPackageJSON: true });
-        assertFileContainsJSON('node_modules/prove-it.json', { originalNodeModules: true });
+        assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
+        assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), { originalNodeModules: true });
       });
     });
   });
@@ -196,18 +197,3 @@ describe('npmAdapter', () => {
     });
   });
 });
-
-function assertFileContainsJSON(filename, expectedObj) {
-  return assertFileContains(filename, JSON.stringify(expectedObj, null, 2));
-}
-
-function assertFileContains(filename, expectedContents) {
-  let regex = new RegExp(`${escapeForRegex(expectedContents)}($|\\W)`, 'gm');
-  let actualContents = fs.readFileSync(path.join(tmpdir, filename), { encoding: 'utf-8' });
-  let result = regex.test(actualContents);
-  expect(result).to.equal(true, `File ${filename} is expected to contain ${expectedContents}`);
-}
-
-function escapeForRegex(str) {
-  return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-}
