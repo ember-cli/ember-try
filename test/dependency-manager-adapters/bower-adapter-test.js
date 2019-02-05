@@ -8,6 +8,7 @@ let tmp = require('tmp-sync');
 let fixtureBower = require('../fixtures/bower.json');
 let BowerAdapter = require('../../lib/dependency-manager-adapters/bower');
 let writeJSONFile = require('../helpers/write-json-file');
+let assertFileContainsJSON = require('../helpers/assert-file-contains-json');
 
 let remove = RSVP.denodeify(fs.remove);
 let stat = RSVP.denodeify(fs.stat);
@@ -30,7 +31,7 @@ describe('bowerAdapter', () => {
     it('backs up the bower file', () => {
       writeJSONFile('bower.json', { originalBowerJSON: true });
       return new BowerAdapter({ cwd: tmpdir }).setup().then(() => {
-        assertFileContainsJSON('bower.json.ember-try', { originalBowerJSON: true });
+        assertFileContainsJSON(path.join(tmpdir, 'bower.json.ember-try'), { originalBowerJSON: true });
       });
     });
 
@@ -153,7 +154,7 @@ describe('bowerAdapter', () => {
       writeJSONFile('bower.json.ember-try', { originalBowerJSON: true });
       writeJSONFile('bower.json', { originalBowerJSON: false });
       return new BowerAdapter({ cwd: tmpdir })._restoreOriginalBowerFile().then(() => {
-        assertFileContainsJSON('bower.json', { originalBowerJSON: true });
+        assertFileContainsJSON(path.join(tmpdir, 'bower.json'), { originalBowerJSON: true });
       });
     });
   });
@@ -167,7 +168,7 @@ describe('bowerAdapter', () => {
 
       new BowerAdapter({ cwd: tmpdir })._writeBowerFileWithDepSetChanges(depSet);
 
-      assertFileContainsJSON('bower.json', {
+      assertFileContainsJSON(path.join(tmpdir, 'bower.json'), {
         dependencies: {
           jquery: '2.1.3',
         },
@@ -181,7 +182,7 @@ describe('bowerAdapter', () => {
       let depSet = { dependencies: { jquery: '2.1.3' } };
 
       new BowerAdapter({ cwd: tmpdir })._writeBowerFileWithDepSetChanges(depSet);
-      assertFileContainsJSON('bower.json', {
+      assertFileContainsJSON(path.join(tmpdir, 'bower.json'), {
         name: 'ember-try-placeholder',
         dependencies: {
           jquery: '2.1.3',
@@ -267,18 +268,3 @@ describe('bowerAdapter', () => {
     });
   });
 });
-
-function assertFileContainsJSON(filename, expectedObj) {
-  return assertFileContains(filename, JSON.stringify(expectedObj, null, 2));
-}
-
-function assertFileContains(filename, expectedContents) {
-  let regex = new RegExp(`${escapeForRegex(expectedContents)}($|\\W)`, 'gm');
-  let actualContents = fs.readFileSync(path.join(tmpdir, filename), { encoding: 'utf-8' });
-  let result = regex.test(actualContents);
-  expect(result).to.equal(true, `File ${filename} is expected to contain ${expectedContents} but contained ${actualContents}`);
-}
-
-function escapeForRegex(str) {
-  return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-}
