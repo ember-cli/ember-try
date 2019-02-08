@@ -65,7 +65,7 @@
     "chalk": "^2.4.2",
     "cli-table3": "^0.5.1",
     "core-object": "^3.1.5",
-    "debug": "^4.1.0",
+    "debug": "^4.1.1",
     "ember-try-config": "^3.0.0",
     "execa": "^1.0.0",
     "extend": "^3.0.0",
