@@ -140,6 +140,15 @@ module.exports = function() {
             'ember-data': '1.0.0-beta.15'
           }
         },
+        /*
+          When writing scenarios that depend upon ember versions supplied by bower, you must explictly remove the 
+          npm ember-source dependency if your addon defines an ember-source in its own package.json devDependencies
+        */
+        npm: {
+          devDependencies: {
+            'ember-source': null
+          }
+        }
       },
       {
         name: 'Ember 2.11.0',
