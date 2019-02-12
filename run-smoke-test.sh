@@ -5,4 +5,4 @@ rm ember-try*.tgz || true
 npm pack
 now=$(date +%s)
 mv ember-try*.tgz "ember-try-${now}.tgz"
-cd smoke-test-app && yarn upgrade "ember-try@file:../ember-try-${now}.tgz" && yarn install && "./${1}"
+cd smoke-test-app && npm i && npm i --save-dev "../ember-try-${now}.tgz" && "./${1}"

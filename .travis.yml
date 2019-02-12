@@ -39,15 +39,15 @@ jobs:
     install: yarn install --no-lockfile
   - name: All Commands Smoke Test
     script:
-    - yarn client-test
+    - npm run client-test
   - name: Node 6 Smoke Test
     node_js: '6'
     script:
-    - yarn smoke-test
+    - npm run smoke-test
   - name: Node 8 Smoke Test
     node_js: '8'
     script:
-    - yarn smoke-test
+    - npm run smoke-test
   - stage: deploy
     if: tag IS present
     node_js: "10"
