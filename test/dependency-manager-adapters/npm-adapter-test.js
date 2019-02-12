@@ -52,20 +52,13 @@ describe('npmAdapter', () => {
             expect(opts).to.have.property('cwd', tmpdir);
             return RSVP.resolve();
           },
-        }, {
-          command: 'npm prune',
-          callback(command, args, opts) {
-            runCount++;
-            expect(opts).to.have.property('cwd', tmpdir);
-            return RSVP.resolve();
-          },
         }], { allowPassthrough: false });
 
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
         })._install().then(() => {
-          expect(runCount).to.equal(2, 'Both commands should run');
+          expect(runCount).to.equal(1);
         });
       });
 
@@ -78,12 +71,6 @@ describe('npmAdapter', () => {
             runCount++;
             return RSVP.resolve();
           },
-        }, {
-          command: 'npm prune',
-          callback() {
-            runCount++;
-            return RSVP.resolve();
-          },
         }], { allowPassthrough: false });
 
         return new NpmAdapter({
@@ -91,7 +78,7 @@ describe('npmAdapter', () => {
           run: stubbedRun,
           managerOptions: ['--no-optional'],
         })._install().then(() => {
-          expect(runCount).to.equal(2, 'Both commands should run');
+          expect(runCount).to.equal(1);
         });
       });
     });
