@@ -23,7 +23,7 @@
     "bower": "^1.8.2",
     "broccoli-asset-rev": "^3.0.0",
     "chai": "^4.1.2",
-    "codecov": "^3.0.0",
+    "codecov": "^3.2.0",
     "ember-cli": "~3.6.0",
     "ember-cli-babel": "^7.4.1",
     "ember-cli-dependency-checker": "^3.0.0",
