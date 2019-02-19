@@ -45,7 +45,7 @@
     "eslint-plugin-node": "^8.0.0",
     "glob": "^7.0.0",
     "loader.js": "^4.7.0",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.0",
     "mockery": "^2.1.0",
     "nyc": "^13.3.0",
     "tmp-sync": "^1.1.0"
