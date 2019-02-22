@@ -33,11 +33,10 @@ steps:
     set ran=%RANDOM%
     echo move package
     move "ember-try*.tgz" "ember-try-%ran%.tgz"
-    cd smoke-test-app
     echo yarn install
-    yarn upgrade "ember-try@../ember-try-%ran%.tgz" && yarn install
+    cd smoke-test-app && yarn upgrade "ember-try@../ember-try-%ran%.tgz" && yarn install
   displayName: "Install smoke-test deps"
 - script: |
     echo ember try:each
-    node_modules/.bin/ember try:each
+    cd smoke-test-app && ./node_modules/.bin/ember try:each
   displayName: "Run smoke test"
