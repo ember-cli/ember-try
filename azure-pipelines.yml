@@ -36,7 +36,7 @@ steps:
     echo yarn install
     cd smoke-test-app && yarn upgrade "ember-try@../ember-try-%ran%.tgz" && yarn install
   displayName: "Install smoke-test deps"
-- script: |
-    echo ember try:each
-    cd smoke-test-app && ./node_modules/.bin/ember try:each
+- bash: |
+    cd smoke-test-app && node_modules/.bin/ember try:each 
+  failOnStderr: true
   displayName: "Run smoke test"
