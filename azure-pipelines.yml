@@ -21,16 +21,21 @@ steps:
     node -v
     yarn -v
   displayName: "Print versions"
-- script: |
-    yarn --frozen-lockfile
-  displayName: "Install dependencies"
+#- script: |
+#    yarn --frozen-lockfile
+#  displayName: "Install dependencies"
 - script: |
     del "ember-try*.tgz" >nul 2>&1
+    echo npm pack
     npm pack
     set ran=%RANDOM%
+    echo move package
     move "ember-try*.tgz" "ember-try-%ran%.tgz"
     cd smoke-test-app
+    echo yarn upgrade
     yarn upgrade "ember-try@../ember-try-%ran%.tgz"
+    echo yarn install
     yarn install
+    echo ember try:each
     node_modules/.bin/ember try:each
   displayName: "Run smoke tests"
