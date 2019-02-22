@@ -25,5 +25,12 @@ steps:
     yarn --frozen-lockfile
   displayName: "Install dependencies"
 - script: |
-    yarn smoke-test
+    del "ember-try*.tgz" >nul 2>&1
+    npm pack
+    set ran=%RANDOM%
+    move "ember-try*.tgz" "ember-try-%ran%.tgz"
+    cd smoke-test-app
+    yarn upgrade "ember-try@../ember-try-%ran%.tgz"
+    yarn install
+    node_modules/.bin/ember try:each
   displayName: "Run smoke tests"
