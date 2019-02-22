@@ -34,10 +34,8 @@ steps:
     echo move package
     move "ember-try*.tgz" "ember-try-%ran%.tgz"
     cd smoke-test-app
-    echo yarn upgrade
-    yarn upgrade "ember-try@../ember-try-%ran%.tgz"
     echo yarn install
-    yarn install
+    yarn upgrade "ember-try@../ember-try-%ran%.tgz" && yarn install
     echo ember try:each
     node_modules/.bin/ember try:each
   displayName: "Run smoke test"
