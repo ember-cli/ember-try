@@ -28,6 +28,8 @@ steps:
     del "ember-try*.tgz" >nul 2>&1
     echo npm pack
     npm pack
+  displayName: "Build package"
+- script: |
     set ran=%RANDOM%
     echo move package
     move "ember-try*.tgz" "ember-try-%ran%.tgz"
@@ -38,4 +40,4 @@ steps:
     yarn install
     echo ember try:each
     node_modules/.bin/ember try:each
-  displayName: "Run smoke tests"
+  displayName: "Run smoke test"
