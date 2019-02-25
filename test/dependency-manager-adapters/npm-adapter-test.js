@@ -43,7 +43,7 @@ describe('npmAdapter', () => {
 
   describe('#_install', () => {
     describe('without yarn', () => {
-      it('runs npm prune and npm install', () => {
+      it('only runs npm install with npm 5', () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
         let stubbedRun = generateMockRun([{
@@ -53,12 +53,11 @@ describe('npmAdapter', () => {
             expect(opts).to.have.property('cwd', tmpdir);
             return RSVP.resolve();
           },
-        }, {
-          command: 'npm prune',
-          callback(command, args, opts) {
+        },{
+          command: 'npm --version',
+          callback() {
             runCount++;
-            expect(opts).to.have.property('cwd', tmpdir);
-            return RSVP.resolve();
+            return RSVP.resolve({stdout: '5.7.1'});
           },
         }], { allowPassthrough: false });
 
@@ -66,7 +65,40 @@ describe('npmAdapter', () => {
           cwd: tmpdir,
           run: stubbedRun,
         })._install().then(() => {
-          expect(runCount).to.equal(2, 'Both commands should run');
+          expect(runCount).to.equal(2);
+        });
+      });
+
+      it('runs npm prune and npm install with npm 4', () => {
+        writeJSONFile('package.json', fixturePackage);
+        let runCount = 0;
+        let stubbedRun = generateMockRun([{
+          command: 'npm install --no-shrinkwrap',
+          callback(command, args, opts) {
+            runCount++;
+            expect(opts).to.have.property('cwd', tmpdir);
+            return RSVP.resolve();
+          },
+        },{
+          command: 'npm prune',
+          callback(command, args, opts) {
+            runCount++;
+            expect(opts).to.have.property('cwd', tmpdir);
+            return RSVP.resolve();
+          },
+        }, {
+          command: 'npm --version',
+          callback() {
+            runCount++;
+            return RSVP.resolve({stdout: '4.7.1'});
+          },
+        }], { allowPassthrough: false });
+
+        return new NpmAdapter({
+          cwd: tmpdir,
+          run: stubbedRun,
+        })._install().then(() => {
+          expect(runCount).to.equal(3, 'All three commands should run');
         });
       });
 
@@ -80,10 +112,10 @@ describe('npmAdapter', () => {
             return RSVP.resolve();
           },
         }, {
-          command: 'npm prune',
+          command: 'npm --version',
           callback() {
             runCount++;
-            return RSVP.resolve();
+            return RSVP.resolve({stdout: '5.7.1'});
           },
         }], { allowPassthrough: false });
 
@@ -92,7 +124,7 @@ describe('npmAdapter', () => {
           run: stubbedRun,
           managerOptions: ['--no-optional'],
         })._install().then(() => {
-          expect(runCount).to.equal(2, 'Both commands should run');
+          expect(runCount).to.equal(2);
         });
       });
     });
