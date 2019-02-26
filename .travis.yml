@@ -32,22 +32,25 @@ jobs:
   - stage: tests
     name: Node 10 With Coverage
     script:
-    - yarn lint
-    - yarn node-test-with-coverage
+      - yarn lint
+      - yarn node-test-with-coverage
   - stage: additional tests
     name: floating dependencies
     install: yarn install --no-lockfile
   - name: All Commands Smoke Test
-    script:
-    - npm run client-test
+    script: npm run client-test
   - name: Node 6 Smoke Test
     node_js: '6'
-    script:
-    - npm run smoke-test
+    script: npm run smoke-test
   - name: Node 8 Smoke Test
     node_js: '8'
-    script:
-    - npm run smoke-test
+    script: npm run smoke-test
+  - name: Node 6 Yarn Smoke Test
+    node_js: '6'
+    script: yarn smoke-test-yarn
+  - name: Node 8 Yarn Smoke Test
+    node_js: '8'
+    script: yarn smoke-test-yarn
   - stage: deploy
     if: tag IS present
     node_js: "10"

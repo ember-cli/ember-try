@@ -13,6 +13,7 @@
     "all-test": "npm run-script node-test && npm run-script smoke-test",
     "node-test-with-coverage": "nyc --reporter lcov npm run-script node-test && node_modules/.bin/codecov",
     "smoke-test": "./run-smoke-test.sh smoke-test.sh",
+    "smoke-test-yarn": "./run-smoke-test.sh smoke-test-yarn.sh",
     "lint": "eslint lib test"
   },
   "engines": {
