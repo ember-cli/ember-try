@@ -160,9 +160,7 @@ describe('workspaceAdapter', () => {
 
     it('changes specified dependency versions', () => {
       return workspaceAdapter.changeToDependencySet({
-        npm: {
-          dependencies: { 'ember-cli-babel': '6.0.0' },
-        },
+        dependencies: { 'ember-cli-babel': '6.0.0' },
       }).then(() => {
         assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
           devDependencies: { 'ember-feature-flags': '1.0.0' },
@@ -175,9 +173,7 @@ describe('workspaceAdapter', () => {
 
     it('changes specified npm dev dependency versions', () => {
       return workspaceAdapter.changeToDependencySet({
-        npm: {
-          devDependencies: { 'ember-feature-flags': '2.0.1' },
-        },
+        devDependencies: { 'ember-feature-flags': '2.0.1' },
       }).then(() => {
         assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
           devDependencies: { 'ember-feature-flags': '2.0.1' },
@@ -190,9 +186,7 @@ describe('workspaceAdapter', () => {
 
     it('changes specified npm peer dependency versions', () => {
       return workspaceAdapter.changeToDependencySet({
-        npm: {
-          peerDependencies: { 'ember-cli-sass': '4.5.6' },
-        },
+        peerDependencies: { 'ember-cli-sass': '4.5.6' },
       }).then(() => {
         assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
           devDependencies: { 'ember-feature-flags': '1.0.0' },
@@ -205,9 +199,7 @@ describe('workspaceAdapter', () => {
 
     it('changes specified resolution versions', () => {
       return workspaceAdapter.changeToDependencySet({
-        npm: {
-          resolutions: { 'ember-data': '3.5.0' },
-        },
+        resolutions: { 'ember-data': '3.5.0' },
       }).then(() => {
         assertFileContainsJSON('packages/test/package.json', {
           devDependencies: { 'ember-feature-flags': '1.0.0' },
@@ -220,9 +212,7 @@ describe('workspaceAdapter', () => {
 
     it('can remove a package', () => {
       return workspaceAdapter.changeToDependencySet({
-        npm: {
-          devDependencies: { 'ember-feature-flags': null },
-        },
+        devDependencies: { 'ember-feature-flags': null },
       }).then(() => {
         assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
           devDependencies: {},
