@@ -35,11 +35,13 @@ describe('scenarioManager', () => {
     it('changes dependency sets on each of the managers, in order, and concats results', () => {
       let fakeAdapters = [
         new CoreObject({
+          configKey: 'adapterA',
           changeToDependencySet() {
             return RSVP.resolve(['a', 'b', 'r']);
           },
         }),
         new CoreObject({
+          configKey: 'adapterB',
           changeToDependencySet() {
             return RSVP.resolve(['u', 'q', 'a']);
           },
@@ -47,7 +49,7 @@ describe('scenarioManager', () => {
       ];
 
       let manager = new ScenarioManager({ dependencyManagerAdapters: fakeAdapters });
-      return manager.changeTo({}).then((results) => {
+      return manager.changeTo({ adapterA: {}, adapterB: {} }).then((results) => {
         expect(results).to.eql(['a', 'b', 'r', 'u', 'q', 'a']);
       });
     });

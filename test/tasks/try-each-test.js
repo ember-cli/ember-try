@@ -154,6 +154,28 @@ describe('tryEach', () => {
         expect(output).to.include('Scenario first: SUCCESS');
         expect(output).to.include('Scenario second: SUCCESS');
         expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
+
+        let tables = output.filter((line) => {
+          return typeof line === "object";
+        });
+
+        expect(tables[0]).to.eql([
+          [ 'ember-cli-deploy', '0.5.0', '0.5.0', 'npm'],
+          [ 'ember', '1.13.0', '1.13.0', 'bower' ],
+          [ 'bootstrap', 'Not Installed', 'Not Installed', 'bower' ]
+        ]);
+
+        expect(tables[1]).to.eql([
+          [ 'ember-cli-deploy', '0.5.1', '0.5.1', 'npm'],
+          [ 'ember', '2.0.0', '2.0.0', 'bower' ],
+          [ 'jquery', '1.11.3', '1.11.3', 'bower' ]
+        ]);
+
+        expect(tables[2]).to.eql([
+          [ 'ember-cli-deploy', '0.5.1', '0.5.1', 'npm'],
+          [ 'ember', 'components/ember#beta', '3.0.0-beta.2-beta+b4135dfe', 'bower' ]
+        ]);
+
         expect(output).to.include('All 3 scenarios succeeded');
       });
     });

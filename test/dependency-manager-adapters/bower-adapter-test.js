@@ -57,7 +57,7 @@ describe('bowerAdapter', () => {
         });
     });
 
-    it('if bower dependencies in dep set, they install is run', () => {
+    it('if bower dependencies in dep set, then install is run', () => {
       let stubbedRunRan = false;
       let stubbedRun = function(command, args, opts) {
         expect(command).to.equal('node');
@@ -72,7 +72,7 @@ describe('bowerAdapter', () => {
       let adapter = new BowerAdapter({ cwd: tmpdir, run: stubbedRun });
       return adapter.setup()
         .then(() => {
-          return adapter.changeToDependencySet({ bower: { dependencies: { 'ember': '*' } } });
+          return adapter.changeToDependencySet({ dependencies: { 'ember': '*' } });
         })
         .then(() => {
           expect(stubbedRunRan).to.equal(true);
