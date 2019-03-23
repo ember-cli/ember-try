@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.2.0](https://github.com/ember-cli/ember-try/tree/v1.2.0)
+
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.1.0...v1.2.0)
+
+**Merged pull requests:**
+
+- Restore table output on runs that aren't yarn workspaces [\#309](https://github.com/ember-cli/ember-try/pull/309) ([kategengler](https://github.com/kategengler))
+- Update example bower-supplied ember scenario example [\#279](https://github.com/ember-cli/ember-try/pull/279) ([mistahenry](https://github.com/mistahenry))
+- Add yarn resolutions [\#259](https://github.com/ember-cli/ember-try/pull/259) ([ryanto](https://github.com/ryanto))
+- Upgrade ember-cli & friends [\#213](https://github.com/ember-cli/ember-try/pull/213) ([kategengler](https://github.com/kategengler))
+- Copy `useYarn` into example configuration file [\#210](https://github.com/ember-cli/ember-try/pull/210) ([allthesignals](https://github.com/allthesignals))
+- Clarify useYarn option [\#168](https://github.com/ember-cli/ember-try/pull/168) ([oskarrough](https://github.com/oskarrough))
+
+
 ## [v1.1.0](https://github.com/ember-cli/ember-try/tree/v1.1.0) (2018-09-25)
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.0.0...v1.1.0)
 
