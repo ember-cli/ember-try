@@ -122,7 +122,7 @@ module.exports = function() {
     */
     useVersionCompatibility: true,
     /*
-      If set to true, all npm scenarios will use `yarn` for install with the `--no-lockfile` option. At cleanup, your 
+      If set to true, all npm scenarios will use `yarn` for install with the `--no-lockfile` option. At cleanup, your
       dependencies will be restored to their prior state.
     */
     useYarn: true,
@@ -141,7 +141,7 @@ module.exports = function() {
           }
         },
         /*
-          When writing scenarios that depend upon ember versions supplied by bower, you must explictly remove the 
+          When writing scenarios that depend upon ember versions supplied by bower, you must explictly remove the
           npm ember-source dependency if your addon defines an ember-source in its own package.json devDependencies
         */
         npm: {
@@ -162,6 +162,14 @@ module.exports = function() {
         npm: {
           devDependencies: {
             'ember-source': '2.11.0'
+          },
+          /*
+            When `useYarn` is true, you can optionally define yarn resolutions to enforce a
+            specific dependency version to be installed. This is useful if other libraries
+            you depend on include different versions of a package.
+          */
+          resolutions: {
+            'lodash': '5.0.0'
           }
         }
       },
