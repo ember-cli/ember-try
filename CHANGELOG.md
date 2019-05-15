@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.2.1](https://github.com/ember-cli/ember-try/tree/v1.2.1)
+
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.2.0...v1.2.1)
+
+**Merged pull requests:**
+
+- Fix support for `npm` >= 5 [\#281](https://github.com/ember-cli/ember-try/pull/281) ([mansona](https://github.com/mansona))
+
 ## [v1.2.0](https://github.com/ember-cli/ember-try/tree/v1.2.0)
 
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.1.0...v1.2.0)
