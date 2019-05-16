@@ -10,7 +10,6 @@ commands:
     steps:
       - run: node --version
       - run: npm version
-      - run: npm install -g bower
       - checkout
       - node/with-cache:
           steps:
@@ -20,7 +19,6 @@ commands:
     steps:
       - run: node --version
       - run: npm version
-      - run: npm install -g bower
       - checkout
       - node/install-yarn
       - node/with-cache:
@@ -38,7 +36,6 @@ commands:
             - run:
                 name: Install dependencies
                 command: yarn install
-            - run: npm install -g bower
             - run: yarn node-test
 
 
