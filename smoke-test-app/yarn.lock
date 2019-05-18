@@ -2425,7 +2425,7 @@ browserslist@^2.1.2:
     caniuse-lite "^1.0.30000792"
     electron-to-chromium "^1.3.30"
 
-browserslist@^3.1.1, browserslist@^3.2.6:
+browserslist@^3.2.6:
   version "3.2.8"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-3.2.8.tgz#b0005361d6471f0f5952797a76fc985f1f978fc6"
   integrity sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==
@@ -3212,7 +3212,7 @@ ember-cli-app-version@^3.2.0:
     ember-cli-babel "^6.12.0"
     git-repo-version "^1.0.2"
 
-ember-cli-babel@^6.0.0-beta.4, ember-cli-babel@^6.12.0, ember-cli-babel@^6.16.0, ember-cli-babel@^6.7.2:
+ember-cli-babel@^6.0.0-beta.4, ember-cli-babel@^6.12.0, ember-cli-babel@^6.16.0:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/ember-cli-babel/-/ember-cli-babel-6.18.0.tgz#3f6435fd275172edeff2b634ee7b29ce74318957"
   integrity sha512-7ceC8joNYxY2wES16iIBlbPSxwKDBhYwC8drU3ZEvuPDMwVv1KzxCNu1fvxyFEBWhwaRNTUxSCsEVoTd9nosGA==
@@ -3599,21 +3599,6 @@ ember-export-application-global@^2.0.0:
   dependencies:
     ember-cli-babel "^6.0.0-beta.7"
 
-ember-factory-for-polyfill@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/ember-factory-for-polyfill/-/ember-factory-for-polyfill-1.3.1.tgz#b446ed64916d293c847a4955240eb2c993b86eae"
-  integrity sha512-y3iG2iCzH96lZMTWQw6LWNLAfOmDC4pXKbZP6FxG8lt7GGaNFkZjwsf+Z5GAe7kxfD7UG4lVkF7x37K82rySGA==
-  dependencies:
-    ember-cli-version-checker "^2.1.0"
-
-ember-getowner-polyfill@^2.0.1:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/ember-getowner-polyfill/-/ember-getowner-polyfill-2.2.0.tgz#38e7dccbcac69d5ec694000329ec0b2be651d2b2"
-  integrity sha512-rwGMJgbGzxIAiWYjdpAh04Abvt0s3HuS/VjHzUFhVyVg2pzAuz45B9AzOxYXzkp88vFC7FPaiA4kE8NxNk4A4Q==
-  dependencies:
-    ember-cli-version-checker "^2.1.0"
-    ember-factory-for-polyfill "^1.3.1"
-
 ember-inflector@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/ember-inflector/-/ember-inflector-3.0.0.tgz#7e1ee8aaa0fa773ba0905d8b7c0786354d890ee1"
@@ -3628,16 +3613,6 @@ ember-load-initializers@^1.1.0:
   dependencies:
     ember-cli-babel "^6.6.0"
 
-ember-macro-helpers@^0.17.0:
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/ember-macro-helpers/-/ember-macro-helpers-0.17.1.tgz#34836e9158cc260ee1c540935371d11f52ec98d9"
-  integrity sha1-NINukVjMJg7hxUCTU3HRH1LsmNk=
-  dependencies:
-    ember-cli-babel "^6.6.0"
-    ember-cli-string-utils "^1.1.0"
-    ember-cli-test-info "^1.0.0"
-    ember-weakmap "^3.0.0"
-
 ember-maybe-import-regenerator@^0.1.6:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/ember-maybe-import-regenerator/-/ember-maybe-import-regenerator-0.1.6.tgz#35d41828afa6d6a59bc0da3ce47f34c573d776ca"
@@ -3647,15 +3622,6 @@ ember-maybe-import-regenerator@^0.1.6:
     broccoli-merge-trees "^1.0.0"
     ember-cli-babel "^6.0.0-beta.4"
     regenerator-runtime "^0.9.5"
-
-ember-moment@7.5.0:
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/ember-moment/-/ember-moment-7.5.0.tgz#9ed25b32ae941b2f1d9116c44f518a52bdb01722"
-  integrity sha1-ntJbMq6UGy8dkRbET1GKUr2wFyI=
-  dependencies:
-    ember-cli-babel "^6.7.2"
-    ember-getowner-polyfill "^2.0.1"
-    ember-macro-helpers "^0.17.0"
 
 ember-qunit@^3.4.1:
   version "3.5.3"
@@ -3731,15 +3697,6 @@ ember-template-lint@^1.0.0-beta.5:
     minimatch "^3.0.4"
     resolve "^1.1.3"
     strip-bom "^3.0.0"
-
-ember-weakmap@^3.0.0:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/ember-weakmap/-/ember-weakmap-3.3.1.tgz#5188b035f5bfb17397067ea635300ae4e1205e11"
-  integrity sha512-pClKGFyByX03R2Y9ZogXHWXreeHzFZcuZj8EOOqj7fVYx0QDNiXBWo+jGhTl/pINlvjw4Z6fMFHlItrq1tZFxA==
-  dependencies:
-    browserslist "^3.1.1"
-    debug "^3.1.0"
-    ember-cli-babel "^6.6.0"
 
 encodeurl@~1.0.1:
   version "1.0.1"
@@ -6050,12 +6007,7 @@ lodash.values@~2.3.0:
   dependencies:
     lodash.keys "~2.3.0"
 
-lodash@^4.14.0, lodash@^4.17.4, lodash@^4.3.0:
-  version "4.17.4"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
-  integrity sha1-eCA6TRwyiuHYbcpkYONptX9AVa4=
-
-lodash@^4.17.10, lodash@^4.17.11:
+lodash@^4.14.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.4, lodash@^4.3.0:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
