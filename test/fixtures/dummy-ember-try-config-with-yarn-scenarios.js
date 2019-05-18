@@ -14,7 +14,7 @@ module.exports = {
       command: 'ember test',
       npm: {
         dependencies: {
-          'ember-moment': '7.5.0'
+          'ember-try-test-suite-helper': '1.0.0'
         }
       }
     }

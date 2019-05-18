@@ -30,7 +30,7 @@ const config = {
       },
       npm: {
         dependencies: {
-          'ember-cli-deploy': '0.5.0',
+          'ember-try-test-suite-helper': '1.0.0',
         },
       },
     }, {
@@ -45,7 +45,7 @@ const config = {
       },
       npm: {
         devDependencies: {
-          'ember-cli-deploy': '0.5.1',
+          'ember-try-test-suite-helper': '1.0.1',
         },
       },
     },
@@ -61,7 +61,7 @@ const config = {
       },
       npm: {
         dependencies: {
-          'ember-cli-deploy': '0.5.1',
+          'ember-try-test-suite-helper': '1.0.0',
         },
       },
     }],
@@ -160,19 +160,19 @@ describe('tryEach', () => {
         });
 
         expect(tables[0]).to.eql([
-          [ 'ember-cli-deploy', '0.5.0', '0.5.0', 'npm'],
+          [ 'ember-try-test-suite-helper', '1.0.0', '1.0.0', 'npm'],
           [ 'ember', '1.13.0', '1.13.0', 'bower' ],
           [ 'bootstrap', 'Not Installed', 'Not Installed', 'bower' ]
         ]);
 
         expect(tables[1]).to.eql([
-          [ 'ember-cli-deploy', '0.5.1', '0.5.1', 'npm'],
+          [ 'ember-try-test-suite-helper', '1.0.1', '1.0.1', 'npm'],
           [ 'ember', '2.0.0', '2.0.0', 'bower' ],
           [ 'jquery', '1.11.3', '1.11.3', 'bower' ]
         ]);
 
         expect(tables[2]).to.eql([
-          [ 'ember-cli-deploy', '0.5.1', '0.5.1', 'npm'],
+          [ 'ember-try-test-suite-helper', '1.0.0', '1.0.0', 'npm'],
           [ 'ember', 'components/ember#beta', '3.0.0-beta.2-beta+b4135dfe', 'bower' ]
         ]);
 

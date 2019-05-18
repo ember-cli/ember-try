@@ -4,7 +4,7 @@ module.exports = {
       name: 'test1',
       npm: {
         devDependencies: {
-          'ember-ajax': '2.5.6'
+          'ember-try-test-suite-helper': '1.0.0'
         }
       }
     }
