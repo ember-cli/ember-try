@@ -73,7 +73,7 @@
     "extend": "^3.0.0",
     "fs-extra": "^5.0.0",
     "promise-map-series": "^0.2.1",
-    "resolve": "^1.10.1",
+    "resolve": "^1.11.1",
     "rimraf": "^2.6.3",
     "rsvp": "^4.7.0",
     "walk-sync": "^1.1.3"
