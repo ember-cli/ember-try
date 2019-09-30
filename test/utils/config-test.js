@@ -37,7 +37,7 @@ describe('utils/config', () => {
   }
 
   describe('addImplicitBowerToScenarios', () => {
-    it('adds an npm with a bower dev depencency for scenarios that have only bower', () => {
+    it('adds an npm with a bower dev dependency for scenarios that have only bower', () => {
       expect(addImplicitBowerToScenarios({
         scenarios: [{
           name: 'bower-only',
@@ -52,7 +52,7 @@ describe('utils/config', () => {
       });
     });
 
-    it('adds a bower dev dependency for scnearios that have bower and npm', () => {
+    it('adds a bower dev dependency for scenarios that have bower and npm', () => {
       expect(addImplicitBowerToScenarios({
         scenarios: [{
           name: 'bower-and-npm',
