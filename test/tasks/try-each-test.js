@@ -155,6 +155,8 @@ describe('tryEach', () => {
         expect(output).to.include('Scenario second: SUCCESS');
         expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
 
+        expect(output).to.include('DEPRECATION: The next major version of `ember-try` (v2.0) will drop support for installing dependencies with `bower`.');
+
         let tables = output.filter((line) => {
           return typeof line === "object";
         });
