@@ -36,6 +36,19 @@ commands:
             - run:
                 name: Install dependencies
                 command: yarn install
+            - run: yarn node-test-with-coverage
+
+  floating-deps:
+    steps:
+      - run: node --version
+      - run: npm version
+      - checkout
+      - node/install-yarn
+      - node/with-cache:
+          steps:
+            - run:
+                name: Install dependencies (floating)
+                command: yarn install --no-lockfile
             - run: yarn node-test
 
 
@@ -110,12 +123,49 @@ jobs:
     steps:
       - node-test
 
+  floating-deps:
+    docker:
+      - image: circleci/node:lts-browsers
+    steps:
+      - floating-deps
+
+  deploy:
+    docker:
+      - image: circleci/node:lts-browsers
+    steps:
+      - run: node --version
+      - run: npm version
+      - checkout
+      - node/install-yarn
+      - node/with-cache:
+          steps:
+            - run:
+                name: Install dependencies
+                command: yarn install
+      - run: yarn global add auto-dist-tag
+      - run: auto-dist-tag --write
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+      - run:
+          name: Publish package
+          command: npm publish
+
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
-  node-matrix:
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+  test-and-deploy:
     jobs:
       - lint
       - node-lts-test
+      - floating-deps
       - node-v8-smoke-test:
           requires:
             - lint
@@ -144,4 +194,12 @@ workflows:
           requires:
             - lint
             - node-lts-test
+      - deploy:
+          requires:
+            - all-commands-smoke-test
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
 
