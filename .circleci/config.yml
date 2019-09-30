@@ -161,6 +161,8 @@ workflows:
             branches:
               only:
                 - master
+    jobs:
+      - floating-deps
   test-and-deploy:
     jobs:
       - lint
