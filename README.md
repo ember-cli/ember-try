@@ -126,6 +126,15 @@ module.exports = function() {
       dependencies will be restored to their prior state.
     */
     useYarn: true,
+
+    /*
+      buildManagerOptions allows you to opt-out of the default options such as `--ignore-engines --no-lockfile`.
+      The buildManagerOptions function is aware of each scenario so you can customize your options.
+    */
+    buildManagerOptions(scenario) {
+      return ['--ignore-engines'];
+    }
+
     scenarios: [
       {
         name: 'Ember 1.10 with ember-data',
