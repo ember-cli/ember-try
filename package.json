@@ -2,22 +2,53 @@
   "name": "ember-try",
   "version": "1.2.1",
   "description": "An ember-cli addon to test against multiple bower dependencies, such as ember and ember-data.",
+  "keywords": [
+    "ember-addon",
+    "testing"
+  ],
+  "homepage": "https://github.com/ember-cli/ember-try#readme",
+  "bugs": {
+    "url": "https://github.com/ember-cli/ember-try/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ember-cli/ember-try.git"
+  },
+  "license": "MIT",
+  "author": "Katie Gengler",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
   "scripts": {
+    "all-test": "npm run-script node-test && npm run-script smoke-test",
     "build": "ember build",
+    "client-test": "./run-smoke-test.sh all-commands.sh",
+    "lint": "eslint lib test",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
-    "start": "ember serve",
-    "test": "npm run-script lint && npm run-script node-test && npm run-script client-test",
-    "client-test": "./run-smoke-test.sh all-commands.sh",
     "node-test": "mocha test/**/*.js",
-    "all-test": "npm run-script node-test && npm run-script smoke-test",
     "node-test-with-coverage": "nyc --reporter lcov npm run-script node-test && node_modules/.bin/codecov",
     "smoke-test": "./run-smoke-test.sh smoke-test.sh",
     "smoke-test-yarn": "./run-smoke-test.sh smoke-test-yarn.sh",
-    "lint": "eslint lib test"
+    "start": "ember serve",
+    "test": "npm run-script lint && npm run-script node-test && npm run-script client-test"
   },
-  "engines": {
-    "node": "6.* || 8.* || >= 10.*"
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "cli-table3": "^0.5.1",
+    "core-object": "^3.1.5",
+    "debug": "^4.1.1",
+    "ember-try-config": "^3.0.0",
+    "execa": "^1.0.0",
+    "extend": "^3.0.0",
+    "fs-extra": "^5.0.0",
+    "promise-map-series": "^0.2.1",
+    "resolve": "^1.10.1",
+    "rimraf": "^2.6.3",
+    "rsvp": "^4.7.0",
+    "walk-sync": "^1.1.3"
   },
   "devDependencies": {
     "@ember/optional-features": "^0.7.0",
@@ -52,31 +83,8 @@
     "nyc": "^13.3.0",
     "tmp-sync": "^1.1.0"
   },
-  "keywords": [
-    "ember-addon",
-    "testing"
-  ],
-  "repository": "ember-cli/ember-try",
-  "license": "MIT",
-  "author": "Katie Gengler",
-  "directories": {
-    "doc": "doc",
-    "test": "tests"
-  },
-  "dependencies": {
-    "chalk": "^2.4.2",
-    "cli-table3": "^0.5.1",
-    "core-object": "^3.1.5",
-    "debug": "^4.1.1",
-    "ember-try-config": "^3.0.0",
-    "execa": "^1.0.0",
-    "extend": "^3.0.0",
-    "fs-extra": "^5.0.0",
-    "promise-map-series": "^0.2.1",
-    "resolve": "^1.10.1",
-    "rimraf": "^2.6.3",
-    "rsvp": "^4.7.0",
-    "walk-sync": "^1.1.3"
+  "engines": {
+    "node": "6.* || 8.* || >= 10.*"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
