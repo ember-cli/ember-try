@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.3.0](https://github.com/ember-cli/ember-try/tree/v1.3.0)
+
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.2.1...v1.3.0)
+
+**Merged pull requests:**
+
+- Add support for opting out of `--ignore-lockfile` file [\#409](https://github.com/ember-cli/ember-try/pull/409) ([huyphamily](https://github.com/huyphamily))
+- Deprecate `bower` support [\#402](https://github.com/ember-cli/ember-try/pull/402) ([kategengler](https://github.com/kategengler))
+
 ## [v1.2.1](https://github.com/ember-cli/ember-try/tree/v1.2.1)
 
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.2.0...v1.2.1)
