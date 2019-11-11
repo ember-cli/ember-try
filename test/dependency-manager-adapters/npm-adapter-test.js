@@ -39,6 +39,24 @@ describe('npmAdapter', () => {
         assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), { originalNodeModules: true });
       });
     });
+
+    it('backs up the yarn.lock file, npm-shrinkwrap.json and package-lock.json if they exist', () => {
+      fs.mkdirSync('node_modules');
+      writeJSONFile('node_modules/prove-it.json', { originalNodeModules: true });
+      writeJSONFile('package.json', { originalPackageJSON: true });
+      writeJSONFile('yarn.lock', { originalYarnLock: true });
+      writeJSONFile('npm-shrinkwrap.json', { originalNpmShrinkWrap: true });
+      writeJSONFile('package-lock.json', { originalPackageLock: true });
+      return new NpmAdapter({
+        cwd: tmpdir,
+      }).setup().then(() => {
+        assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), { originalPackageJSON: true });
+        assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), { originalNodeModules: true });
+        assertFileContainsJSON(path.join(tmpdir, 'yarn.lock.ember-try'), { originalYarnLock: true });
+        assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json.ember-try'), { originalNpmShrinkWrap: true });
+        assertFileContainsJSON(path.join(tmpdir, 'package-lock.json.ember-try'), { originalPackageLock: true });
+      });
+    });
   });
 
   describe('#_install', () => {
@@ -127,6 +145,46 @@ describe('npmAdapter', () => {
           expect(runCount).to.equal(2);
         });
       });
+
+      it('uses buildManagerOptions for npm commands', () => {
+        writeJSONFile('package.json', fixturePackage);
+        let runCount = 0;
+        let stubbedRun = generateMockRun([{
+          command: 'npm install --flat',
+          callback() {
+            runCount++;
+            return RSVP.resolve();
+          },
+        }, {
+          command: 'npm --version',
+          callback() {
+            runCount++;
+            return RSVP.resolve({stdout: '5.7.1'});
+          },
+        }], { allowPassthrough: false });
+
+        return new NpmAdapter({
+          cwd: tmpdir,
+          run: stubbedRun,
+          buildManagerOptions: function() {
+            return ['--flat'];
+          },
+        })._install().then(() => {
+          expect(runCount).to.equal(2, 'npm install should run with buildManagerOptions');
+        });
+      });
+
+      it('throws an error if buildManagerOptions does not return an array', () => {
+        expect(() => {
+          new NpmAdapter({
+            cwd: tmpdir,
+            run: () => {},
+            buildManagerOptions: function() {
+              return 'string';
+            },
+          })._install()
+        }).to.throw(/buildManagerOptions must return an array of options/);
+      });
     });
 
     describe('with yarn', () => {
@@ -171,6 +229,42 @@ describe('npmAdapter', () => {
           expect(runCount).to.equal(1, 'Only yarn install should run with manager options');
         });
       });
+
+      it('uses buildManagerOptions for yarn commands', () => {
+        writeJSONFile('package.json', fixturePackage);
+        let runCount = 0;
+        let stubbedRun = generateMockRun([{
+          command: 'yarn install --flat',
+          callback() {
+            runCount++;
+            return RSVP.resolve();
+          },
+        }], { allowPassthrough: false });
+
+        return new NpmAdapter({
+          cwd: tmpdir,
+          run: stubbedRun,
+          useYarnCommand: true,
+          buildManagerOptions: function() {
+            return ['--flat'];
+          },
+        })._install().then(() => {
+          expect(runCount).to.equal(1, 'Only yarn install should run with buildManagerOptions');
+        });
+      });
+
+      it('throws an error if buildManagerOptions does not return an array', () => {
+        expect(() => {
+          new NpmAdapter({
+            cwd: tmpdir,
+            run: () => {},
+            useYarnCommand: true,
+            buildManagerOptions: function() {
+              return 'string';
+            },
+          })._install()
+        }).to.throw(/buildManagerOptions must return an array of options/);
+      });
     });
   });
 
@@ -183,6 +277,26 @@ describe('npmAdapter', () => {
       return new NpmAdapter({ cwd: tmpdir })._restoreOriginalDependencies().then(() => {
         assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
         assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), { originalNodeModules: true });
+      });
+    });
+
+    it('replaces the yarn.lock, npm-shrinkwrap.json and package-lock.json with the backed up version if they exist', () => {
+      writeJSONFile('package.json.ember-try', { originalPackageJSON: true });
+      writeJSONFile('package.json', { originalPackageJSON: false });
+      fs.mkdirSync('.node_modules.ember-try');
+      writeJSONFile('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
+      writeJSONFile('yarn.lock.ember-try', { originalYarnLock: true });
+      writeJSONFile('yarn.lock', { originalYarnLock: false });
+      writeJSONFile('npm-shrinkwrap.json.ember-try', { originalNpmShrinkWrap: true });
+      writeJSONFile('npm-shrinkwrap.json', { originalNpmShrinkWrap: false });
+      writeJSONFile('package-lock.json.ember-try', { originalPackageLock: true });
+      writeJSONFile('package-lock.json', { originalPackageLock: false });
+      return new NpmAdapter({ cwd: tmpdir })._restoreOriginalDependencies().then(() => {
+        assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
+        assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), { originalNodeModules: true });
+        assertFileContainsJSON(path.join(tmpdir, 'yarn.lock'), { originalYarnLock: true });
+        assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json'), { originalNpmShrinkWrap: true });
+        assertFileContainsJSON(path.join(tmpdir, 'package-lock.json'), { originalPackageLock: true });
       });
     });
   });
