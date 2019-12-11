@@ -180,6 +180,14 @@ module.exports = function() {
           resolutions: {
             'lodash': '5.0.0'
           }
+          /*
+            In order to easily test multiple editions ember-try merges any `ember` property specified
+            into the applications `package.json`. Values specified in the ember-try configuration will
+            override values that pre-existed in the original `package.json`.
+          */
+          ember: {
+            'edition': 'octane'
+          }
         }
       },
       {

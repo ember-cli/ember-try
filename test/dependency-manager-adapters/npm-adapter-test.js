@@ -312,6 +312,68 @@ describe('npmAdapter', () => {
       expect(resultJSON.dependencies['ember-cli-babel']).to.equal('6.0.0');
     });
 
+    describe('ember property', () => {
+      it('adds the ember property to project package.json', () => {
+        let npmAdapter = new NpmAdapter({
+          cwd: tmpdir,
+          useYarnCommand: true
+        });
+        let packageJSON = {};
+        let depSet = {
+          ember: { edition: 'octane' }
+        };
+
+        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+        expect(resultJSON).to.deep.equal({ ember: { edition: 'octane' }});
+      });
+
+      it('merges the ember property to project package.json', () => {
+        let npmAdapter = new NpmAdapter({
+          cwd: tmpdir,
+          useYarnCommand: true
+        });
+        let packageJSON = { ember: { foo: 'bar' } };
+        let depSet = {
+          ember: { edition: 'octane' }
+        };
+
+        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+        expect(resultJSON).to.deep.equal({ ember: { foo: 'bar', edition: 'octane' }});
+      });
+
+      it('overrides existing fields inside the ember property to project package.json', () => {
+        let npmAdapter = new NpmAdapter({
+          cwd: tmpdir,
+          useYarnCommand: true
+        });
+        let packageJSON = { ember: { edition: 'classic' } };
+        let depSet = {
+          ember: { edition: 'octane' }
+        };
+
+        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+        expect(resultJSON).to.deep.equal({ ember: { edition: 'octane' }});
+      });
+
+      it('removes any items with a null value', () => {
+        let npmAdapter = new NpmAdapter({
+          cwd: tmpdir,
+          useYarnCommand: true
+        });
+        let packageJSON = { ember: { edition: 'octane' } };
+        let depSet = {
+          ember: { edition: null }
+        };
+
+        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+        expect(resultJSON).to.deep.equal({ ember: { }});
+      });
+    });
+
     it('adds a resolution for the specified dependency version', () => {
       let npmAdapter = new NpmAdapter({
         cwd: tmpdir,

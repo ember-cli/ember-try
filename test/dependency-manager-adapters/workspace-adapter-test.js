@@ -297,6 +297,20 @@ describe('workspaceAdapter', () => {
       });
     });
 
+    it('changes specified ember properties', () => {
+      return workspaceAdapter.changeToDependencySet({
+        ember: { edition: 'octane' },
+      }).then(() => {
+        assertFileContainsJSON('packages/test/package.json', {
+          devDependencies: { 'ember-feature-flags': '1.0.0' },
+          dependencies: { 'ember-cli-babel': '5.0.0' },
+          peerDependencies: { 'ember-cli-sass': '1.2.3' },
+          resolutions: { 'ember-data': '3.0.0' },
+          ember: { edition: 'octane' },
+        });
+      });
+    });
+
     it('can remove a package', () => {
       return workspaceAdapter.changeToDependencySet({
         devDependencies: { 'ember-feature-flags': null },
