@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.4.0](https://github.com/ember-cli/ember-try/tree/v1.4.0)
+
+[Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.3.0...v1.4.0)
+
+**Implemented enhancements:**
+
+- Add support for merging/clobbering `ember` in `package.json`. [\#429](https://github.com/ember-c
+li/ember-try/pull/429) ([rwjblue](https://github.com/rwjblue))
+
 ## [v1.3.0](https://github.com/ember-cli/ember-try/tree/v1.3.0)
 
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.2.1...v1.3.0)
