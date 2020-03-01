@@ -354,13 +354,13 @@ describe('npmAdapter', () => {
     });
   });
 
-  describe('#_restoreOriginalDependencies', () => {
+  describe('#restoreOriginalDependencies', () => {
     it('replaces the package.json with the backed up version', () => {
       writeJSONFile('package.json.ember-try', { originalPackageJSON: true });
       writeJSONFile('package.json', { originalPackageJSON: false });
       fs.mkdirSync('.node_modules.ember-try');
       writeJSONFile('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
-      return new NpmAdapter({ cwd: tmpdir })._restoreOriginalDependencies().then(() => {
+      return new NpmAdapter({ cwd: tmpdir }).restoreOriginalDependencies().then(() => {
         assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
         assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), {
           originalNodeModules: true,
@@ -379,7 +379,7 @@ describe('npmAdapter', () => {
       writeJSONFile('npm-shrinkwrap.json', { originalNpmShrinkWrap: false });
       writeJSONFile('package-lock.json.ember-try', { originalPackageLock: true });
       writeJSONFile('package-lock.json', { originalPackageLock: false });
-      return new NpmAdapter({ cwd: tmpdir })._restoreOriginalDependencies().then(() => {
+      return new NpmAdapter({ cwd: tmpdir }).restoreOriginalDependencies().then(() => {
         assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
         assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), {
           originalNodeModules: true,
