@@ -44,6 +44,33 @@ describe('workspaceAdapter', () => {
       });
     });
 
+    it('with workspace packages', () => {
+      writeJSONFile('package.json', {
+        name: 'a-test-project-with-workspaces',
+        workspaces: {
+          packages: [
+            "packages/*"
+          ],
+          nohoist: [
+            '@foo/example'
+          ]
+        }
+      })
+
+      fs.ensureDirSync('packages/test/node_modules');
+
+      writeJSONFile('packages/test/package.json', { originalPackageJSON: true });
+      writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
+
+      return new WorkspaceAdapter({
+        cwd: tmpdir,
+        useYarnCommand: true,
+      }).setup().then(() => {
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json.ember-try'), { originalPackageJSON: true });
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/.node_modules.ember-try/prove-it.json'), { originalNodeModules: true });
+      });
+    });
+
     it('backs up the yarn.lock file, npm-shrinkwrap.json and package-lock.json if they exist', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
