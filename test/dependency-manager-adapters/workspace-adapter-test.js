@@ -195,6 +195,29 @@ describe('workspaceAdapter', () => {
   });
 
   describe('#cleanup', () => {
+    it('works without having called #setup first', () => {
+      fs.ensureDirSync('packages/test/node_modules');
+
+      writeJSONFile('packages/test/package.json', { originalPackageJSON: false });
+      writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: false });
+
+      let workspaceAdapter = new WorkspaceAdapter({
+        cwd: tmpdir,
+        useYarnCommand: true,
+        run: () => Promise.resolve(),
+      });
+
+      fs.ensureDirSync('packages/test/.node_modules.ember-try');
+
+      writeJSONFile('packages/test/package.json.ember-try', { originalPackageJSON: true });
+      writeJSONFile('packages/test/.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
+
+      return workspaceAdapter.cleanup().then(() => {
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), { originalPackageJSON: true });
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/node_modules/prove-it.json'), { originalNodeModules: true });
+      });
+    });
+
     it('replaces the package.json with the backed up version', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
