@@ -62,7 +62,7 @@ jobs:
   npm-smoke-tests:
     strategy:
       matrix:
-        node: ['8', '10', '12', '14']
+        node: ['10', '12', '14']
 
     name: Tests (Node.js v${{ matrix.node }} with npm)
     runs-on: ubuntu-latest
@@ -84,7 +84,7 @@ jobs:
   yarn-smoke-tests:
     strategy:
       matrix:
-        node: ['8', '10', '12', '14']
+        node: ['10', '12', '14']
 
     name: Tests (Node.js v${{ matrix.node }} with yarn)
     runs-on: ubuntu-latest
