@@ -5,7 +5,7 @@ skip_branch_with_pr: true
 environment:
   MOCHA_REPORTER: "mocha-appveyor-reporter"
   matrix:
-    - nodejs_version: "6"
+    - nodejs_version: "10"
 
 # Install scripts. (runs after repo cloning)
 install:
