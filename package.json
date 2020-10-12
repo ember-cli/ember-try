@@ -44,7 +44,7 @@
     "execa": "^1.0.0",
     "extend": "^3.0.0",
     "fs-extra": "^5.0.0",
-    "promise-map-series": "^0.2.1",
+    "promise-map-series": "^0.3.0",
     "resolve": "^1.10.1",
     "rimraf": "^3.0.2",
     "rsvp": "^4.7.0",
