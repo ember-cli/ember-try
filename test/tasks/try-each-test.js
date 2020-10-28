@@ -77,7 +77,7 @@ describe('tryEach', () => {
       warnOnUnregistered: false,
       useCleanCache: true,
     });
-    require('chalk').enabled = false;
+    require('chalk').level = 0;
   });
 
   afterEach(() => {

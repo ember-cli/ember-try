@@ -40,21 +40,28 @@ describe('commands/try-one', () => {
       mockConfig = null;
     });
 
-    it('throws if no scenario is provided', () => {
-      expect(() => {
-        TryOneCommand.run({}, []);
-      }).to.throw(/requires a scenario name to be specified/);
+    it('throws if no scenario is provided', async () => {
+      let error;
+
+      try {
+        await TryOneCommand.run({}, []);
+      } catch(e) {
+        error = e;
+      }
+
+      expect(error.message).to.include('requires a scenario name to be specified');
     });
 
-    it('passes the configPath to _getConfig', () => {
+    it('passes the configPath to _getConfig', async () => {
       let configPath;
-      TryOneCommand._getConfig = function(options) {
+      TryOneCommand._getConfig = async function(options) {
         configPath = options.configPath;
 
-        return RSVP.resolve({ scenarios: [{ name: 'foo' }] });
+        return { scenarios: [{ name: 'foo' }] };
       };
 
-      TryOneCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
+      await TryOneCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
+
       expect(configPath).to.equal('foo/bar/widget.js');
     });
 
@@ -64,22 +71,22 @@ describe('commands/try-one', () => {
       });
     });
 
-    it('sets command on task init', () => {
-      testCommandSetsTheseAsCommandArgs('try:one default', []);
-      testCommandSetsTheseAsCommandArgs('try:one default --- ember help', ['ember', 'help']);
-      testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json', ['ember', 'help', '--json']);
-      testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json=true', ['ember', 'help', '--json=true']);
-      testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json true', ['ember', 'help', '--json', 'true']);
+    it('sets command on task init', async () => {
+      await testCommandSetsTheseAsCommandArgs('try:one default', []);
+      await testCommandSetsTheseAsCommandArgs('try:one default --- ember help', ['ember', 'help']);
+      await testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json', ['ember', 'help', '--json']);
+      await testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json=true', ['ember', 'help', '--json=true']);
+      await testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json true', ['ember', 'help', '--json', 'true']);
     });
   });
 });
 
-function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
+async function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
   let additionalArgs = command.split(' ');
   function MockTask(opts) {
     expect(opts.commandArgs).to.eql(expectedArgs);
   }
-  MockTask.prototype.run = function() {
+  MockTask.prototype.run = async function() {
   };
   TryOneCommand._TryEachTask = MockTask;
   TryOneCommand._commandLineArguments = function() {
@@ -88,9 +95,9 @@ function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
     additionalArgs);
   };
 
-  TryOneCommand._getConfig = function() {
+  TryOneCommand._getConfig = async function() {
     return RSVP.resolve({ scenarios: [{ name: 'default' }] });
   };
 
-  TryOneCommand.run({}, ['default']);
+  return await TryOneCommand.run({}, ['default']);
 }

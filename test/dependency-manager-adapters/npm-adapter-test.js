@@ -174,16 +174,23 @@ describe('npmAdapter', () => {
         });
       });
 
-      it('throws an error if buildManagerOptions does not return an array', () => {
-        expect(() => {
-          new NpmAdapter({
+      it('throws an error if buildManagerOptions does not return an array', async () => {
+        let error;
+        try {
+          let adapter = new NpmAdapter({
             cwd: tmpdir,
             run: () => {},
             buildManagerOptions: function() {
               return 'string';
             },
-          })._install()
-        }).to.throw(/buildManagerOptions must return an array of options/);
+          });
+
+          await adapter._install()
+        } catch (e) {
+          error = e;
+        }
+
+        expect(error.message).to.include('buildManagerOptions must return an array of options');
       });
     });
 
@@ -253,17 +260,24 @@ describe('npmAdapter', () => {
         });
       });
 
-      it('throws an error if buildManagerOptions does not return an array', () => {
-        expect(() => {
-          new NpmAdapter({
+      it('throws an error if buildManagerOptions does not return an array', async () => {
+        let error;
+        try {
+          let adapter = new NpmAdapter({
             cwd: tmpdir,
             run: () => {},
             useYarnCommand: true,
             buildManagerOptions: function() {
               return 'string';
             },
-          })._install()
-        }).to.throw(/buildManagerOptions must return an array of options/);
+          });
+
+          await adapter._install()
+        } catch (e) {
+          error = e;
+        }
+
+        expect(error.message).to.include('buildManagerOptions must return an array of options');
       });
     });
   });
