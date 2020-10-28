@@ -29,8 +29,8 @@
     "lint:js": "eslint .",
     "node-test": "mocha test/**/*.js",
     "node-test-with-coverage": "nyc --reporter lcov npm run-script node-test && node_modules/.bin/codecov",
-    "smoke-test": "./run-smoke-test.sh smoke-test.sh",
-    "smoke-test-yarn": "./run-smoke-test.sh smoke-test-yarn.sh",
+    "smoke-test": "cd smoke-test-app && ./smoke-test.sh",
+    "smoke-test-yarn": "cd smoke-test-app && ./smoke-test-yarn.sh",
     "start": "ember serve",
     "test": "npm run-script lint && npm run-script node-test"
   },

@@ -146,7 +146,11 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - run: yarn install
+      - name: install deps
+        run: yarn install
+      - name: install smoke-test-app deps
+        run: npm install
+        working-directory: smoke-test-app
       - run: npm run smoke-test
 
   yarn-smoke-tests:
@@ -168,5 +172,9 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - run: yarn install
+      - name: install deps
+        run: yarn install
+      - name: install smoke-test-app deps
+        run: yarn install
+        working-directory: smoke-test-app
       - run: yarn smoke-test-yarn
