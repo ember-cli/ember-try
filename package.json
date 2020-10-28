@@ -43,7 +43,6 @@
     "ember-try-config": "^3.0.0",
     "execa": "^1.0.0",
     "fs-extra": "^5.0.0",
-    "promise-map-series": "^0.3.0",
     "resolve": "^1.10.1",
     "rimraf": "^3.0.2",
     "walk-sync": "^2.2.0"
