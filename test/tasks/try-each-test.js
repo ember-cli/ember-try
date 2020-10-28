@@ -5,7 +5,6 @@ const tmp = require('tmp-sync');
 const path = require('path');
 const RSVP = require('rsvp');
 const fs = require('fs-extra');
-const fixtureBower = require('../fixtures/bower.json');
 const fixturePackage = require('../fixtures/package.json');
 const writeJSONFile = require('../helpers/write-json-file');
 const mockery = require('mockery');
@@ -22,12 +21,6 @@ const config = {
   scenarios: [
     {
       name: 'first',
-      bower: {
-        dependencies: {
-          ember: '1.13.0',
-          bootstrap: null,
-        },
-      },
       npm: {
         dependencies: {
           'ember-try-test-suite-helper': '1.0.0',
@@ -35,14 +28,6 @@ const config = {
       },
     }, {
       name: 'second',
-      bower: {
-        dependencies: {
-          ember: '2.0.0',
-        },
-        devDependencies: {
-          jquery: '1.11.3',
-        },
-      },
       npm: {
         devDependencies: {
           'ember-try-test-suite-helper': '1.0.1',
@@ -50,20 +35,15 @@ const config = {
       },
     },
     {
-      name: 'with-bower-resolutions',
-      bower: {
-        dependencies: {
-          ember: 'components/ember#beta',
-        },
-        resolutions: {
-          ember: 'beta',
-        },
-      },
+      name: 'with-resolutions',
       npm: {
         dependencies: {
           'ember-try-test-suite-helper': '1.0.0',
         },
       },
+      resolutions: {
+        'ember-try-test-suite-helper': '1.0.0',
+      }
     }],
 };
 
@@ -87,41 +67,7 @@ describe('tryEach', () => {
     return remove(tmproot);
   });
 
-  describe('with bower scenarios', () => {
-    it('works without an initial bower.json', function() {
-      this.timeout(300000);
-
-      let mockedRun = generateMockRun('ember test', () => {
-        return RSVP.resolve(0);
-      });
-      mockery.registerMock('./run', mockedRun);
-
-      let output = [];
-      let outputFn = function(log) {
-        output.push(log);
-      };
-
-      let TryEachTask = require('../../lib/tasks/try-each');
-      let tryEachTask = new TryEachTask({
-        ui: { writeLine: outputFn },
-        project: { root: tmpdir },
-        config,
-        _on() {},
-      });
-
-      writeJSONFile('package.json', fixturePackage);
-      fs.mkdirSync('node_modules');
-
-      expect(fs.existsSync('bower.json')).to.eql(false);
-      return tryEachTask.run(config.scenarios, {}).then(() => {
-        expect(output).to.include('All 3 scenarios succeeded');
-        expect(fs.existsSync('bower.json')).to.eql(false);
-        expect(fs.existsSync('bower_components')).to.eql(false);
-      });
-    });
-  });
-
-  describe('with both npm and bower', () => {
+  describe('with npm scenarios', () => {
     it('succeeds when scenario\'s tests succeed', function() {
       this.timeout(300000);
 
@@ -147,15 +93,12 @@ describe('tryEach', () => {
       writeJSONFile('package.json', fixturePackage);
       fs.writeFileSync('yarn.lock', '');
       fs.mkdirSync('node_modules');
-      writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(output).to.include('Detected a yarn.lock file. Add `useYarn: true` to your `config/ember-try.js` configuration file if you want to use Yarn to install npm dependencies.');
         expect(output).to.include('Scenario first: SUCCESS');
         expect(output).to.include('Scenario second: SUCCESS');
-        expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
-
-        expect(output).to.include('DEPRECATION: The next major version of `ember-try` (v2.0) will drop support for installing dependencies with `bower`.');
+        expect(output).to.include('Scenario with-resolutions: SUCCESS');
 
         let tables = output.filter((line) => {
           return typeof line === "object";
@@ -163,19 +106,14 @@ describe('tryEach', () => {
 
         expect(tables[0]).to.eql([
           [ 'ember-try-test-suite-helper', '1.0.0', '1.0.0', 'npm'],
-          [ 'ember', '1.13.0', '1.13.0', 'bower' ],
-          [ 'bootstrap', 'Not Installed', 'Not Installed', 'bower' ]
         ]);
 
         expect(tables[1]).to.eql([
           [ 'ember-try-test-suite-helper', '1.0.1', '1.0.1', 'npm'],
-          [ 'ember', '2.0.0', '2.0.0', 'bower' ],
-          [ 'jquery', '1.11.3', '1.11.3', 'bower' ]
         ]);
 
         expect(tables[2]).to.eql([
           [ 'ember-try-test-suite-helper', '1.0.0', '1.0.0', 'npm'],
-          [ 'ember', 'components/ember#beta', '3.0.0-beta.2-beta+b4135dfe', 'bower' ]
         ]);
 
         expect(output).to.include('All 3 scenarios succeeded');
@@ -212,12 +150,11 @@ describe('tryEach', () => {
 
       writeJSONFile('package.json', fixturePackage);
       fs.mkdirSync('node_modules');
-      writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(1);
         expect(output).to.include('Scenario first: FAIL');
         expect(output).to.include('Scenario second: SUCCESS');
-        expect(output).to.include('Scenario with-bower-resolutions: SUCCESS');
+        expect(output).to.include('Scenario with-resolutions: SUCCESS');
         expect(output).to.include('1 scenarios failed');
         expect(output).to.include('2 scenarios succeeded');
         expect(output).to.include('3 scenarios run');
@@ -264,7 +201,6 @@ describe('tryEach', () => {
         _on() {},
       });
 
-      writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(output).to.include('Scenario first: SUCCESS');
@@ -670,9 +606,11 @@ describe('tryEach', () => {
       let config = {
         scenarios: [{
           name: 'first',
-          dependencies: {
-            ember: '1.13.0',
-          },
+          npm: {
+            dependencies: {
+              'ember-source': '3.20.0',
+            },
+          }
         }],
       };
 
@@ -698,7 +636,6 @@ describe('tryEach', () => {
         _runCommand: mockRunCommand,
       });
 
-      writeJSONFile('bower.json', fixtureBower);
       return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(scenarios).to.eql(['first']);

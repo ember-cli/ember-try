@@ -4,7 +4,7 @@ const tmp = require('tmp-sync');
 const path = require('path');
 const RSVP = require('rsvp');
 const fs = require('fs-extra');
-const fixtureBower = require('../fixtures/bower.json');
+const fixturePackageJson = require('../fixtures/package.json');
 const writeJSONFile = require('../helpers/write-json-file');
 
 const remove = RSVP.denodeify(fs.remove);
@@ -28,9 +28,11 @@ describe('reset', () => {
     let config = {
       scenarios: [{
         name: 'first',
-        dependencies: {
-          ember: '1.13.0',
-        },
+        npm: {
+          dependencies: {
+            'ember-source': '2.13.0',
+          },
+        }
       }],
     };
 
@@ -40,8 +42,8 @@ describe('reset', () => {
       config,
     });
 
-    writeJSONFile('bower.json', fixtureBower);
-    writeJSONFile('bower.json.ember-try', fixtureBower);
+    writeJSONFile('package.json', fixturePackageJson);
+    writeJSONFile('package.json.ember-try', fixturePackageJson);
 
     return resetTask.run();
   });

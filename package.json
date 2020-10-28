@@ -1,7 +1,7 @@
 {
   "name": "ember-try",
   "version": "1.4.0",
-  "description": "An ember-cli addon to test against multiple bower dependencies, such as ember and ember-data.",
+  "description": "An ember-cli addon to test against multiple dependencies, such as ember and ember-data.",
   "keywords": [
     "ember-addon",
     "testing"
@@ -36,7 +36,7 @@
     "cli-table3": "^0.6.0",
     "core-object": "^3.1.5",
     "debug": "^4.1.1",
-    "ember-try-config": "^3.0.0",
+    "ember-try-config": "^4.0.0",
     "execa": "^1.0.0",
     "fs-extra": "^5.0.0",
     "resolve": "^1.10.1",
@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "@ember/optional-features": "^2.0.0",
-    "bower": "^1.8.8",
     "broccoli-asset-rev": "^3.0.0",
     "chai": "^4.1.2",
     "codecov": "^3.4.0",

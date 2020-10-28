@@ -8,7 +8,6 @@ const tmp = require('tmp-sync');
 const fixturePackage = require('../fixtures/package.json');
 const writeJSONFile = require('../helpers/write-json-file');
 const getConfig = require('../../lib/utils/config');
-const addImplicitBowerToScenarios = getConfig._addImplicitBowerToScenarios;
 
 const remove = RSVP.denodeify(fs.remove);
 const root = process.cwd();
@@ -35,85 +34,6 @@ describe('utils/config', () => {
 
     fs.writeFileSync(filename, contents, { encoding: 'utf8' });
   }
-
-  describe('addImplicitBowerToScenarios', () => {
-    it('adds an npm with a bower dev dependency for scenarios that have only bower', () => {
-      expect(addImplicitBowerToScenarios({
-        scenarios: [{
-          name: 'bower-only',
-          bower: { dependencies: {} },
-        }],
-      })).to.deep.equal({
-        scenarios: [{
-          name: 'bower-only',
-          bower: { dependencies: {} },
-          npm: { devDependencies: { bower: '^1.8.2' } },
-        }],
-      });
-    });
-
-    it('adds a bower dev dependency for scenarios that have bower and npm', () => {
-      expect(addImplicitBowerToScenarios({
-        scenarios: [{
-          name: 'bower-and-npm',
-          bower: { dependencies: {} },
-          npm: { devDependencies: { foo: 'latest' } },
-        }],
-      })).to.deep.equal({
-        scenarios: [{
-          name: 'bower-and-npm',
-          bower: { dependencies: {} },
-          npm: { devDependencies: { foo: 'latest', bower: '^1.8.2' } },
-        }],
-      });
-    });
-
-    it('does not add a bower dev dependency if a bower dev dependency is already present', () => {
-      expect(addImplicitBowerToScenarios({
-        scenarios: [{
-          name: 'bower-dev-dependency',
-          bower: { dependencies: {} },
-          npm: { devDependencies: { bower: '^1.8.2' } },
-        }],
-      })).to.deep.equal({
-        scenarios: [{
-          name: 'bower-dev-dependency',
-          bower: { dependencies: {} },
-          npm: { devDependencies: { bower: '^1.8.2' } },
-        }],
-      });
-    });
-
-    it('does not add a bower dev dependency if a bower dependency is already present', () => {
-      expect(addImplicitBowerToScenarios({
-        scenarios: [{
-          name: 'bower-dependency',
-          bower: { dependencies: {} },
-          npm: { dependencies: { bower: '^1.8.2' } },
-        }],
-      })).to.deep.equal({
-        scenarios: [{
-          name: 'bower-dependency',
-          bower: { dependencies: {} },
-          npm: { dependencies: { bower: '^1.8.2' } },
-        }],
-      });
-    });
-
-    it('does not add a bower dev dependency if bower is not present', () => {
-      expect(addImplicitBowerToScenarios({
-        scenarios: [{
-          name: 'no-bower',
-          npm: { devDependencies: { foo: 'latest' } },
-        }],
-      })).to.deep.equal({
-        scenarios: [{
-          name: 'no-bower',
-          npm: { devDependencies: { foo: 'latest' } },
-        }],
-      });
-    });
-  });
 
   it('uses specified options.configFile if present', () => {
     generateConfigFile('module.exports = { scenarios: [ { qux: "baz" }] };', 'config/non-default.js');
@@ -156,29 +76,6 @@ describe('utils/config', () => {
     return getConfig({ project }).then((config) => {
       expect(config.scenarios).to.have.lengthOf(1);
       expect(config.scenarios[0].foo).to.equal('bar');
-    });
-  });
-
-  it('implicitly adds a bower dev dependency for npm for scenarios that include bower', () => {
-    generateConfigFile('module.exports = { scenarios: [ { bower: { dependencies: { foo: "latest" } } }] };');
-
-    return getConfig({ project }).then((config) => {
-      expect(config.scenarios).to.have.lengthOf(1);
-      expect(config.scenarios[0]).to.deep.equal({
-        bower: { dependencies: { foo: 'latest' } },
-        npm: { devDependencies: { bower: '^1.8.2' } },
-      });
-    });
-  });
-
-  it('does not add a bower dependency for scenarios that do not include bower', () => {
-    generateConfigFile('module.exports = { scenarios: [ { npm: { dependencies: { foo: "latest" } } }] };');
-
-    return getConfig({ project }).then((config) => {
-      expect(config.scenarios).to.have.lengthOf(1);
-      expect(config.scenarios[0]).to.deep.equal({
-        npm: { dependencies: { foo: 'latest' } },
-      });
     });
   });
 
@@ -245,9 +142,8 @@ describe('utils/config', () => {
         expect(scenarios).to.include.deep.members([
           { name: 'default', npm: { devDependencies: { } } },
           {
-            name: 'ember-2.2.0',
-            bower: { dependencies: { ember: '2.2.0' } },
-            npm: { devDependencies: { 'ember-source': null, bower: '^1.8.2' } },
+            name: 'ember-2.18.0',
+            npm: { devDependencies: { 'ember-source': '2.18.0' } },
           },
         ]);
 
@@ -258,15 +154,14 @@ describe('utils/config', () => {
 
     it('is always used if passed in and behaves as if config file has "useVersionCompatibility: true"', () => {
       generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };');
-      return getConfig({ project, versionCompatibility: { ember: '1.13.0' } }).then((config) => {
+      return getConfig({ project, versionCompatibility: { ember: '2.18.0' } }).then((config) => {
         let scenarios = config.scenarios;
         expect(scenarios.length).to.equal(6);
         expect(scenarios).to.include.deep.members([
           { name: 'default', npm: { devDependencies: { } } },
           {
-            name: 'ember-1.13.0',
-            bower: { dependencies: { ember: '1.13.0' } },
-            npm: { devDependencies: { 'ember-source': null, bower: '^1.8.2' } },
+            name: 'ember-2.18.0',
+            npm: { devDependencies: { 'ember-source': '2.18.0' } },
           },
           { foo: 'bar' },
         ]);
@@ -274,15 +169,14 @@ describe('utils/config', () => {
     });
 
     it('can be overridden by passed in versionCompatibility', () => {
-      return getConfig({ project, versionCompatibility: { ember: '1.13.0' } }).then((config) => {
+      return getConfig({ project, versionCompatibility: { ember: '2.18.0' } }).then((config) => {
         let scenarios = config.scenarios;
         expect(scenarios.length).to.equal(5);
         expect(scenarios).to.include.deep.members([
           { name: 'default', npm: { devDependencies: { } } },
           {
-            name: 'ember-1.13.0',
-            bower: { dependencies: { ember: '1.13.0' } },
-            npm: { devDependencies: { 'ember-source': null, bower: '^1.8.2' } },
+            name: 'ember-2.18.0',
+            npm: { devDependencies: { 'ember-source': '2.18.0' } },
           },
         ]);
       });
@@ -298,20 +192,20 @@ describe('utils/config', () => {
     });
 
     it('is merged with config if config does not have scenarios', () => {
-      generateConfigFile('module.exports = { bowerOptions: ["--allow-root=true"] };');
+      generateConfigFile('module.exports = { npmOptions: ["--some-thing=true"] };');
       return getConfig({ project }).then((config) => {
-        expect(config.bowerOptions).to.eql(['--allow-root=true']);
+        expect(config.npmOptions).to.eql(['--some-thing=true']);
         expect(config.scenarios.length).to.equal(5);
       });
     });
 
     it('is merged with config if config has useVersionCompatibility', () => {
       generateConfigFile(
-        'module.exports = { useVersionCompatibility: true, bowerOptions: ["--allow-root=true"], scenarios: [ { name: "bar" }, { name: "ember-beta", allowedToFail: false } ] };'
+        'module.exports = { useVersionCompatibility: true, npmOptions: ["--whatever=true"], scenarios: [ { name: "bar" }, { name: "ember-beta", allowedToFail: false } ] };'
       );
       return getConfig({ project }).then((config) => {
         expect(config.useVersionCompatibility).to.equal(true);
-        expect(config.bowerOptions).to.eql(['--allow-root=true']);
+        expect(config.npmOptions).to.eql(['--whatever=true']);
         expect(config.scenarios.length).to.equal(6);
         expect(config.scenarios).to.include.deep.members([
           {
@@ -319,9 +213,8 @@ describe('utils/config', () => {
             npm: { devDependencies: { } },
           },
           {
-            name: 'ember-2.2.0',
-            bower: { dependencies: { ember: '2.2.0' } },
-            npm: { devDependencies: { 'ember-source': null, bower: '^1.8.2' } },
+            name: 'ember-2.18.0',
+            npm: { devDependencies: { 'ember-source': '2.18.0' } },
           },
           { name: 'bar' },
         ]);
@@ -334,6 +227,6 @@ describe('utils/config', () => {
 });
 
 function writePackageJSONWithVersionCompatibility() {
-  fixturePackage['ember-addon'] = { versionCompatibility: { ember: '=2.2.0' } };
+  fixturePackage['ember-addon'] = { versionCompatibility: { ember: '=2.18.0' } };
   writeJSONFile('package.json', fixturePackage);
 }

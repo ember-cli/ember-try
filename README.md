@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/ember-try.svg)](https://badge.fury.io/js/ember-try) [![Build Status](https://travis-ci.org/ember-cli/ember-try.svg?branch=master)](https://travis-ci.org/ember-cli/ember-try) [![Ember Observer Score](http://emberobserver.com/badges/ember-try.svg)](http://emberobserver.com/addons/ember-try) [![Build status](https://ci.appveyor.com/api/projects/status/9sswkni8pfuvo4dv/branch/master?svg=true)](https://ci.appveyor.com/project/kategengler/ember-try/branch/master) [![Code Climate](https://codeclimate.com/github/ember-cli/ember-try/badges/gpa.svg)](https://codeclimate.com/github/ember-cli/ember-try) [![Test Coverage](https://codecov.io/gh/ember-cli/ember-try/branch/master/graph/badge.svg)](https://codecov.io/gh/ember-cli/ember-try)
 
-An ember-cli addon to test against multiple bower and npm dependencies, such as `ember` and `ember-data`.
+An ember-cli addon to test against multiple dependencies, such as `ember` and `ember-data`.
 
 ### Installation
 
@@ -61,7 +61,7 @@ In order to use an alternate config path or to group various scenarios, you can 
 
 #### `ember try:reset`
 
-This command restores the original `bower.json` from `bower.json.ember-try`, `package.json` from `package.json.ember-try`, `rm -rf`s `bower_components` and `node_components` and runs `bower install` and `npm install`. For use if any of the other commands fail to clean up after (they run this by default on completion).
+This command restores the original `package.json` from `package.json.ember-try`, `rm -rf`s `node_modules` and runs `npm install`. For use if any of the other commands fail to clean up after (they run this by default on completion).
 
 #### `ember try:ember <semver-string>`
 
@@ -79,7 +79,7 @@ If you're using `ember-try` with an Ember addon, there is a short cut to test ma
 ```json
   "ember-addon": {
     "versionCompatibility": {
-       "ember": ">1.11.0 <=2.0.0"
+       "ember": ">2.18.0 < 4.0.0"
     }
   }
 ```
@@ -91,16 +91,14 @@ If `useVersionCompatibility` is set to `true` in the config file, the autogenera
 
 To keep this from getting out of hand, `ember-try` will limit the versions of Ember used to the lasted point release per minor version. For example, ">1.11.0 <=2.0.0", would (as of writing) run with versions ['1.11.4', '1.12.2', '1.13.13', '2.0.0'].
 
-As of v1.0.0, This will only work for projects starting with ember provided by npm, not bower.
-
 ##### Configuration Files
 
 Configuration will be read from a file in your ember app in `config/ember-try.js`. Here are the possible options:
 
 ```js
-/*jshint node:true*/
+const getChannelURL = require('ember-source-channel-url');
 
-module.exports = function() {
+module.exports = async function() {
   return {
     /*
       `command` - a single command that, if set, will be the default command used by `ember-try`.
@@ -108,10 +106,6 @@ module.exports = function() {
       Keep in mind that this config file is JavaScript, so you can code in here to determine the command.
     */
     command: 'ember test --reporter xunit',
-    /*
-      `bowerOptions` - options to be passed to `bower`.
-    */
-    bowerOptions: ['--allow-root=true'],
     /*
       `npmOptions` - options to be passed to `npm`.
     */
@@ -136,29 +130,6 @@ module.exports = function() {
     }
 
     scenarios: [
-      {
-        name: 'Ember 1.10 with ember-data',
-
-        /*
-          `command` can also be overridden at the scenario level.
-        */
-        command: 'ember test --filter ember-1-10',
-        bower: {
-          dependencies: {
-            'ember': '1.10.0',
-            'ember-data': '1.0.0-beta.15'
-          }
-        },
-        /*
-          When writing scenarios that depend upon ember versions supplied by bower, you must explictly remove the
-          npm ember-source dependency if your addon defines an ember-source in its own package.json devDependencies
-        */
-        npm: {
-          devDependencies: {
-            'ember-source': null
-          }
-        }
-      },
       {
         name: 'Ember 2.11.0',
         /*
@@ -200,36 +171,27 @@ module.exports = function() {
           devDependencies: {
             'ember-data': '2.3.0',
 
+            'ember-source': await getChannelURL('canary')
+
             // you can remove any package by marking `null`
             'some-optional-package': null
           }
         },
-        bower: {
-          dependencies: {
-            'ember': 'components/ember#canary'
-          },
-          resolutions: {
-            'ember': 'canary'
+      },
+      {
+        name: 'ember-beta',
+        npm: {
+          devDependencies: {
+            'ember-source': await getChannelURL('beta')
           }
         }
       },
-      {
-        name: 'Ember beta',
-        bower: {
-          dependencies: {
-            'ember': 'components/ember#beta'
-          },
-          resolutions: { // Resolutions are only necessary when they do not match the version specified in `dependencies`
-            'ember': 'beta'
-          }
-        }
-      }
     ]
   };
 };
 ```
 
-Scenarios are sets of dependencies (`bower` and `npm` only). They can be specified exactly as in the `bower.json` or `package.json`
+Scenarios are sets of dependencies. They can be specified exactly as in the `package.json`
 The `name` can be used to try just one scenario using the `ember try:one` command.
 
 ##### Yarn

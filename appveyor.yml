@@ -16,7 +16,6 @@ install:
 
 cache:
   - '%LOCALAPPDATA%\Yarn'
-  - '%APPDATA%\Roaming\bower'
 
 # Post-install test scripts.
 test_script:
