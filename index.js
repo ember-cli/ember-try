@@ -3,7 +3,7 @@
 module.exports = {
   name: 'ember-try',
 
-  includedCommands: function() {
+  includedCommands() {
     return require('./lib/commands');
   }
 };

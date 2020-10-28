@@ -21,7 +21,7 @@ describe('utils/config', () => {
   beforeEach(() => {
     tmpdir = tmp.in(tmproot);
     process.chdir(tmpdir);
-    project = { root: tmpdir };
+    project = { root: tmpdir, pkg: {} };
   });
 
   afterEach(() => {
@@ -29,11 +29,11 @@ describe('utils/config', () => {
     return remove(tmproot);
   });
 
-  function generateConfigFile(contents, _filename) {
-    let filename = _filename || 'ember-try.js';
-    fs.mkdirsSync('config');
+  function generateConfigFile(contents, filename = 'config/ember-try.js') {
+    let directory = path.dirname(filename);
+    fs.mkdirsSync(directory);
 
-    fs.writeFileSync(`config/${filename}`, contents, { encoding: 'utf8' });
+    fs.writeFileSync(filename, contents, { encoding: 'utf8' });
   }
 
   describe('addImplicitBowerToScenarios', () => {
@@ -116,12 +116,38 @@ describe('utils/config', () => {
   });
 
   it('uses specified options.configFile if present', () => {
-    generateConfigFile('module.exports = { scenarios: [ { qux: "baz" }] };', 'non-default.js');
+    generateConfigFile('module.exports = { scenarios: [ { qux: "baz" }] };', 'config/non-default.js');
 
     return getConfig({ project, configPath: 'config/non-default.js' }).then((config) => {
       expect(config.scenarios).to.have.lengthOf(1);
       expect(config.scenarios[0].qux).to.equal('baz');
     });
+  });
+
+  it('uses projects configured configPath if present', async () => {
+    generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };', 'other-path/ember-try.js');
+
+    project.pkg['ember-addon'] = {
+      configPath: 'other-path',
+    };
+
+    let config = await getConfig({ project })
+
+    expect(config.scenarios).to.have.lengthOf(1);
+    expect(config.scenarios[0].foo).to.equal('bar');
+  });
+
+  it('falls back to config/ember-try.js if projects configured configPath is not present', async () => {
+    generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };');
+
+    project.pkg['ember-addon'] = {
+      configPath: 'other-path',
+    };
+
+    let config = await getConfig({ project })
+
+    expect(config.scenarios).to.have.lengthOf(1);
+    expect(config.scenarios[0].foo).to.equal('bar');
   });
 
   it('uses projects config/ember-try.js if present', () => {
@@ -198,7 +224,7 @@ describe('utils/config', () => {
   });
 
   it('uses specified options.configFile over project config/ember-try.js', () => {
-    generateConfigFile('module.exports = { scenarios: [ { qux: "baz" }] };', 'non-default.js');
+    generateConfigFile('module.exports = { scenarios: [ { qux: "baz" }] };', 'config/non-default.js');
     generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };'); // Should not be used
 
     return getConfig({ project, configPath: 'config/non-default.js' }).then((config) => {
