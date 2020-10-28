@@ -1,7 +1,5 @@
 'use strict';
 
-const extend = require('extend');
-
 module.exports = function generateMockRun() {
   let mockedRuns = [];
   let options = { allowPassthrough: true };
@@ -9,7 +7,7 @@ module.exports = function generateMockRun() {
     mockedRuns.push({ command: arguments[0], callback: arguments[1] });
   } else {
     mockedRuns = arguments[0];
-    options = extend({}, options, arguments[1]);
+    options = Object.assign({}, options, arguments[1]);
   }
 
   return function mockRun(actualCommand, actualArgs, opts) {
