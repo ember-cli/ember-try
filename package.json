@@ -40,7 +40,7 @@
     "cli-table3": "^0.6.0",
     "core-object": "^3.1.5",
     "debug": "^4.1.1",
-    "ember-try-config": "^3.0.0",
+    "ember-try-config": "^4.0.0",
     "execa": "^1.0.0",
     "fs-extra": "^5.0.0",
     "resolve": "^1.10.1",
