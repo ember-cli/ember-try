@@ -49,5 +49,11 @@
   },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"
+  },
+  "ember-addon": {
+    "#": "use ember-try as an 'in-repo' addon",
+    "paths": [
+      "../"
+    ]
   }
 }

@@ -52,12 +52,80 @@ jobs:
       - tests
       - floating-deps
 
+    strategy:
+      matrix:
+        command:
+          # try:each
+          - ./node_modules/.bin/ember try:each
+
+          # skip-cleanup option
+          - ./node_modules/.bin/ember try:each --skip-cleanup
+
+          # config-path option
+          - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config.js'
+
+          # both ember-try options
+          - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
+
+          # try:ember
+          - ./node_modules/.bin/ember try:ember '> 2.10.0 < 3.0.0'
+          - ./node_modules/.bin/ember try:ember '2.10.0' --config-path='../test/fixtures/dummy-ember-try-config.js'
+          - ./node_modules/.bin/ember try:ember '3.2.0' --skip-cleanup=true
+
+          # try:config
+          - ./node_modules/.bin/ember try:config
+          - ./node_modules/.bin/ember try:config --config-path='../test/fixtures/dummy-ember-try-config.js'
+
+          # try:one <scenario>
+          - ./node_modules/.bin/ember try:one default
+
+          # custom command
+          - ./node_modules/.bin/ember try:one default --- ember help
+
+          # skip-cleanup option
+          - ./node_modules/.bin/ember try:one default --skip-cleanup
+
+          # config-path option
+          - ./node_modules/.bin/ember try:one test1 --config-path='../test/fixtures/dummy-ember-try-config.js'
+
+          # both ember-try options
+          - ./node_modules/.bin/ember try:one test1 --config-path='../test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
+
+          # custom command with options to command
+          - ./node_modules/.bin/ember try:one default --- ember help --silent
+
+          # custom command mixed with ember try's own option
+          - ./node_modules/.bin/ember try:one default --skip-cleanup --- ember help --silent
+
+          # try:reset
+          - ./node_modules/.bin/ember try:reset
+
+          # Environment variables availability
+          - FOO="5" ./node_modules/.bin/ember try:one default --- ./fail-if-no-foo.sh
+
+          - ./node_modules/.bin/ember try:one default --- FOO=5 ./fail-if-no-foo.sh
+
+          # Custom, compound commands
+          - ./node_modules/.bin/ember try:one default --- 'echo 1 && echo 2'
+
+          # Environment variables from config
+          - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config-different-env-vars.js'
+
+
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
 
-      - run: yarn install
-      - run: npm run client-test
+      - name: install deps
+        run: yarn install
+      - name: install smoke-test-app deps
+        # using `npm` to install in the smoke-test-app so that `file:` will be treated
+        # as a symlink (npm handles `file:../` as symlink, and `yarn` treats it
+        # as "copy into this directory")
+        run: npm install
+        working-directory: smoke-test-app
+      - run: ${{ matrix.command }}
+        working-directory: smoke-test-app
 
   npm-smoke-tests:
     strategy:
@@ -78,8 +146,13 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - run: yarn install
-      - run: npm run smoke-test
+      - name: install deps
+        run: yarn install
+      - name: install smoke-test-app deps
+        run: npm install
+        working-directory: smoke-test-app
+      - run:  ./node_modules/.bin/ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-npm-scenarios.js'
+        working-directory: smoke-test-app
 
   yarn-smoke-tests:
     strategy:
@@ -100,5 +173,10 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - run: yarn install
-      - run: yarn smoke-test-yarn
+      - name: install deps
+        run: yarn install
+      - name: install smoke-test-app deps
+        run: yarn install
+        working-directory: smoke-test-app
+      - run:  ./node_modules/.bin/ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-yarn-scenarios.js'
+        working-directory: smoke-test-app
