@@ -38,24 +38,27 @@ describe('workspaceAdapter', () => {
       return new WorkspaceAdapter({
         cwd: tmpdir,
         useYarnCommand: true,
-      }).setup().then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json.ember-try'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/.node_modules.ember-try/prove-it.json'), { originalNodeModules: true });
-      });
+      })
+        .setup()
+        .then(() => {
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json.ember-try'), {
+            originalPackageJSON: true,
+          });
+          assertFileContainsJSON(
+            path.join(tmpdir, 'packages/test/.node_modules.ember-try/prove-it.json'),
+            { originalNodeModules: true }
+          );
+        });
     });
 
     it('with workspace packages', () => {
       writeJSONFile('package.json', {
         name: 'a-test-project-with-workspaces',
         workspaces: {
-          packages: [
-            "packages/*"
-          ],
-          nohoist: [
-            '@foo/example'
-          ]
-        }
-      })
+          packages: ['packages/*'],
+          nohoist: ['@foo/example'],
+        },
+      });
 
       fs.ensureDirSync('packages/test/node_modules');
 
@@ -65,10 +68,17 @@ describe('workspaceAdapter', () => {
       return new WorkspaceAdapter({
         cwd: tmpdir,
         useYarnCommand: true,
-      }).setup().then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json.ember-try'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/.node_modules.ember-try/prove-it.json'), { originalNodeModules: true });
-      });
+      })
+        .setup()
+        .then(() => {
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json.ember-try'), {
+            originalPackageJSON: true,
+          });
+          assertFileContainsJSON(
+            path.join(tmpdir, 'packages/test/.node_modules.ember-try/prove-it.json'),
+            { originalNodeModules: true }
+          );
+        });
     });
 
     it('backs up the yarn.lock file, npm-shrinkwrap.json and package-lock.json if they exist', () => {
@@ -82,18 +92,31 @@ describe('workspaceAdapter', () => {
       return new WorkspaceAdapter({
         cwd: tmpdir,
         useYarnCommand: true,
-      }).setup().then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json.ember-try'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/.node_modules.ember-try/prove-it.json'), { originalNodeModules: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/yarn.lock.ember-try'), { originalYarnLock: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/npm-shrinkwrap.json.ember-try'), { originalNpmShrinkWrap: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package-lock.json.ember-try'), { originalPackageLock: true });
-      });
+      })
+        .setup()
+        .then(() => {
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json.ember-try'), {
+            originalPackageJSON: true,
+          });
+          assertFileContainsJSON(
+            path.join(tmpdir, 'packages/test/.node_modules.ember-try/prove-it.json'),
+            { originalNodeModules: true }
+          );
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/yarn.lock.ember-try'), {
+            originalYarnLock: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/npm-shrinkwrap.json.ember-try'), {
+            originalNpmShrinkWrap: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package-lock.json.ember-try'), {
+            originalPackageLock: true,
+          });
+        });
     });
 
     it('throws an error if workspaces are not present', () => {
       writeJSONFile('package.json', {
-        name: 'a-test-project-with-workspaces'
+        name: 'a-test-project-with-workspaces',
       });
 
       expect(() => {
@@ -101,7 +124,9 @@ describe('workspaceAdapter', () => {
           cwd: tmpdir,
           useYarnCommand: true,
         }).setup();
-      }).to.throw(/you must define the `workspaces` property in package.json with at least one workspace to use workspaces with ember-try/)
+      }).to.throw(
+        /you must define the `workspaces` property in package.json with at least one workspace to use workspaces with ember-try/
+      );
     });
   });
 
@@ -112,71 +137,94 @@ describe('workspaceAdapter', () => {
           return new WorkspaceAdapter({
             cwd: tmpdir,
           });
-        }).to.throw(/workspaces are currently only supported by Yarn, you must set `useYarn` to true/)
+        }).to.throw(
+          /workspaces are currently only supported by Yarn, you must set `useYarn` to true/
+        );
       });
     });
 
     describe('with yarn', () => {
       it('runs yarn install', () => {
         let runCount = 0;
-        let stubbedRun = generateMockRun([{
-          command: 'yarn install --no-lockfile --ignore-engines',
-          callback(command, args, opts) {
-            runCount++;
-            expect(opts).to.have.property('cwd', tmpdir);
-            return RSVP.resolve();
-          },
-        }], { allowPassthrough: false });
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'yarn install --no-lockfile --ignore-engines',
+              callback(command, args, opts) {
+                runCount++;
+                expect(opts).to.have.property('cwd', tmpdir);
+                return RSVP.resolve();
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
 
         return new WorkspaceAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           useYarnCommand: true,
-        })._install().then(() => {
-          expect(runCount).to.equal(1, 'Only yarn install should run');
-        });
+        })
+          ._install()
+          .then(() => {
+            expect(runCount).to.equal(1, 'Only yarn install should run');
+          });
       });
 
       it('uses managerOptions for yarn commands', () => {
         let runCount = 0;
-        let stubbedRun = generateMockRun([{
-          command: 'yarn install --flat --no-lockfile --ignore-engines',
-          callback() {
-            runCount++;
-            return RSVP.resolve();
-          },
-        }], { allowPassthrough: false });
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'yarn install --flat --no-lockfile --ignore-engines',
+              callback() {
+                runCount++;
+                return RSVP.resolve();
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
 
         return new WorkspaceAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           useYarnCommand: true,
           managerOptions: ['--flat'],
-        })._install().then(() => {
-          expect(runCount).to.equal(1, 'Only yarn install should run with manager options');
-        });
+        })
+          ._install()
+          .then(() => {
+            expect(runCount).to.equal(1, 'Only yarn install should run with manager options');
+          });
       });
 
       it('uses buildManagerOptions to override defaults for yarn commands', () => {
         let runCount = 0;
-        let stubbedRun = generateMockRun([{
-          command: 'yarn install --flat',
-          callback() {
-            runCount++;
-            return RSVP.resolve();
-          },
-        }], { allowPassthrough: false });
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'yarn install --flat',
+              callback() {
+                runCount++;
+                return RSVP.resolve();
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
 
         return new WorkspaceAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           useYarnCommand: true,
-          buildManagerOptions: function() {
+          buildManagerOptions: function () {
             return ['--flat'];
           },
-        })._install().then(() => {
-          expect(runCount).to.equal(1, 'Only yarn install should run with buildManagerOptions');
-        });
+        })
+          ._install()
+          .then(() => {
+            expect(runCount).to.equal(1, 'Only yarn install should run with buildManagerOptions');
+          });
       });
 
       it('throws an error if buildManagerOptions does not return an array', () => {
@@ -185,10 +233,10 @@ describe('workspaceAdapter', () => {
             cwd: tmpdir,
             run: () => {},
             useYarnCommand: true,
-            buildManagerOptions: function() {
+            buildManagerOptions: function () {
               return 'string';
             },
-          })._install()
+          })._install();
         }).to.throw(/buildManagerOptions must return an array of options/);
       });
     });
@@ -210,11 +258,17 @@ describe('workspaceAdapter', () => {
       fs.ensureDirSync('packages/test/.node_modules.ember-try');
 
       writeJSONFile('packages/test/package.json.ember-try', { originalPackageJSON: true });
-      writeJSONFile('packages/test/.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
+      writeJSONFile('packages/test/.node_modules.ember-try/prove-it.json', {
+        originalNodeModules: true,
+      });
 
       return workspaceAdapter.cleanup().then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/node_modules/prove-it.json'), { originalNodeModules: true });
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
+          originalPackageJSON: true,
+        });
+        assertFileContainsJSON(path.join(tmpdir, 'packages/test/node_modules/prove-it.json'), {
+          originalNodeModules: true,
+        });
       });
     });
 
@@ -230,15 +284,22 @@ describe('workspaceAdapter', () => {
         run: () => Promise.resolve(),
       });
 
-      return workspaceAdapter.setup().then(() => {
-        writeJSONFile('packages/test/package.json', { originalPackageJSON: false });
-        writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
+      return workspaceAdapter
+        .setup()
+        .then(() => {
+          writeJSONFile('packages/test/package.json', { originalPackageJSON: false });
+          writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
 
-        return workspaceAdapter.cleanup();
-      }).then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/node_modules/prove-it.json'), { originalNodeModules: true });
-      });
+          return workspaceAdapter.cleanup();
+        })
+        .then(() => {
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
+            originalPackageJSON: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/node_modules/prove-it.json'), {
+            originalNodeModules: true,
+          });
+        });
     });
 
     it('replaces the yarn.lock, npm-shrinkwrap.json and package-lock.json with the backed up version if they exist', () => {
@@ -256,21 +317,34 @@ describe('workspaceAdapter', () => {
         run: () => Promise.resolve(),
       });
 
-      return workspaceAdapter.setup().then(() => {
-        writeJSONFile('packages/test/package.json', { originalPackageJSON: false });
-        writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
-        writeJSONFile('packages/test/yarn.lock', { originalYarnLock: false });
-        writeJSONFile('packages/test/npm-shrinkwrap.json', { originalNpmShrinkWrap: false });
-        writeJSONFile('packages/test/package-lock.json', { originalPackageLock: false });
+      return workspaceAdapter
+        .setup()
+        .then(() => {
+          writeJSONFile('packages/test/package.json', { originalPackageJSON: false });
+          writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
+          writeJSONFile('packages/test/yarn.lock', { originalYarnLock: false });
+          writeJSONFile('packages/test/npm-shrinkwrap.json', { originalNpmShrinkWrap: false });
+          writeJSONFile('packages/test/package-lock.json', { originalPackageLock: false });
 
-        return workspaceAdapter.cleanup();
-      }).then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/node_modules/prove-it.json'), { originalNodeModules: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/yarn.lock'), { originalYarnLock: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/npm-shrinkwrap.json'), { originalNpmShrinkWrap: true });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package-lock.json'), { originalPackageLock: true });
-      });
+          return workspaceAdapter.cleanup();
+        })
+        .then(() => {
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
+            originalPackageJSON: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/node_modules/prove-it.json'), {
+            originalNodeModules: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/yarn.lock'), {
+            originalYarnLock: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/npm-shrinkwrap.json'), {
+            originalNpmShrinkWrap: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package-lock.json'), {
+            originalPackageLock: true,
+          });
+        });
     });
   });
 
@@ -296,107 +370,129 @@ describe('workspaceAdapter', () => {
     });
 
     it('changes specified dependency versions', () => {
-      return workspaceAdapter.changeToDependencySet({
-        dependencies: { 'ember-cli-babel': '6.0.0' },
-      }).then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
-          devDependencies: { 'ember-feature-flags': '1.0.0' },
+      return workspaceAdapter
+        .changeToDependencySet({
           dependencies: { 'ember-cli-babel': '6.0.0' },
-          peerDependencies: { 'ember-cli-sass': '1.2.3' },
-          resolutions: { 'ember-data': '3.0.0' },
+        })
+        .then(() => {
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
+            devDependencies: { 'ember-feature-flags': '1.0.0' },
+            dependencies: { 'ember-cli-babel': '6.0.0' },
+            peerDependencies: { 'ember-cli-sass': '1.2.3' },
+            resolutions: { 'ember-data': '3.0.0' },
+          });
         });
-      });
     });
 
     it('changes specified npm dev dependency versions', () => {
-      return workspaceAdapter.changeToDependencySet({
-        devDependencies: { 'ember-feature-flags': '2.0.1' },
-      }).then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
+      return workspaceAdapter
+        .changeToDependencySet({
           devDependencies: { 'ember-feature-flags': '2.0.1' },
-          dependencies: { 'ember-cli-babel': '5.0.0' },
-          peerDependencies: { 'ember-cli-sass': '1.2.3' },
-          resolutions: { 'ember-data': '3.0.0' },
+        })
+        .then(() => {
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
+            devDependencies: { 'ember-feature-flags': '2.0.1' },
+            dependencies: { 'ember-cli-babel': '5.0.0' },
+            peerDependencies: { 'ember-cli-sass': '1.2.3' },
+            resolutions: { 'ember-data': '3.0.0' },
+          });
         });
-      });
     });
 
     it('changes specified npm peer dependency versions', () => {
-      return workspaceAdapter.changeToDependencySet({
-        peerDependencies: { 'ember-cli-sass': '4.5.6' },
-      }).then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
-          devDependencies: { 'ember-feature-flags': '1.0.0' },
-          dependencies: { 'ember-cli-babel': '5.0.0' },
+      return workspaceAdapter
+        .changeToDependencySet({
           peerDependencies: { 'ember-cli-sass': '4.5.6' },
-          resolutions: { 'ember-data': '3.0.0' },
+        })
+        .then(() => {
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
+            devDependencies: { 'ember-feature-flags': '1.0.0' },
+            dependencies: { 'ember-cli-babel': '5.0.0' },
+            peerDependencies: { 'ember-cli-sass': '4.5.6' },
+            resolutions: { 'ember-data': '3.0.0' },
+          });
         });
-      });
     });
 
     it('changes specified resolution versions', () => {
-      return workspaceAdapter.changeToDependencySet({
-        resolutions: { 'ember-data': '3.5.0' },
-      }).then(() => {
-        assertFileContainsJSON('packages/test/package.json', {
-          devDependencies: { 'ember-feature-flags': '1.0.0' },
-          dependencies: { 'ember-cli-babel': '5.0.0' },
-          peerDependencies: { 'ember-cli-sass': '1.2.3' },
+      return workspaceAdapter
+        .changeToDependencySet({
           resolutions: { 'ember-data': '3.5.0' },
+        })
+        .then(() => {
+          assertFileContainsJSON('packages/test/package.json', {
+            devDependencies: { 'ember-feature-flags': '1.0.0' },
+            dependencies: { 'ember-cli-babel': '5.0.0' },
+            peerDependencies: { 'ember-cli-sass': '1.2.3' },
+            resolutions: { 'ember-data': '3.5.0' },
+          });
         });
-      });
     });
 
     it('changes specified ember properties', () => {
-      return workspaceAdapter.changeToDependencySet({
-        ember: { edition: 'octane' },
-      }).then(() => {
-        assertFileContainsJSON('packages/test/package.json', {
-          devDependencies: { 'ember-feature-flags': '1.0.0' },
-          dependencies: { 'ember-cli-babel': '5.0.0' },
-          peerDependencies: { 'ember-cli-sass': '1.2.3' },
-          resolutions: { 'ember-data': '3.0.0' },
+      return workspaceAdapter
+        .changeToDependencySet({
           ember: { edition: 'octane' },
+        })
+        .then(() => {
+          assertFileContainsJSON('packages/test/package.json', {
+            devDependencies: { 'ember-feature-flags': '1.0.0' },
+            dependencies: { 'ember-cli-babel': '5.0.0' },
+            peerDependencies: { 'ember-cli-sass': '1.2.3' },
+            resolutions: { 'ember-data': '3.0.0' },
+            ember: { edition: 'octane' },
+          });
         });
-      });
     });
 
     it('can remove a package', () => {
-      return workspaceAdapter.changeToDependencySet({
-        devDependencies: { 'ember-feature-flags': null },
-      }).then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
-          devDependencies: {},
-          dependencies: { 'ember-cli-babel': '5.0.0' },
-          peerDependencies: { 'ember-cli-sass': '1.2.3' },
-          resolutions: { 'ember-data': '3.0.0' },
+      return workspaceAdapter
+        .changeToDependencySet({
+          devDependencies: { 'ember-feature-flags': null },
+        })
+        .then(() => {
+          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
+            devDependencies: {},
+            dependencies: { 'ember-cli-babel': '5.0.0' },
+            peerDependencies: { 'ember-cli-sass': '1.2.3' },
+            resolutions: { 'ember-data': '3.0.0' },
+          });
         });
-      });
     });
 
     it('passes the scenario into buildManagerOptions to run with the correct options', () => {
       let runCount = 0;
-      workspaceAdapter.run = generateMockRun([{
-        command: 'yarn install --flat',
-        callback(command, args, opts) {
-          runCount++;
-          expect(opts).to.have.property('cwd', tmpdir);
-          return RSVP.resolve();
-        },
-      }], { allowPassthrough: false });
-      workspaceAdapter.buildManagerOptions = function(scenario) {
+      workspaceAdapter.run = generateMockRun(
+        [
+          {
+            command: 'yarn install --flat',
+            callback(command, args, opts) {
+              runCount++;
+              expect(opts).to.have.property('cwd', tmpdir);
+              return RSVP.resolve();
+            },
+          },
+        ],
+        { allowPassthrough: false }
+      );
+      workspaceAdapter.buildManagerOptions = function (scenario) {
         if (scenario.name === 'scenario1') {
-          return ['--flat']
+          return ['--flat'];
         }
 
         return [];
       };
 
-      return workspaceAdapter.changeToDependencySet({
-        name: 'scenario1'
-      }).then(() => {
-        expect(runCount).to.equal(1, 'yarn install should run with correct options from buildManagerOptions');
-      });
+      return workspaceAdapter
+        .changeToDependencySet({
+          name: 'scenario1',
+        })
+        .then(() => {
+          expect(runCount).to.equal(
+            1,
+            'yarn install should run with correct options from buildManagerOptions'
+          );
+        });
     });
   });
 });

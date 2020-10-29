@@ -23,17 +23,19 @@ describe('reset', () => {
     return remove(tmproot);
   });
 
-  it('runs without blowing up', function() {
+  it('runs without blowing up', function () {
     this.timeout(15000);
     let config = {
-      scenarios: [{
-        name: 'first',
-        npm: {
-          dependencies: {
-            'ember-source': '2.13.0',
+      scenarios: [
+        {
+          name: 'first',
+          npm: {
+            dependencies: {
+              'ember-source': '2.13.0',
+            },
           },
-        }
-      }],
+        },
+      ],
     };
 
     let ResetTask = require('../../lib/tasks/reset');
@@ -47,5 +49,4 @@ describe('reset', () => {
 
     return resetTask.run();
   });
-
 });

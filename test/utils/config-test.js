@@ -36,7 +36,10 @@ describe('utils/config', () => {
   }
 
   it('uses specified options.configFile if present', () => {
-    generateConfigFile('module.exports = { scenarios: [ { qux: "baz" }] };', 'config/non-default.js');
+    generateConfigFile(
+      'module.exports = { scenarios: [ { qux: "baz" }] };',
+      'config/non-default.js'
+    );
 
     return getConfig({ project, configPath: 'config/non-default.js' }).then((config) => {
       expect(config.scenarios).to.have.lengthOf(1);
@@ -45,13 +48,16 @@ describe('utils/config', () => {
   });
 
   it('uses projects configured configPath if present', async () => {
-    generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };', 'other-path/ember-try.js');
+    generateConfigFile(
+      'module.exports = { scenarios: [ { foo: "bar" }] };',
+      'other-path/ember-try.js'
+    );
 
     project.pkg['ember-addon'] = {
       configPath: 'other-path',
     };
 
-    let config = await getConfig({ project })
+    let config = await getConfig({ project });
 
     expect(config.scenarios).to.have.lengthOf(1);
     expect(config.scenarios[0].foo).to.equal('bar');
@@ -64,7 +70,7 @@ describe('utils/config', () => {
       configPath: 'other-path',
     };
 
-    let config = await getConfig({ project })
+    let config = await getConfig({ project });
 
     expect(config.scenarios).to.have.lengthOf(1);
     expect(config.scenarios[0].foo).to.equal('bar');
@@ -89,14 +95,15 @@ describe('utils/config', () => {
   });
 
   it('config file can return a promise', () => {
-    let configFile = 'module.exports = function() {' +
-                     '  return new Promise(function (resolve) {' +
-                     '    var scenarios = [' +
-                     '      { bar: "baz" }' +
-                     '    ];' +
-                     '    resolve({ scenarios: scenarios });' +
-                     '  });' +
-                     '};';
+    let configFile =
+      'module.exports = function() {' +
+      '  return new Promise(function (resolve) {' +
+      '    var scenarios = [' +
+      '      { bar: "baz" }' +
+      '    ];' +
+      '    resolve({ scenarios: scenarios });' +
+      '  });' +
+      '};';
     generateConfigFile(configFile);
     return getConfig({ project }).then((config) => {
       expect(config.scenarios).to.have.lengthOf(1);
@@ -105,7 +112,9 @@ describe('utils/config', () => {
   });
 
   it('config file exporting a function is passed the project', () => {
-    generateConfigFile('module.exports =  function(project) { return { scenarios: [ { foo: project.blah }] } };');
+    generateConfigFile(
+      'module.exports =  function(project) { return { scenarios: [ { foo: project.blah }] } };'
+    );
 
     project.blah = 'passed-in';
     return getConfig({ project }).then((config) => {
@@ -116,12 +125,17 @@ describe('utils/config', () => {
 
   it('throws error if project.root/config/ember-try.js is not present and no versionCompatibility', () => {
     return getConfig({ project }).catch((error) => {
-      expect(error).to.match(/No ember-try configuration found\. Please see the README for configuration options/);
+      expect(error).to.match(
+        /No ember-try configuration found\. Please see the README for configuration options/
+      );
     });
   });
 
   it('uses specified options.configFile over project config/ember-try.js', () => {
-    generateConfigFile('module.exports = { scenarios: [ { qux: "baz" }] };', 'config/non-default.js');
+    generateConfigFile(
+      'module.exports = { scenarios: [ { qux: "baz" }] };',
+      'config/non-default.js'
+    );
     generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };'); // Should not be used
 
     return getConfig({ project, configPath: 'config/non-default.js' }).then((config) => {
@@ -140,14 +154,16 @@ describe('utils/config', () => {
         let scenarios = config.scenarios;
         expect(scenarios.length).to.equal(5);
         expect(scenarios).to.include.deep.members([
-          { name: 'default', npm: { devDependencies: { } } },
+          { name: 'default', npm: { devDependencies: {} } },
           {
             name: 'ember-2.18.0',
             npm: { devDependencies: { 'ember-source': '2.18.0' } },
           },
         ]);
 
-        let scenarioNames = scenarios.map((s) => { return s.name; });
+        let scenarioNames = scenarios.map((s) => {
+          return s.name;
+        });
         expect(scenarioNames).to.include.members(['ember-beta', 'ember-release', 'ember-canary']);
       });
     });
@@ -158,7 +174,7 @@ describe('utils/config', () => {
         let scenarios = config.scenarios;
         expect(scenarios.length).to.equal(6);
         expect(scenarios).to.include.deep.members([
-          { name: 'default', npm: { devDependencies: { } } },
+          { name: 'default', npm: { devDependencies: {} } },
           {
             name: 'ember-2.18.0',
             npm: { devDependencies: { 'ember-source': '2.18.0' } },
@@ -173,7 +189,7 @@ describe('utils/config', () => {
         let scenarios = config.scenarios;
         expect(scenarios.length).to.equal(5);
         expect(scenarios).to.include.deep.members([
-          { name: 'default', npm: { devDependencies: { } } },
+          { name: 'default', npm: { devDependencies: {} } },
           {
             name: 'ember-2.18.0',
             npm: { devDependencies: { 'ember-source': '2.18.0' } },
@@ -210,7 +226,7 @@ describe('utils/config', () => {
         expect(config.scenarios).to.include.deep.members([
           {
             name: 'default',
-            npm: { devDependencies: { } },
+            npm: { devDependencies: {} },
           },
           {
             name: 'ember-2.18.0',
@@ -219,7 +235,9 @@ describe('utils/config', () => {
           { name: 'bar' },
         ]);
 
-        let betaScenario = config.scenarios.find((s) => { return s.name === 'ember-beta'; });
+        let betaScenario = config.scenarios.find((s) => {
+          return s.name === 'ember-beta';
+        });
         expect(betaScenario.allowedToFail).to.equal(false);
       });
     });

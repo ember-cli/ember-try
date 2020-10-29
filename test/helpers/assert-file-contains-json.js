@@ -12,7 +12,10 @@ function assertFileContains(filePath, expectedContents) {
   let regex = new RegExp(`${escapeForRegex(expectedContents)}($|\\W)`, 'gm');
   let actualContents = fs.readFileSync(filePath, { encoding: 'utf-8' });
   let result = regex.test(actualContents);
-  expect(result).to.equal(true, `File ${path.basename(filePath)} is expected to contain ${expectedContents}`);
+  expect(result).to.equal(
+    true,
+    `File ${path.basename(filePath)} is expected to contain ${expectedContents}`
+  );
 }
 
 function escapeForRegex(str) {

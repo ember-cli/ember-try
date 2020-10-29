@@ -21,7 +21,9 @@ module.exports = function generateMockRun() {
     } else if (options.allowPassthrough) {
       return passthrough().apply(this, arguments);
     } else {
-      throw new Error(`${actualCommand} ${actualArgs.join(' ')} not stubbed and not allowed to passthrough`);
+      throw new Error(
+        `${actualCommand} ${actualArgs.join(' ')} not stubbed and not allowed to passthrough`
+      );
     }
   };
 };
@@ -30,24 +32,33 @@ function isCommandMocked(mockedRun, actualCommand, actualArgs) {
   let mockedRunParts = mockedRun.command.split(' ');
   let mockedCommand = mockedRunParts[0];
   let mockedArgs = mockedRunParts.slice(1);
-  return mockedCommandIsEmberAndArgumentsMatch(mockedCommand, mockedArgs, actualCommand, actualArgs) ||
-         commandIsMocked(mockedCommand, mockedArgs, actualCommand, actualArgs);
+  return (
+    mockedCommandIsEmberAndArgumentsMatch(mockedCommand, mockedArgs, actualCommand, actualArgs) ||
+    commandIsMocked(mockedCommand, mockedArgs, actualCommand, actualArgs)
+  );
 }
 
 function passthrough() {
   return require('../../lib/utils/run');
 }
 
-function mockedCommandIsEmberAndArgumentsMatch(mockedCommand, mockedArgs, actualCommand, actualArgs) {
-
-  return (mockedCommand === 'ember') &&
-         (actualCommand === 'node' && actualArgs && (actualArgs[0].indexOf('ember') > -1) &&
-         arraysAreEqual(actualArgs.slice(1), mockedArgs));
+function mockedCommandIsEmberAndArgumentsMatch(
+  mockedCommand,
+  mockedArgs,
+  actualCommand,
+  actualArgs
+) {
+  return (
+    mockedCommand === 'ember' &&
+    actualCommand === 'node' &&
+    actualArgs &&
+    actualArgs[0].indexOf('ember') > -1 &&
+    arraysAreEqual(actualArgs.slice(1), mockedArgs)
+  );
 }
 
 function commandIsMocked(mockedCommand, mockedArgs, actualCommand, actualArgs) {
-  return mockedCommand === actualCommand &&
-         arraysAreEqual(actualArgs, mockedArgs);
+  return mockedCommand === actualCommand && arraysAreEqual(actualArgs, mockedArgs);
 }
 
 function arraysAreEqual(firstArr, secondArr) {

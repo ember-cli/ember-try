@@ -27,26 +27,38 @@ describe('DependencyManagerAdapterFactory', () => {
 
   describe('generateFromConfig', () => {
     it('creates the adapter', () => {
-      let adapters = DependencyManagerAdapterFactory.generateFromConfig({ scenarios: [{ npm: {} }] }, 'here');
+      let adapters = DependencyManagerAdapterFactory.generateFromConfig(
+        { scenarios: [{ npm: {} }] },
+        'here'
+      );
       expect(adapters[0].configKey).to.equal('npm');
       expect(adapters.length).to.equal(1);
     });
 
     it('errors when it sees `bower` explicitly', () => {
       expect(() => {
-        DependencyManagerAdapterFactory.generateFromConfig({ scenarios: [{ bower: {}, npm: {} }] }, 'here');
+        DependencyManagerAdapterFactory.generateFromConfig(
+          { scenarios: [{ bower: {}, npm: {} }] },
+          'here'
+        );
       }).to.throw(/bower configuration is no longer supported/);
     });
 
     it('errors when there is only a legacy top-level dependencies', () => {
       expect(() => {
-        DependencyManagerAdapterFactory.generateFromConfig({ scenarios: [{ dependencies: {} }] }, 'here');
+        DependencyManagerAdapterFactory.generateFromConfig(
+          { scenarios: [{ dependencies: {} }] },
+          'here'
+        );
       }).to.throw(/bower configuration is no longer supported/);
     });
 
     it('errors when there is only a legacy top-level devDependencies', () => {
       expect(() => {
-        DependencyManagerAdapterFactory.generateFromConfig({ scenarios: [{ devDependencies: {} }] }, 'here');
+        DependencyManagerAdapterFactory.generateFromConfig(
+          { scenarios: [{ devDependencies: {} }] },
+          'here'
+        );
       }).to.throw(/bower configuration is no longer supported/);
     });
 
@@ -60,7 +72,7 @@ describe('DependencyManagerAdapterFactory', () => {
         {
           useYarn: true,
           useWorkspaces: true,
-          scenarios: [{ npm: {} }]
+          scenarios: [{ npm: {} }],
         },
         tmpdir
       );

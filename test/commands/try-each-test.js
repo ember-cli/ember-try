@@ -11,11 +11,11 @@ describe('commands/try-each', () => {
   describe('#run', () => {
     let mockConfig;
 
-    function MockTryEachTask() { }
-    MockTryEachTask.prototype.run = function() { };
+    function MockTryEachTask() {}
+    MockTryEachTask.prototype.run = function () {};
 
     beforeEach(() => {
-      TryEachCommand._getConfig = function() {
+      TryEachCommand._getConfig = function () {
         return RSVP.resolve(mockConfig || { scenarios: [] });
       };
 
@@ -30,7 +30,7 @@ describe('commands/try-each', () => {
 
     it('passes the configPath to _getConfig', () => {
       let configPath;
-      TryEachCommand._getConfig = function(options) {
+      TryEachCommand._getConfig = function (options) {
         configPath = options.configPath;
 
         return RSVP.resolve({ scenarios: [{ name: 'foo' }] });

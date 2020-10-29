@@ -18,7 +18,7 @@ describe('utils/run-command', () => {
   });
 
   it('passes arguments to run', () => {
-    let mockedRun = function(command, args) {
+    let mockedRun = function (command, args) {
       expect(command).to.equal('node');
       expect(args[0]).to.match(/.*\/ember/);
       expect(args[1]).to.equal('help');

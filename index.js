@@ -5,5 +5,5 @@ module.exports = {
 
   includedCommands() {
     return require('./lib/commands');
-  }
+  },
 };
