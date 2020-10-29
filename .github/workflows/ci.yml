@@ -151,7 +151,8 @@ jobs:
       - name: install smoke-test-app deps
         run: npm install
         working-directory: smoke-test-app
-      - run: npm run smoke-test
+      - run:  ./node_modules/.bin/ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-npm-scenarios.js'
+        working-directory: smoke-test-app
 
   yarn-smoke-tests:
     strategy:
@@ -177,4 +178,5 @@ jobs:
       - name: install smoke-test-app deps
         run: yarn install
         working-directory: smoke-test-app
-      - run: yarn smoke-test-yarn
+      - run:  ./node_modules/.bin/ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-yarn-scenarios.js'
+        working-directory: smoke-test-app

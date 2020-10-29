@@ -22,15 +22,12 @@
     "test": "tests"
   },
   "scripts": {
-    "all-test": "npm run-script node-test && npm run-script smoke-test",
     "build": "ember build",
     "lint": "eslint lib test",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint .",
     "node-test": "mocha test/**/*.js",
     "node-test-with-coverage": "nyc --reporter lcov npm run-script node-test && node_modules/.bin/codecov",
-    "smoke-test": "cd smoke-test-app && ./smoke-test.sh",
-    "smoke-test-yarn": "cd smoke-test-app && ./smoke-test-yarn.sh",
     "start": "ember serve",
     "test": "npm run-script lint && npm run-script node-test"
   },
