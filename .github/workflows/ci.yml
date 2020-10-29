@@ -132,13 +132,12 @@ jobs:
       matrix:
         node: ['10', '12', '14']
 
-    name: Tests (Node.js v${{ matrix.node }} with npm)
+    name: Smoke Tests (Node v${{ matrix.node }} with npm)
     runs-on: ubuntu-latest
 
     needs:
       - lint
       - tests
-      - floating-deps
 
     steps:
       - uses: actions/checkout@v1
@@ -159,13 +158,12 @@ jobs:
       matrix:
         node: ['10', '12', '14']
 
-    name: Tests (Node.js v${{ matrix.node }} with yarn)
+    name: Smoke Tests (Node v${{ matrix.node }} with yarn)
     runs-on: ubuntu-latest
 
     needs:
       - lint
       - tests
-      - floating-deps
 
     steps:
       - uses: actions/checkout@v1
@@ -179,4 +177,26 @@ jobs:
         run: yarn install
         working-directory: smoke-test-app
       - run:  ./node_modules/.bin/ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-yarn-scenarios.js'
+        working-directory: smoke-test-app
+
+  windows-smoke-tests:
+    name: Smoke Tests (Windows)
+    runs-on: windows-latest
+
+    needs:
+      - lint
+      - tests
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: install deps
+        run: yarn install
+      - name: install smoke-test-app deps
+        run: npm install
+        working-directory: smoke-test-app
+      - run:  ./node_modules/.bin/ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-npm-scenarios.js'
         working-directory: smoke-test-app
