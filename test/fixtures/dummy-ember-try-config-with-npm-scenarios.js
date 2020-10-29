@@ -5,9 +5,9 @@ module.exports = {
       command: 'ember test',
       npm: {
         dependencies: {
-          'ember-try-test-suite-helper': '1.0.0'
-        }
-      }
-    }
-  ]
+          'ember-try-test-suite-helper': '1.0.0',
+        },
+      },
+    },
+  ],
 };

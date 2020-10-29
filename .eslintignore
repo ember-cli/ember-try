@@ -1,6 +1,7 @@
 # unconventional js
 /blueprints/*/files/
 /vendor/
+/smoke-test-app
 
 # compiled output
 /dist/

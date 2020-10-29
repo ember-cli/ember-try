@@ -4,18 +4,11 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module'
   },
-  plugins: [
-    'ember'
-  ],
   extends: [
     'eslint:recommended',
-    'plugin:ember/recommended'
+    'plugin:prettier/recommended',
   ],
-  env: {
-    browser: true
-  },
-  rules: {
-  },
+  rules: {},
   overrides: [
     // node files
     {
@@ -44,11 +37,11 @@ module.exports = {
         browser: false,
         node: true
       },
-      plugins: ['node'],
-      rules: Object.assign({}, require('eslint-plugin-node').configs.recommended.rules, {
+      extends: ['plugin:node/recommended'],
+      rules: {
         // add your custom rules and overrides for node files here
         'no-process-exit': 'off'
-      })
+      }
     }
   ]
 };

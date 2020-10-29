@@ -10,12 +10,25 @@ const origGetConfig = TryOneCommand._getConfig;
 describe('commands/try-one', () => {
   describe('getCommand', () => {
     it('returns args after --- as command args', () => {
-      let args = TryOneCommand.getCommand(['ember', 'try:one', 'foo-bar-scenario', '--skip-cleanup', '---', 'ember', 'build']);
+      let args = TryOneCommand.getCommand([
+        'ember',
+        'try:one',
+        'foo-bar-scenario',
+        '--skip-cleanup',
+        '---',
+        'ember',
+        'build',
+      ]);
       expect(args).to.eql(['ember', 'build']);
     });
 
     it('returns no command args if no ---', () => {
-      let args = TryOneCommand.getCommand(['ember', 'try:one', 'foo-bar-scenario', '--skip-cleanup']);
+      let args = TryOneCommand.getCommand([
+        'ember',
+        'try:one',
+        'foo-bar-scenario',
+        '--skip-cleanup',
+      ]);
       expect(args).to.eql([]);
     });
   });
@@ -23,11 +36,11 @@ describe('commands/try-one', () => {
   describe('#run', () => {
     let mockConfig;
 
-    function MockTryEachTask() { }
-    MockTryEachTask.prototype.run = function() { };
+    function MockTryEachTask() {}
+    MockTryEachTask.prototype.run = function () {};
 
     beforeEach(() => {
-      TryOneCommand._getConfig = function() {
+      TryOneCommand._getConfig = function () {
         return RSVP.resolve(mockConfig || { scenarios: [] });
       };
 
@@ -45,7 +58,7 @@ describe('commands/try-one', () => {
 
       try {
         await TryOneCommand.run({}, []);
-      } catch(e) {
+      } catch (e) {
         error = e;
       }
 
@@ -54,7 +67,7 @@ describe('commands/try-one', () => {
 
     it('passes the configPath to _getConfig', async () => {
       let configPath;
-      TryOneCommand._getConfig = async function(options) {
+      TryOneCommand._getConfig = async function (options) {
         configPath = options.configPath;
 
         return { scenarios: [{ name: 'foo' }] };
@@ -66,7 +79,7 @@ describe('commands/try-one', () => {
     });
 
     it('throws if a scenario was not found for the scenarioName provided', () => {
-      return TryOneCommand.run({ }, ['foo']).catch((error) => {
+      return TryOneCommand.run({}, ['foo']).catch((error) => {
         expect(error).to.match(/requires a scenario specified in the config/);
       });
     });
@@ -74,9 +87,22 @@ describe('commands/try-one', () => {
     it('sets command on task init', async () => {
       await testCommandSetsTheseAsCommandArgs('try:one default', []);
       await testCommandSetsTheseAsCommandArgs('try:one default --- ember help', ['ember', 'help']);
-      await testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json', ['ember', 'help', '--json']);
-      await testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json=true', ['ember', 'help', '--json=true']);
-      await testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json true', ['ember', 'help', '--json', 'true']);
+      await testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json', [
+        'ember',
+        'help',
+        '--json',
+      ]);
+      await testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json=true', [
+        'ember',
+        'help',
+        '--json=true',
+      ]);
+      await testCommandSetsTheseAsCommandArgs('try:one default --- ember help --json true', [
+        'ember',
+        'help',
+        '--json',
+        'true',
+      ]);
     });
   });
 });
@@ -86,16 +112,16 @@ async function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
   function MockTask(opts) {
     expect(opts.commandArgs).to.eql(expectedArgs);
   }
-  MockTask.prototype.run = async function() {
-  };
+  MockTask.prototype.run = async function () {};
   TryOneCommand._TryEachTask = MockTask;
-  TryOneCommand._commandLineArguments = function() {
-    return [].concat(['/usr/local/Cellar/node/5.3.0/bin/node',
-      '/usr/local/bin/ember'],
-    additionalArgs);
+  TryOneCommand._commandLineArguments = function () {
+    return [].concat(
+      ['/usr/local/Cellar/node/5.3.0/bin/node', '/usr/local/bin/ember'],
+      additionalArgs
+    );
   };
 
-  TryOneCommand._getConfig = async function() {
+  TryOneCommand._getConfig = async function () {
     return RSVP.resolve({ scenarios: [{ name: 'default' }] });
   };
 

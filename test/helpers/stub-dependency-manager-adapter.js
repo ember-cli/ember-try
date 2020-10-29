@@ -8,11 +8,13 @@ module.exports = CoreObject.extend({
     return RSVP.resolve();
   },
   changeToDependencySet() {
-    return RSVP.resolve([{
-      name: 'testDep',
-      versionExpected: '2.0.0',
-      versionSeen: '2.1.0',
-    }]);
+    return RSVP.resolve([
+      {
+        name: 'testDep',
+        versionExpected: '2.0.0',
+        versionSeen: '2.1.0',
+      },
+    ]);
   },
   cleanup() {
     return RSVP.resolve();

@@ -11,11 +11,11 @@ describe('commands/try-ember', () => {
   describe('#run', () => {
     let mockConfig;
 
-    function MockTryEachTask() { }
-    MockTryEachTask.prototype.run = function() { };
+    function MockTryEachTask() {}
+    MockTryEachTask.prototype.run = function () {};
 
     beforeEach(() => {
-      TryEmberCommand._getConfig = function() {
+      TryEmberCommand._getConfig = function () {
         return RSVP.resolve(mockConfig || { scenarios: [] });
       };
 
@@ -30,7 +30,7 @@ describe('commands/try-ember', () => {
 
     it('passes the configPath to _getConfig', () => {
       let configPath;
-      TryEmberCommand._getConfig = function(options) {
+      TryEmberCommand._getConfig = function (options) {
         configPath = options.configPath;
 
         return RSVP.resolve({ scenarios: [{ name: 'foo' }] });
@@ -42,7 +42,7 @@ describe('commands/try-ember', () => {
 
     it('passes ember semver statement to _getConfig', () => {
       let versionCompatibility;
-      TryEmberCommand._getConfig = function(options) {
+      TryEmberCommand._getConfig = function (options) {
         versionCompatibility = options.versionCompatibility;
 
         return RSVP.resolve({ scenarios: [{ name: 'foo' }] });

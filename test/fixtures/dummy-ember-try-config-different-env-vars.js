@@ -5,14 +5,14 @@ module.exports = {
       name: 'test1',
       command: './fail-if-no-foo.sh',
       env: {
-        FOO: true
+        FOO: true,
       },
-      npm: {}
+      npm: {},
     },
     {
       name: 'test2',
       command: './fail-if-foo.sh',
-      npm: {}
-    }
-  ]
+      npm: {},
+    },
+  ],
 };

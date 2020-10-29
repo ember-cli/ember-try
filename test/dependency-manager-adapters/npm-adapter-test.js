@@ -34,10 +34,16 @@ describe('npmAdapter', () => {
       writeJSONFile('package.json', { originalPackageJSON: true });
       return new NpmAdapter({
         cwd: tmpdir,
-      }).setup().then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), { originalNodeModules: true });
-      });
+      })
+        .setup()
+        .then(() => {
+          assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), {
+            originalPackageJSON: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), {
+            originalNodeModules: true,
+          });
+        });
     });
 
     it('backs up the yarn.lock file, npm-shrinkwrap.json and package-lock.json if they exist', () => {
@@ -49,13 +55,25 @@ describe('npmAdapter', () => {
       writeJSONFile('package-lock.json', { originalPackageLock: true });
       return new NpmAdapter({
         cwd: tmpdir,
-      }).setup().then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), { originalNodeModules: true });
-        assertFileContainsJSON(path.join(tmpdir, 'yarn.lock.ember-try'), { originalYarnLock: true });
-        assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json.ember-try'), { originalNpmShrinkWrap: true });
-        assertFileContainsJSON(path.join(tmpdir, 'package-lock.json.ember-try'), { originalPackageLock: true });
-      });
+      })
+        .setup()
+        .then(() => {
+          assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), {
+            originalPackageJSON: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), {
+            originalNodeModules: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, 'yarn.lock.ember-try'), {
+            originalYarnLock: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json.ember-try'), {
+            originalNpmShrinkWrap: true,
+          });
+          assertFileContainsJSON(path.join(tmpdir, 'package-lock.json.ember-try'), {
+            originalPackageLock: true,
+          });
+        });
     });
   });
 
@@ -64,114 +82,147 @@ describe('npmAdapter', () => {
       it('only runs npm install with npm 5', () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
-        let stubbedRun = generateMockRun([{
-          command: 'npm install --no-shrinkwrap',
-          callback(command, args, opts) {
-            runCount++;
-            expect(opts).to.have.property('cwd', tmpdir);
-            return RSVP.resolve();
-          },
-        },{
-          command: 'npm --version',
-          callback() {
-            runCount++;
-            return RSVP.resolve({stdout: '5.7.1'});
-          },
-        }], { allowPassthrough: false });
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'npm install --no-shrinkwrap',
+              callback(command, args, opts) {
+                runCount++;
+                expect(opts).to.have.property('cwd', tmpdir);
+                return RSVP.resolve();
+              },
+            },
+            {
+              command: 'npm --version',
+              callback() {
+                runCount++;
+                return RSVP.resolve({ stdout: '5.7.1' });
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
 
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-        })._install().then(() => {
-          expect(runCount).to.equal(2);
-        });
+        })
+          ._install()
+          .then(() => {
+            expect(runCount).to.equal(2);
+          });
       });
 
       it('runs npm prune and npm install with npm 4', () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
-        let stubbedRun = generateMockRun([{
-          command: 'npm install --no-shrinkwrap',
-          callback(command, args, opts) {
-            runCount++;
-            expect(opts).to.have.property('cwd', tmpdir);
-            return RSVP.resolve();
-          },
-        },{
-          command: 'npm prune',
-          callback(command, args, opts) {
-            runCount++;
-            expect(opts).to.have.property('cwd', tmpdir);
-            return RSVP.resolve();
-          },
-        }, {
-          command: 'npm --version',
-          callback() {
-            runCount++;
-            return RSVP.resolve({stdout: '4.7.1'});
-          },
-        }], { allowPassthrough: false });
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'npm install --no-shrinkwrap',
+              callback(command, args, opts) {
+                runCount++;
+                expect(opts).to.have.property('cwd', tmpdir);
+                return RSVP.resolve();
+              },
+            },
+            {
+              command: 'npm prune',
+              callback(command, args, opts) {
+                runCount++;
+                expect(opts).to.have.property('cwd', tmpdir);
+                return RSVP.resolve();
+              },
+            },
+            {
+              command: 'npm --version',
+              callback() {
+                runCount++;
+                return RSVP.resolve({ stdout: '4.7.1' });
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
 
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-        })._install().then(() => {
-          expect(runCount).to.equal(3, 'All three commands should run');
-        });
+        })
+          ._install()
+          .then(() => {
+            expect(runCount).to.equal(3, 'All three commands should run');
+          });
       });
 
       it('uses managerOptions for npm commands', () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
-        let stubbedRun = generateMockRun([{
-          command: 'npm install --no-optional --no-shrinkwrap',
-          callback() {
-            runCount++;
-            return RSVP.resolve();
-          },
-        }, {
-          command: 'npm --version',
-          callback() {
-            runCount++;
-            return RSVP.resolve({stdout: '5.7.1'});
-          },
-        }], { allowPassthrough: false });
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'npm install --no-optional --no-shrinkwrap',
+              callback() {
+                runCount++;
+                return RSVP.resolve();
+              },
+            },
+            {
+              command: 'npm --version',
+              callback() {
+                runCount++;
+                return RSVP.resolve({ stdout: '5.7.1' });
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
 
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           managerOptions: ['--no-optional'],
-        })._install().then(() => {
-          expect(runCount).to.equal(2);
-        });
+        })
+          ._install()
+          .then(() => {
+            expect(runCount).to.equal(2);
+          });
       });
 
       it('uses buildManagerOptions for npm commands', () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
-        let stubbedRun = generateMockRun([{
-          command: 'npm install --flat',
-          callback() {
-            runCount++;
-            return RSVP.resolve();
-          },
-        }, {
-          command: 'npm --version',
-          callback() {
-            runCount++;
-            return RSVP.resolve({stdout: '5.7.1'});
-          },
-        }], { allowPassthrough: false });
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'npm install --flat',
+              callback() {
+                runCount++;
+                return RSVP.resolve();
+              },
+            },
+            {
+              command: 'npm --version',
+              callback() {
+                runCount++;
+                return RSVP.resolve({ stdout: '5.7.1' });
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
 
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-          buildManagerOptions: function() {
+          buildManagerOptions: function () {
             return ['--flat'];
           },
-        })._install().then(() => {
-          expect(runCount).to.equal(2, 'npm install should run with buildManagerOptions');
-        });
+        })
+          ._install()
+          .then(() => {
+            expect(runCount).to.equal(2, 'npm install should run with buildManagerOptions');
+          });
       });
 
       it('throws an error if buildManagerOptions does not return an array', async () => {
@@ -180,12 +231,12 @@ describe('npmAdapter', () => {
           let adapter = new NpmAdapter({
             cwd: tmpdir,
             run: () => {},
-            buildManagerOptions: function() {
+            buildManagerOptions: function () {
               return 'string';
             },
           });
 
-          await adapter._install()
+          await adapter._install();
         } catch (e) {
           error = e;
         }
@@ -198,66 +249,87 @@ describe('npmAdapter', () => {
       it('runs yarn install', () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
-        let stubbedRun = generateMockRun([{
-          command: 'yarn install --no-lockfile --ignore-engines',
-          callback(command, args, opts) {
-            runCount++;
-            expect(opts).to.have.property('cwd', tmpdir);
-            return RSVP.resolve();
-          },
-        }], { allowPassthrough: false });
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'yarn install --no-lockfile --ignore-engines',
+              callback(command, args, opts) {
+                runCount++;
+                expect(opts).to.have.property('cwd', tmpdir);
+                return RSVP.resolve();
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
 
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           useYarnCommand: true,
-        })._install().then(() => {
-          expect(runCount).to.equal(1, 'Only yarn install should run');
-        });
+        })
+          ._install()
+          .then(() => {
+            expect(runCount).to.equal(1, 'Only yarn install should run');
+          });
       });
 
       it('uses managerOptions for yarn commands', () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
-        let stubbedRun = generateMockRun([{
-          command: 'yarn install --flat --no-lockfile --ignore-engines',
-          callback() {
-            runCount++;
-            return RSVP.resolve();
-          },
-        }], { allowPassthrough: false });
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'yarn install --flat --no-lockfile --ignore-engines',
+              callback() {
+                runCount++;
+                return RSVP.resolve();
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
 
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           useYarnCommand: true,
           managerOptions: ['--flat'],
-        })._install().then(() => {
-          expect(runCount).to.equal(1, 'Only yarn install should run with manager options');
-        });
+        })
+          ._install()
+          .then(() => {
+            expect(runCount).to.equal(1, 'Only yarn install should run with manager options');
+          });
       });
 
       it('uses buildManagerOptions for yarn commands', () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
-        let stubbedRun = generateMockRun([{
-          command: 'yarn install --flat',
-          callback() {
-            runCount++;
-            return RSVP.resolve();
-          },
-        }], { allowPassthrough: false });
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'yarn install --flat',
+              callback() {
+                runCount++;
+                return RSVP.resolve();
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
 
         return new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           useYarnCommand: true,
-          buildManagerOptions: function() {
+          buildManagerOptions: function () {
             return ['--flat'];
           },
-        })._install().then(() => {
-          expect(runCount).to.equal(1, 'Only yarn install should run with buildManagerOptions');
-        });
+        })
+          ._install()
+          .then(() => {
+            expect(runCount).to.equal(1, 'Only yarn install should run with buildManagerOptions');
+          });
       });
 
       it('throws an error if buildManagerOptions does not return an array', async () => {
@@ -267,12 +339,12 @@ describe('npmAdapter', () => {
             cwd: tmpdir,
             run: () => {},
             useYarnCommand: true,
-            buildManagerOptions: function() {
+            buildManagerOptions: function () {
               return 'string';
             },
           });
 
-          await adapter._install()
+          await adapter._install();
         } catch (e) {
           error = e;
         }
@@ -290,7 +362,9 @@ describe('npmAdapter', () => {
       writeJSONFile('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
       return new NpmAdapter({ cwd: tmpdir })._restoreOriginalDependencies().then(() => {
         assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), { originalNodeModules: true });
+        assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), {
+          originalNodeModules: true,
+        });
       });
     });
 
@@ -307,10 +381,16 @@ describe('npmAdapter', () => {
       writeJSONFile('package-lock.json', { originalPackageLock: false });
       return new NpmAdapter({ cwd: tmpdir })._restoreOriginalDependencies().then(() => {
         assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), { originalNodeModules: true });
+        assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), {
+          originalNodeModules: true,
+        });
         assertFileContainsJSON(path.join(tmpdir, 'yarn.lock'), { originalYarnLock: true });
-        assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json'), { originalNpmShrinkWrap: true });
-        assertFileContainsJSON(path.join(tmpdir, 'package-lock.json'), { originalPackageLock: true });
+        assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json'), {
+          originalNpmShrinkWrap: true,
+        });
+        assertFileContainsJSON(path.join(tmpdir, 'package-lock.json'), {
+          originalPackageLock: true,
+        });
       });
     });
   });
@@ -318,7 +398,10 @@ describe('npmAdapter', () => {
   describe('#_packageJSONForDependencySet', () => {
     it('changes specified dependency versions', () => {
       let npmAdapter = new NpmAdapter({ cwd: tmpdir });
-      let packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0' } };
+      let packageJSON = {
+        devDependencies: { 'ember-feature-flags': '1.0.0' },
+        dependencies: { 'ember-cli-babel': '5.0.0' },
+      };
       let depSet = { dependencies: { 'ember-cli-babel': '6.0.0' } };
 
       let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
@@ -330,75 +413,75 @@ describe('npmAdapter', () => {
       it('adds the ember property to project package.json', () => {
         let npmAdapter = new NpmAdapter({
           cwd: tmpdir,
-          useYarnCommand: true
+          useYarnCommand: true,
         });
         let packageJSON = {};
         let depSet = {
-          ember: { edition: 'octane' }
+          ember: { edition: 'octane' },
         };
 
         let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
-        expect(resultJSON).to.deep.equal({ ember: { edition: 'octane' }});
+        expect(resultJSON).to.deep.equal({ ember: { edition: 'octane' } });
       });
 
       it('merges the ember property to project package.json', () => {
         let npmAdapter = new NpmAdapter({
           cwd: tmpdir,
-          useYarnCommand: true
+          useYarnCommand: true,
         });
         let packageJSON = { ember: { foo: 'bar' } };
         let depSet = {
-          ember: { edition: 'octane' }
+          ember: { edition: 'octane' },
         };
 
         let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
-        expect(resultJSON).to.deep.equal({ ember: { foo: 'bar', edition: 'octane' }});
+        expect(resultJSON).to.deep.equal({ ember: { foo: 'bar', edition: 'octane' } });
       });
 
       it('overrides existing fields inside the ember property to project package.json', () => {
         let npmAdapter = new NpmAdapter({
           cwd: tmpdir,
-          useYarnCommand: true
+          useYarnCommand: true,
         });
         let packageJSON = { ember: { edition: 'classic' } };
         let depSet = {
-          ember: { edition: 'octane' }
+          ember: { edition: 'octane' },
         };
 
         let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
-        expect(resultJSON).to.deep.equal({ ember: { edition: 'octane' }});
+        expect(resultJSON).to.deep.equal({ ember: { edition: 'octane' } });
       });
 
       it('removes any items with a null value', () => {
         let npmAdapter = new NpmAdapter({
           cwd: tmpdir,
-          useYarnCommand: true
+          useYarnCommand: true,
         });
         let packageJSON = { ember: { edition: 'octane' } };
         let depSet = {
-          ember: { edition: null }
+          ember: { edition: null },
         };
 
         let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
-        expect(resultJSON).to.deep.equal({ ember: { }});
+        expect(resultJSON).to.deep.equal({ ember: {} });
       });
     });
 
     it('adds a resolution for the specified dependency version', () => {
       let npmAdapter = new NpmAdapter({
         cwd: tmpdir,
-        useYarnCommand: true
+        useYarnCommand: true,
       });
       let packageJSON = {
         dependencies: { 'ember-cli-babel': '5.0.0' },
       };
       let depSet = {
         dependencies: { 'ember-cli-babel': '6.0.0' },
-        resolutions: { 'ember-cli-babel': '6.0.0' }
+        resolutions: { 'ember-cli-babel': '6.0.0' },
       };
 
       let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
@@ -409,7 +492,7 @@ describe('npmAdapter', () => {
     it('removes a dependency from resolutions if its version is null', () => {
       let npmAdapter = new NpmAdapter({
         cwd: tmpdir,
-        useYarnCommand: true
+        useYarnCommand: true,
       });
       let packageJSON = {
         dependencies: { 'ember-cli-babel': '5.0.0' },
@@ -428,7 +511,7 @@ describe('npmAdapter', () => {
     it('doesnt add resolutions if there are none specified', () => {
       let npmAdapter = new NpmAdapter({
         cwd: tmpdir,
-        useYarnCommand: true
+        useYarnCommand: true,
       });
       let packageJSON = {
         dependencies: { 'ember-cli-babel': '5.0.0' },
@@ -445,14 +528,14 @@ describe('npmAdapter', () => {
     it('doesnt add resolutions when not using yarn', () => {
       let npmAdapter = new NpmAdapter({
         cwd: tmpdir,
-        useYarnCommand: false
+        useYarnCommand: false,
       });
       let packageJSON = {
         dependencies: { 'ember-cli-babel': '5.0.0' },
       };
       let depSet = {
         dependencies: { 'ember-cli-babel': '6.0.0' },
-        resolutions: { 'ember-cli-babel': '6.0.0' }
+        resolutions: { 'ember-cli-babel': '6.0.0' },
       };
 
       let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
@@ -462,7 +545,10 @@ describe('npmAdapter', () => {
 
     it('changes specified npm dev dependency versions', () => {
       let npmAdapter = new NpmAdapter({ cwd: tmpdir });
-      let packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' }, dependencies: { 'ember-cli-babel': '5.0.0' } };
+      let packageJSON = {
+        devDependencies: { 'ember-feature-flags': '1.0.0' },
+        dependencies: { 'ember-cli-babel': '5.0.0' },
+      };
       let depSet = { devDependencies: { 'ember-feature-flags': '2.0.1' } };
 
       let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
