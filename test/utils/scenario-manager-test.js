@@ -6,6 +6,10 @@ const CoreObject = require('core-object');
 const RSVP = require('rsvp');
 
 describe('scenarioManager', () => {
+  it('does not require any dependency managers', () => {
+    new ScenarioManager({ dependencyManagerAdapters: [] });
+  });
+
   describe('#setup', () => {
     it('sets up each of the dependency managers', () => {
       let calledFirstAdapter = false;
