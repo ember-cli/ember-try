@@ -160,6 +160,64 @@ describe('tryEach', () => {
     });
   });
 
+  describe('with no dependency managers', () => {
+    it('runs properly', async () => {
+      let config = {
+        scenarios: [
+          {
+            name: 'first',
+            command: 'foo-bar',
+          },
+          {
+            name: 'second',
+            command: 'baz-qux',
+          },
+        ],
+      };
+
+      let steps = [];
+      let mockedRun = generateMockRun([
+        {
+          command: 'foo-bar',
+          async callback() {
+            steps.push('foo-bar ran');
+
+            return 0;
+          },
+        },
+        {
+          command: 'baz-qux',
+          async callback() {
+            steps.push('baz-qux ran');
+
+            return 0;
+          },
+        },
+      ]);
+      mockery.registerMock('./run', mockedRun);
+
+      let output = [];
+      let outputFn = function (log) {
+        output.push(log);
+      };
+
+      let TryEachTask = require('../../lib/tasks/try-each');
+      let tryEachTask = new TryEachTask({
+        ui: { writeLine: outputFn },
+        project: { root: tmpdir },
+        config,
+        dependencyManagerAdapters: [],
+        _on() {},
+      });
+
+      let exitCode = await tryEachTask.run(config.scenarios, {});
+
+      expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
+      expect(output).to.include('Scenario first: SUCCESS');
+      expect(steps).to.deep.equal(['foo-bar ran', 'baz-qux ran']);
+    });
+  });
+
   describe('with stubbed dependency manager', () => {
     it('passes along timeout options to run', function () {
       // With stubbed dependency manager, timing out is warning for accidentally not using the stub
