@@ -39,7 +39,7 @@
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-qunit": "^4.6.0",
     "ember-resolver": "^8.0.2",
-    "ember-source": "~3.23.0",
+    "ember-source": "~3.27.5",
     "eslint-plugin-ember": "^8.14.0",
     "loader.js": "^4.7.0",
     "qunit-dom": "^1.6.0"
