@@ -54,7 +54,7 @@
     "mockery": "^2.1.0",
     "nyc": "^15.1.0",
     "prettier": "^2.1.2",
-    "release-it": "^14.2.1",
+    "release-it": "^14.10.0",
     "release-it-lerna-changelog": "^3.1.0",
     "rsvp": "^4.7.0",
     "tmp-sync": "^1.1.0"
