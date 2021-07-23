@@ -127,7 +127,7 @@ module.exports = async function() {
     */
     buildManagerOptions(scenario) {
       return ['--ignore-engines'];
-    }
+    },
 
     scenarios: [
       {
@@ -150,7 +150,7 @@ module.exports = async function() {
           */
           resolutions: {
             'lodash': '5.0.0'
-          }
+          },
           /*
             In order to easily test multiple editions ember-try merges any `ember` property specified
             into the applications `package.json`. Values specified in the ember-try configuration will
@@ -171,7 +171,7 @@ module.exports = async function() {
           devDependencies: {
             'ember-data': '2.3.0',
 
-            'ember-source': await getChannelURL('canary')
+            'ember-source': await getChannelURL('canary'),
 
             // you can remove any package by marking `null`
             'some-optional-package': null
