@@ -32,7 +32,7 @@
     "chalk": "^4.1.0",
     "cli-table3": "^0.6.0",
     "core-object": "^3.1.5",
-    "debug": "^4.1.1",
+    "debug": "^4.3.2",
     "ember-try-config": "^4.0.0",
     "execa": "^4.1.0",
     "fs-extra": "^9.0.1",
