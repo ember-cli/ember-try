@@ -41,7 +41,7 @@
     "walk-sync": "^2.2.0"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
+    "chai": "^4.3.4",
     "codecov": "^3.4.0",
     "ember-cli": "~3.22.0",
     "eslint": "^7.31.0",
