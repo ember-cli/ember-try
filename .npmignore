@@ -9,9 +9,15 @@
 /.bowerrc
 /.editorconfig
 /.ember-cli
+/.env*
+/.eslintcache
 /.eslintignore
 /.eslintrc.js
+/.git/
+/.github/
 /.gitignore
+/.prettierignore
+/.prettierrc
 /.template-lintrc.js
 /.travis.yml
 /.watchmanconfig
@@ -20,6 +26,7 @@
 /ember-cli-build.js
 /testem.js
 /tests/
+/yarn-error.log
 /yarn.lock
 .gitkeep
 
@@ -29,6 +36,7 @@
 /package.json.ember-try
 
 # custom
+/.codeclimate.yml
 /test
 /smoke-test-app
 /coverage
@@ -37,3 +45,4 @@
 appveyor.yml
 run-smoke-test.sh
 *.tgz
+/RELEASE.md
