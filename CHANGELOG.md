@@ -1,3 +1,35 @@
+# Changelog
+
+## v2.0.0 (2021-11-04)
+
+#### :boom: Breaking Change
+* [#586](https://github.com/ember-cli/ember-try/pull/586) Drop support for scenarios with bower. ([@rwjblue](https://github.com/rwjblue))
+
+#### :rocket: Enhancement
+* [#787](https://github.com/ember-cli/ember-try/pull/787) Implement `pnpm` adapter ([@Turbo87](https://github.com/Turbo87))
+* [#143](https://github.com/ember-cli/ember-try/pull/143) Remove requirement to have dependency managers. ([@rwjblue](https://github.com/rwjblue))
+* [#585](https://github.com/ember-cli/ember-try/pull/585) Use `ember-addon.configPath` from `package.json` if defined. ([@rwjblue](https://github.com/rwjblue))
+
+#### :bug: Bug Fix
+* [#467](https://github.com/ember-cli/ember-try/pull/467) Ensure Yarn Workspace adapter supports `ember try:reset`. ([@rwjblue](https://github.com/rwjblue))
+* [#463](https://github.com/ember-cli/ember-try/pull/463) Handle additional `yarn` workspace definition formats ([@BarryThePenguin](https://github.com/BarryThePenguin))
+
+#### :house: Internal
+* [#745](https://github.com/ember-cli/ember-try/pull/745) CI: Remove job schedule ([@Turbo87](https://github.com/Turbo87))
+* [#596](https://github.com/ember-cli/ember-try/pull/596) Remove unused devDeps and addon blueprint files. ([@rwjblue](https://github.com/rwjblue))
+* [#595](https://github.com/ember-cli/ember-try/pull/595) Add Prettier to linting configuration. ([@rwjblue](https://github.com/rwjblue))
+* [#593](https://github.com/ember-cli/ember-try/pull/593) Migrate Windows smoke test to GitHub Actions. ([@rwjblue](https://github.com/rwjblue))
+* [#587](https://github.com/ember-cli/ember-try/pull/587) Add release automation setup. ([@rwjblue](https://github.com/rwjblue))
+* [#594](https://github.com/ember-cli/ember-try/pull/594) Limit SemVer range smoke test to > 2.16 < 3.0.0. ([@rwjblue](https://github.com/rwjblue))
+* [#584](https://github.com/ember-cli/ember-try/pull/584) Use matrix builds to speed up all commands smoke tests ([@rwjblue](https://github.com/rwjblue))
+
+#### Committers: 4
+- Jonathan Haines ([@BarryThePenguin](https://github.com/BarryThePenguin))
+- Robert Jackson ([@rwjblue](https://github.com/rwjblue))
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+- Tobias Bieniek ([@Turbo87](https://github.com/Turbo87))
+
+
 ## [v1.4.0](https://github.com/ember-cli/ember-try/tree/v1.4.0)
 
 [Full Changelog](https://github.com/ember-cli/ember-try/compare/v1.3.0...v1.4.0)
