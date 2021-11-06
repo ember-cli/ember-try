@@ -28,58 +28,54 @@ describe('npmAdapter', () => {
   });
 
   describe('#setup', () => {
-    it('backs up the package.json file and node_modules', () => {
+    it('backs up the package.json file and node_modules', async () => {
       fs.mkdirSync('node_modules');
       writeJSONFile('node_modules/prove-it.json', { originalNodeModules: true });
       writeJSONFile('package.json', { originalPackageJSON: true });
-      return new NpmAdapter({
-        cwd: tmpdir,
-      })
-        .setup()
-        .then(() => {
-          assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), {
-            originalPackageJSON: true,
-          });
-          assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), {
-            originalNodeModules: true,
-          });
-        });
+
+      let adapter = new NpmAdapter({ cwd: tmpdir });
+      await adapter.setup();
+
+      assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), {
+        originalPackageJSON: true,
+      });
+      assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), {
+        originalNodeModules: true,
+      });
     });
 
-    it('backs up the yarn.lock file, npm-shrinkwrap.json and package-lock.json if they exist', () => {
+    it('backs up the yarn.lock file, npm-shrinkwrap.json and package-lock.json if they exist', async () => {
       fs.mkdirSync('node_modules');
       writeJSONFile('node_modules/prove-it.json', { originalNodeModules: true });
       writeJSONFile('package.json', { originalPackageJSON: true });
       writeJSONFile('yarn.lock', { originalYarnLock: true });
       writeJSONFile('npm-shrinkwrap.json', { originalNpmShrinkWrap: true });
       writeJSONFile('package-lock.json', { originalPackageLock: true });
-      return new NpmAdapter({
-        cwd: tmpdir,
-      })
-        .setup()
-        .then(() => {
-          assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), {
-            originalPackageJSON: true,
-          });
-          assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), {
-            originalNodeModules: true,
-          });
-          assertFileContainsJSON(path.join(tmpdir, 'yarn.lock.ember-try'), {
-            originalYarnLock: true,
-          });
-          assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json.ember-try'), {
-            originalNpmShrinkWrap: true,
-          });
-          assertFileContainsJSON(path.join(tmpdir, 'package-lock.json.ember-try'), {
-            originalPackageLock: true,
-          });
-        });
+
+      let adapter = new NpmAdapter({ cwd: tmpdir });
+      await adapter.setup();
+
+      assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), {
+        originalPackageJSON: true,
+      });
+      assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), {
+        originalNodeModules: true,
+      });
+      assertFileContainsJSON(path.join(tmpdir, 'yarn.lock.ember-try'), {
+        originalYarnLock: true,
+      });
+      assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json.ember-try'), {
+        originalNpmShrinkWrap: true,
+      });
+      assertFileContainsJSON(path.join(tmpdir, 'package-lock.json.ember-try'), {
+        originalPackageLock: true,
+      });
     });
   });
 
   describe('#_install', () => {
     describe('without yarn', () => {
-      it('only runs npm install with npm 5', () => {
+      it('only runs npm install with npm 5', async () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
         let stubbedRun = generateMockRun(
@@ -103,17 +99,16 @@ describe('npmAdapter', () => {
           { allowPassthrough: false }
         );
 
-        return new NpmAdapter({
+        let adapter = new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-        })
-          ._install()
-          .then(() => {
-            expect(runCount).to.equal(2);
-          });
+        });
+
+        await adapter._install();
+        expect(runCount).to.equal(2);
       });
 
-      it('runs npm prune and npm install with npm 4', () => {
+      it('runs npm prune and npm install with npm 4', async () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
         let stubbedRun = generateMockRun(
@@ -145,17 +140,16 @@ describe('npmAdapter', () => {
           { allowPassthrough: false }
         );
 
-        return new NpmAdapter({
+        let adapter = new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-        })
-          ._install()
-          .then(() => {
-            expect(runCount).to.equal(3, 'All three commands should run');
-          });
+        });
+
+        await adapter._install();
+        expect(runCount).to.equal(3, 'All three commands should run');
       });
 
-      it('uses managerOptions for npm commands', () => {
+      it('uses managerOptions for npm commands', async () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
         let stubbedRun = generateMockRun(
@@ -178,18 +172,17 @@ describe('npmAdapter', () => {
           { allowPassthrough: false }
         );
 
-        return new NpmAdapter({
+        let adapter = new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           managerOptions: ['--no-optional'],
-        })
-          ._install()
-          .then(() => {
-            expect(runCount).to.equal(2);
-          });
+        });
+
+        await adapter._install();
+        expect(runCount).to.equal(2);
       });
 
-      it('uses buildManagerOptions for npm commands', () => {
+      it('uses buildManagerOptions for npm commands', async () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
         let stubbedRun = generateMockRun(
@@ -212,17 +205,16 @@ describe('npmAdapter', () => {
           { allowPassthrough: false }
         );
 
-        return new NpmAdapter({
+        let adapter = new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           buildManagerOptions: function () {
             return ['--flat'];
           },
-        })
-          ._install()
-          .then(() => {
-            expect(runCount).to.equal(2, 'npm install should run with buildManagerOptions');
-          });
+        });
+
+        await adapter._install();
+        expect(runCount).to.equal(2, 'npm install should run with buildManagerOptions');
       });
 
       it('throws an error if buildManagerOptions does not return an array', async () => {
@@ -246,7 +238,7 @@ describe('npmAdapter', () => {
     });
 
     describe('with yarn', () => {
-      it('runs yarn install', () => {
+      it('runs yarn install', async () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
         let stubbedRun = generateMockRun(
@@ -263,18 +255,17 @@ describe('npmAdapter', () => {
           { allowPassthrough: false }
         );
 
-        return new NpmAdapter({
+        let adapter = new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           useYarnCommand: true,
-        })
-          ._install()
-          .then(() => {
-            expect(runCount).to.equal(1, 'Only yarn install should run');
-          });
+        });
+
+        await adapter._install();
+        expect(runCount).to.equal(1, 'Only yarn install should run');
       });
 
-      it('uses managerOptions for yarn commands', () => {
+      it('uses managerOptions for yarn commands', async () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
         let stubbedRun = generateMockRun(
@@ -290,19 +281,18 @@ describe('npmAdapter', () => {
           { allowPassthrough: false }
         );
 
-        return new NpmAdapter({
+        let adapter = new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           useYarnCommand: true,
           managerOptions: ['--flat'],
-        })
-          ._install()
-          .then(() => {
-            expect(runCount).to.equal(1, 'Only yarn install should run with manager options');
-          });
+        });
+
+        await adapter._install();
+        expect(runCount).to.equal(1, 'Only yarn install should run with manager options');
       });
 
-      it('uses buildManagerOptions for yarn commands', () => {
+      it('uses buildManagerOptions for yarn commands', async () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
         let stubbedRun = generateMockRun(
@@ -318,18 +308,17 @@ describe('npmAdapter', () => {
           { allowPassthrough: false }
         );
 
-        return new NpmAdapter({
+        let adapter = new NpmAdapter({
           cwd: tmpdir,
           run: stubbedRun,
           useYarnCommand: true,
           buildManagerOptions: function () {
             return ['--flat'];
           },
-        })
-          ._install()
-          .then(() => {
-            expect(runCount).to.equal(1, 'Only yarn install should run with buildManagerOptions');
-          });
+        });
+
+        await adapter._install();
+        expect(runCount).to.equal(1, 'Only yarn install should run with buildManagerOptions');
       });
 
       it('throws an error if buildManagerOptions does not return an array', async () => {
@@ -355,20 +344,22 @@ describe('npmAdapter', () => {
   });
 
   describe('#_restoreOriginalDependencies', () => {
-    it('replaces the package.json with the backed up version', () => {
+    it('replaces the package.json with the backed up version', async () => {
       writeJSONFile('package.json.ember-try', { originalPackageJSON: true });
       writeJSONFile('package.json', { originalPackageJSON: false });
       fs.mkdirSync('.node_modules.ember-try');
       writeJSONFile('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
-      return new NpmAdapter({ cwd: tmpdir })._restoreOriginalDependencies().then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), {
-          originalNodeModules: true,
-        });
+
+      let adapter = new NpmAdapter({ cwd: tmpdir });
+      await adapter._restoreOriginalDependencies();
+
+      assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
+      assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), {
+        originalNodeModules: true,
       });
     });
 
-    it('replaces the yarn.lock, npm-shrinkwrap.json and package-lock.json with the backed up version if they exist', () => {
+    it('replaces the yarn.lock, npm-shrinkwrap.json and package-lock.json with the backed up version if they exist', async () => {
       writeJSONFile('package.json.ember-try', { originalPackageJSON: true });
       writeJSONFile('package.json', { originalPackageJSON: false });
       fs.mkdirSync('.node_modules.ember-try');
@@ -379,18 +370,20 @@ describe('npmAdapter', () => {
       writeJSONFile('npm-shrinkwrap.json', { originalNpmShrinkWrap: false });
       writeJSONFile('package-lock.json.ember-try', { originalPackageLock: true });
       writeJSONFile('package-lock.json', { originalPackageLock: false });
-      return new NpmAdapter({ cwd: tmpdir })._restoreOriginalDependencies().then(() => {
-        assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
-        assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), {
-          originalNodeModules: true,
-        });
-        assertFileContainsJSON(path.join(tmpdir, 'yarn.lock'), { originalYarnLock: true });
-        assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json'), {
-          originalNpmShrinkWrap: true,
-        });
-        assertFileContainsJSON(path.join(tmpdir, 'package-lock.json'), {
-          originalPackageLock: true,
-        });
+
+      let adapter = new NpmAdapter({ cwd: tmpdir });
+      await adapter._restoreOriginalDependencies();
+
+      assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
+      assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), {
+        originalNodeModules: true,
+      });
+      assertFileContainsJSON(path.join(tmpdir, 'yarn.lock'), { originalYarnLock: true });
+      assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json'), {
+        originalNpmShrinkWrap: true,
+      });
+      assertFileContainsJSON(path.join(tmpdir, 'package-lock.json'), {
+        originalPackageLock: true,
       });
     });
   });
