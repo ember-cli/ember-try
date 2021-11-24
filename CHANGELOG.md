@@ -36,8 +36,7 @@
 
 **Implemented enhancements:**
 
-- Add support for merging/clobbering `ember` in `package.json`. [\#429](https://github.com/ember-c
-li/ember-try/pull/429) ([rwjblue](https://github.com/rwjblue))
+- Add support for merging/clobbering `ember` in `package.json`. [\#429](https://github.com/ember-cli/ember-try/pull/429) ([rwjblue](https://github.com/rwjblue))
 
 ## [v1.3.0](https://github.com/ember-cli/ember-try/tree/v1.3.0)
 
