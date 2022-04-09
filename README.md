@@ -120,6 +120,11 @@ module.exports = async function() {
       dependencies will be restored to their prior state.
     */
     useYarn: true,
+    /*
+      If set to true, all npm scenarios will use `pnpm` for install. At cleanup, your
+      dependencies will be restored to their prior state.
+    */
+    usePnpm: true,
 
     /*
       buildManagerOptions allows you to opt-out of the default options such as `--ignore-engines --no-lockfile`.
@@ -127,7 +132,7 @@ module.exports = async function() {
     */
     buildManagerOptions(scenario) {
       return ['--ignore-engines'];
-    }
+    },
 
     scenarios: [
       {
@@ -150,7 +155,17 @@ module.exports = async function() {
           */
           resolutions: {
             'lodash': '5.0.0'
-          }
+          },
+          /*
+            When `usePnpm` is true, you can optionally define pnpm overrides to enforce a
+            specific dependency version to be installed. This is useful if other libraries
+            you depend on include different versions of a package.
+          */
+          "pnpm": {
+            "overrides": {
+              'lodash': '5.0.0'
+            }
+          },
           /*
             In order to easily test multiple editions ember-try merges any `ember` property specified
             into the applications `package.json`. Values specified in the ember-try configuration will
@@ -171,7 +186,7 @@ module.exports = async function() {
           devDependencies: {
             'ember-data': '2.3.0',
 
-            'ember-source': await getChannelURL('canary')
+            'ember-source': await getChannelURL('canary'),
 
             // you can remove any package by marking `null`
             'some-optional-package': null
@@ -197,6 +212,10 @@ The `name` can be used to try just one scenario using the `ember try:one` comman
 ##### Yarn
 
 If you include `useYarn: true` in your `ember-try` config, all npm scenarios will use `yarn` for install with the `--no-lockfile` option. At cleanup, your dependencies will be restored to their prior state.
+
+##### PnpM
+
+If you include `usePnpm: true` in your `ember-try` config, all npm scenarios will use `pnpm` for install. At cleanup, your dependencies will be restored to their prior state.
 
 ##### A note on npm scenarios with lockfiles
 
