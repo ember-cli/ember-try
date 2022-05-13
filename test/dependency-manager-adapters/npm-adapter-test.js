@@ -536,6 +536,75 @@ describe('npmAdapter', () => {
       expect(resultJSON.resolutions).to.be.undefined;
     });
 
+    it('adds a override for the specified dependency version', () => {
+      let npmAdapter = new NpmAdapter({
+        cwd: tmpdir,
+      });
+      let packageJSON = {
+        dependencies: { 'ember-cli-babel': '5.0.0' },
+      };
+      let depSet = {
+        dependencies: { 'ember-cli-babel': '6.0.0' },
+        overrides: { 'ember-cli-babel': '6.0.0' },
+      };
+
+      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+      expect(resultJSON.overrides['ember-cli-babel']).to.equal('6.0.0');
+    });
+
+    it('removes a dependency from overrides if its version is null', () => {
+      let npmAdapter = new NpmAdapter({
+        cwd: tmpdir,
+      });
+      let packageJSON = {
+        dependencies: { 'ember-cli-babel': '5.0.0' },
+        overrides: { 'ember-cli-babel': '5.0.0' },
+      };
+      let depSet = {
+        dependencies: { 'ember-cli-babel': '6.0.0' },
+        overrides: { 'ember-cli-babel': null },
+      };
+
+      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+      expect(resultJSON.overrides['ember-cli-babel']).to.be.undefined;
+    });
+
+    it('doesnt add overrides if there are none specified', () => {
+      let npmAdapter = new NpmAdapter({
+        cwd: tmpdir,
+      });
+      let packageJSON = {
+        dependencies: { 'ember-cli-babel': '5.0.0' },
+      };
+      let depSet = {
+        dependencies: { 'ember-cli-babel': '6.0.0' },
+      };
+
+      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+      expect(resultJSON.resolutions).to.be.undefined;
+    });
+
+    it('doesnt add overrides when using yarn', () => {
+      let npmAdapter = new NpmAdapter({
+        cwd: tmpdir,
+        useYarnCommand: true,
+      });
+      let packageJSON = {
+        dependencies: { 'ember-cli-babel': '5.0.0' },
+      };
+      let depSet = {
+        dependencies: { 'ember-cli-babel': '6.0.0' },
+        overrides: { 'ember-cli-babel': '6.0.0' },
+      };
+
+      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+      expect(resultJSON.overrides).to.be.undefined;
+    });
+
     it('changes specified npm dev dependency versions', () => {
       let npmAdapter = new NpmAdapter({ cwd: tmpdir });
       let packageJSON = {
