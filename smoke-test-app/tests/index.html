@@ -11,7 +11,7 @@
     {{content-for "test-head"}}
 
     <link rel="stylesheet" href="{{rootURL}}assets/vendor.css">
-    <link rel="stylesheet" href="{{rootURL}}assets/smoke-test-app.css">
+    <link rel="stylesheet" href="{{rootURL}}assets/dummy.css">
     <link rel="stylesheet" href="{{rootURL}}assets/test-support.css">
 
     {{content-for "head-footer"}}
@@ -21,10 +21,17 @@
     {{content-for "body"}}
     {{content-for "test-body"}}
 
-    <script src="/testem.js" integrity=""></script>
+    <div id="qunit"></div>
+    <div id="qunit-fixture">
+      <div id="ember-testing-container">
+        <div id="ember-testing"></div>
+      </div>
+    </div>
+
+    <script src="/testem.js" integrity="" data-embroider-ignore></script>
     <script src="{{rootURL}}assets/vendor.js"></script>
     <script src="{{rootURL}}assets/test-support.js"></script>
-    <script src="{{rootURL}}assets/smoke-test-app.js"></script>
+    <script src="{{rootURL}}assets/dummy.js"></script>
     <script src="{{rootURL}}assets/tests.js"></script>
 
     {{content-for "body-footer"}}
