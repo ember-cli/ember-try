@@ -57,6 +57,7 @@ jobs:
       - floating-deps
 
     strategy:
+      fail-fast: false
       matrix:
         command:
           # try:each
