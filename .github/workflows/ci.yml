@@ -115,6 +115,8 @@ jobs:
           # Environment variables from config
           - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config-different-env-vars.js'
 
+          # fs-extra versions 7.x and above caused a regresion
+          - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config-fs-extra-scenarios.js'
 
     steps:
       - uses: actions/checkout@v1
