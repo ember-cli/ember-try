@@ -46,6 +46,8 @@ updates:
   - dependency-name: eslint-plugin-prettier
     versions:
     - 3.3.1
+  - dependency-name: fs-extra
+    update-types: ["version-update:semver-major"]
 - package-ecosystem: npm
   directory: "/smoke-test-app"
   schedule:
