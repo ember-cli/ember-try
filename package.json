@@ -1,6 +1,6 @@
 {
   "name": "ember-try",
-  "version": "2.0.0",
+  "version": "3.0.0-beta.1",
   "description": "An ember-cli addon to test against multiple dependencies, such as ember and ember-data.",
   "keywords": [
     "ember-addon",

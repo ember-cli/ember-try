@@ -1,5 +1,26 @@
 # Changelog
 
+
+## v3.0.0-beta.1 (2023-03-01)
+
+#### :boom: Breaking Change
+* [#913](https://github.com/ember-cli/ember-try/pull/913) Bump node to supported versions ([@hjdivad](https://github.com/hjdivad))
+
+#### :bug: Bug Fix
+* [#912](https://github.com/ember-cli/ember-try/pull/912) Downgraded fs-extra version to 6.x to fix a fs.copy related issue. ([@larry-x-yu](https://github.com/larry-x-yu))
+
+#### :memo: Documentation
+* [#798](https://github.com/ember-cli/ember-try/pull/798) Fix a link in CHANGELOG.md ([@lolmaus](https://github.com/lolmaus))
+
+#### :house: Internal
+* [#788](https://github.com/ember-cli/ember-try/pull/788) tests/npm-adapter: Use async/await instead of promise chains ([@Turbo87](https://github.com/Turbo87))
+
+#### Committers: 4
+- Andrey Mikhaylov (lolmaus) ([@lolmaus](https://github.com/lolmaus))
+- David J. Hamilton ([@hjdivad](https://github.com/hjdivad))
+- Tobias Bieniek ([@Turbo87](https://github.com/Turbo87))
+- [@larry-x-yu](https://github.com/larry-x-yu)
+
 ## v2.0.0 (2021-11-04)
 
 #### :boom: Breaking Change
