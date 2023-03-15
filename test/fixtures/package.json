@@ -1,7 +1,6 @@
 {
   "name": "a-test-project",
   "devDependencies": {
-    "ember-try-test-suite-helper": "0.0.1"
   },
   "repository": "kategengler/ember-try",
   "private": true,
