@@ -3,9 +3,14 @@ name: CI
 on:
   push:
     branches:
+      - main
       - master
       - 'v*'
   pull_request: {}
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -20,32 +25,38 @@ jobs:
 
       - run: yarn install
       - run: yarn lint
-
-  tests:
-    name: Tests
+  test:
+    name: "Tests"
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - name: Install Node
+        uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 14.x
+          cache: yarn
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Run Tests
+        run: yarn node-test-with-coverage
 
-      - run: yarn install
-      - run: yarn node-test-with-coverage
-
-  floating-deps:
-    name: Tests (floating dependencies)
+  floating:
+    name: "Floating Dependencies"
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
-
-      - run: yarn install --no-lockfile
-      - run: yarn node-test
+          node-version: 14.x
+          cache: yarn
+      - name: Install Dependencies
+        run: yarn install --no-lockfile
+      - name: Run Tests
+        run: yarn node-test
 
   all-commands-smoke-tests:
     name: Tests (commands smoke test)
@@ -53,8 +64,8 @@ jobs:
 
     needs:
       - lint
-      - tests
-      - floating-deps
+      - test
+      - floating
 
     strategy:
       fail-fast: false
@@ -146,7 +157,7 @@ jobs:
 
     needs:
       - lint
-      - tests
+      - test
 
     steps:
       - uses: actions/checkout@v1
@@ -172,7 +183,7 @@ jobs:
 
     needs:
       - lint
-      - tests
+      - test
 
     steps:
       - uses: actions/checkout@v1
@@ -194,7 +205,7 @@ jobs:
 
     needs:
       - lint
-      - tests
+      - test
 
     steps:
       - uses: actions/checkout@v1
