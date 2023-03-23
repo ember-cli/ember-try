@@ -144,6 +144,14 @@ module.exports = async function() {
             'ember-source': '2.11.0'
           },
           /*
+            You can optionally define npm overrides to enforce a  specific dependency version
+            to be installed. This is useful if other libraries you depend on include different
+            versions of a package. This does nothing if `useYarn` is true;
+          */
+          overrides: {
+            'lodash': '5.0.0'
+          }
+          /*
             When `useYarn` is true, you can optionally define yarn resolutions to enforce a
             specific dependency version to be installed. This is useful if other libraries
             you depend on include different versions of a package.
