@@ -55,7 +55,7 @@
     "nyc": "^15.1.0",
     "prettier": "^2.4.1",
     "release-it": "^14.11.6",
-    "release-it-lerna-changelog": "^3.1.0",
+    "release-it-lerna-changelog": "^5.0.0",
     "rsvp": "^4.7.0",
     "tmp-sync": "^1.1.0"
   },
