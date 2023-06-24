@@ -120,6 +120,11 @@ module.exports = async function() {
       dependencies will be restored to their prior state.
     */
     useYarn: true,
+    /*
+      If set to true, all npm scenarios will use `pnpm` for install with the `--frozen-lockfile=false` option. At cleanup, your
+      dependencies will be restored to their prior state.
+    */
+    usePnpm: true,
 
     /*
       buildManagerOptions allows you to opt-out of the default options such as `--ignore-engines --no-lockfile`.
@@ -144,7 +149,7 @@ module.exports = async function() {
             'ember-source': '2.11.0'
           },
           /*
-            You can optionally define npm overrides to enforce a  specific dependency version
+            You can optionally define npm or pnpm overrides to enforce a  specific dependency version
             to be installed. This is useful if other libraries you depend on include different
             versions of a package. This does nothing if `useYarn` is true;
           */
@@ -206,9 +211,14 @@ The `name` can be used to try just one scenario using the `ember try:one` comman
 
 If you include `useYarn: true` in your `ember-try` config, all npm scenarios will use `yarn` for install with the `--no-lockfile` option. At cleanup, your dependencies will be restored to their prior state.
 
+##### Pnpm
+
+If you include `usePnpm: true` in your `ember-try` config, all npm scenarios will use `pnpm` for install with the `--frozen-lockfile=false` option. At cleanup, your dependencies will be restored to their prior state.
+
+
 ##### A note on npm scenarios with lockfiles
 
-Lockfiles are ignored by `ember-try`. (`yarn` will run with `--no-lockfile` and `npm` will be run with `--no-shrinkwrap`).
+Lockfiles are ignored by `ember-try`. (`yarn` will run with `--no-lockfile` and `npm` will be run with `--no-shrinkwrap` and `pnpm` will be run with `--frozen-lockfile=false`).
 When testing various scenarios, it's important to "float" dependencies so that the scenarios are run with the latest satisfying versions of dependencies a user of the project would get.
 
 ##### Workspaces
