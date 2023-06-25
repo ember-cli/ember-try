@@ -34,6 +34,7 @@ describe('pnpm Adapter', () => {
       expect(await fs.readJson('package.json.ember-try')).to.deep.equal({
         originalPackageJSON: true,
       });
+      expect(await fs.pathExists('pnpm-lock.yaml')).to.be.false;
       expect(await fs.readFile('pnpm-lock.ember-try.yaml', 'utf-8')).to.equal(
         'originalYAML: true\n'
       );
