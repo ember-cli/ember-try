@@ -30,6 +30,9 @@ module.exports = async function () {
           devDependencies: {
             'ember-source': await getChannelURL('release'),
           },
+          overrides: {
+            'ember-source': '$ember-source',
+          },
         },
       },
       {
@@ -38,6 +41,9 @@ module.exports = async function () {
           devDependencies: {
             'ember-source': await getChannelURL('beta'),
           },
+          overrides: {
+            'ember-source': '$ember-source',
+          },
         },
       },
       {
@@ -45,6 +51,9 @@ module.exports = async function () {
         npm: {
           devDependencies: {
             'ember-source': await getChannelURL('canary'),
+          },
+          overrides: {
+            'ember-source': '$ember-source',
           },
         },
       },
@@ -63,6 +72,9 @@ module.exports = async function () {
           },
           ember: {
             edition: 'classic',
+          },
+          overrides: {
+            'ember-source': '$ember-source',
           },
         },
       },
