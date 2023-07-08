@@ -45,7 +45,12 @@ describe('pnpm Adapter', () => {
       await fs.outputJson('package.json', { originalPackageJSON: true });
       await fs.outputFile('pnpm-lock.yaml', 'originalYAML: true\n');
 
-      let adapter = new PnpmAdapter({ cwd: tmpdir, pnpmUseLockfile: true });
+      let adapter = new PnpmAdapter({
+        cwd: tmpdir,
+        options: {
+          useLockfile: true,
+        },
+      });
       await adapter.setup();
 
       expect(await fs.pathExists('pnpm-lock.yaml')).to.be.true;

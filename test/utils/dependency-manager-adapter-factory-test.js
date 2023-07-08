@@ -6,6 +6,7 @@ const tmp = require('tmp-sync');
 const expect = require('chai').expect;
 const DependencyManagerAdapterFactory = require('../../lib/utils/dependency-manager-adapter-factory');
 const WorkspaceAdapter = require('../../lib/dependency-manager-adapters/workspace');
+const PnpmAdapter = require('../../lib/dependency-manager-adapters/pnpm');
 let writeJSONFile = require('../helpers/write-json-file');
 
 const ROOT = process.cwd();
@@ -78,6 +79,49 @@ describe('DependencyManagerAdapterFactory', () => {
       );
       expect(adapters[0]).to.be.instanceOf(WorkspaceAdapter);
       expect(adapters.length).to.equal(1);
+    });
+
+    describe('pnpm', () => {
+      it('creates a pnpm adapter', () => {
+        let adapters = DependencyManagerAdapterFactory.generateFromConfig(
+          {
+            usePnpm: true,
+            scenarios: [{ npm: {} }],
+          },
+          tmpdir
+        );
+        expect(adapters[0]).to.be.instanceOf(PnpmAdapter);
+        expect(adapters.length).to.equal(1);
+      });
+
+      it('correctly forwards default pnpm-specific options', () => {
+        let [pnpm] = DependencyManagerAdapterFactory.generateFromConfig(
+          {
+            usePnpm: true,
+            scenarios: [{ npm: {} }],
+          },
+          tmpdir
+        );
+
+        expect(pnpm.options).to.deep.equal({
+          useLockfile: false,
+        });
+      });
+
+      it('correctly forwards overridden pnpm-specific options', () => {
+        let [pnpm] = DependencyManagerAdapterFactory.generateFromConfig(
+          {
+            usePnpm: true,
+            pnpmUseLockfile: true,
+            scenarios: [{ npm: {} }],
+          },
+          tmpdir
+        );
+
+        expect(pnpm.options).to.deep.equal({
+          useLockfile: true,
+        });
+      });
     });
   });
 });
