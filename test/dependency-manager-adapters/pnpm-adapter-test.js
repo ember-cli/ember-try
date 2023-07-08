@@ -41,6 +41,16 @@ describe('pnpm Adapter', () => {
       expect(fs.existsSync('.node_modules.ember-try')).to.be.false;
     });
 
+    it('copies up the `pnpm-lock.yaml` file when pnpmUseLockfile is true (non-default)', async () => {
+      await fs.outputJson('package.json', { originalPackageJSON: true });
+      await fs.outputFile('pnpm-lock.yaml', 'originalYAML: true\n');
+
+      let adapter = new PnpmAdapter({ cwd: tmpdir, pnpmUseLockfile: true });
+      await adapter.setup();
+
+      expect(await fs.pathExists('pnpm-lock.yaml')).to.be.true;
+    });
+
     it('ignores missing `pnpm-lock.yaml` files', async () => {
       await fs.outputJson('package.json', { originalPackageJSON: true });
       await fs.outputJson('node_modules/prove-it.json', { originalNodeModules: true });
