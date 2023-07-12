@@ -121,7 +121,7 @@ module.exports = async function() {
     */
     useYarn: true,
     /*
-      If set to true, all npm scenarios will use `pnpm` for install with the `--frozen-lockfile=false` option. At cleanup, your
+      If set to true, all npm scenarios will use `pnpm` for install with the `--frozen-lockfile=false --no-lockfile` options. At cleanup, your
       dependencies will be restored to their prior state.
     */
     usePnpm: true,
@@ -213,12 +213,12 @@ If you include `useYarn: true` in your `ember-try` config, all npm scenarios wil
 
 ##### Pnpm
 
-If you include `usePnpm: true` in your `ember-try` config, all npm scenarios will use `pnpm` for install with the `--frozen-lockfile=false` option. At cleanup, your dependencies will be restored to their prior state.
+If you include `usePnpm: true` in your `ember-try` config, all npm scenarios will use `pnpm` for install with the `--frozen-lockfile=false --no-lockfile` options. At cleanup, your dependencies will be restored to their prior state.
 
 
 ##### A note on npm scenarios with lockfiles
 
-Lockfiles are ignored by `ember-try`. (`yarn` will run with `--no-lockfile` and `npm` will be run with `--no-shrinkwrap` and `pnpm` will be run with `--frozen-lockfile=false`).
+Lockfiles are ignored by `ember-try`. (`yarn` will run with `--no-lockfile` and `npm` will be run with `--no-shrinkwrap` and `pnpm` will be run with `--frozen-lockfile=false --no-lockfile`).
 When testing various scenarios, it's important to "float" dependencies so that the scenarios are run with the latest satisfying versions of dependencies a user of the project would get.
 
 ##### Workspaces
