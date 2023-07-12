@@ -67,7 +67,7 @@ describe('pnpm Adapter', () => {
       let stubbedRun = generateMockRun(
         [
           {
-            command: 'pnpm install --frozen-lockfile=false',
+            command: 'pnpm install --frozen-lockfile=false --no-lockfile',
             async callback(command, args, opts) {
               runCount++;
               expect(opts).to.have.property('cwd', tmpdir);
@@ -115,7 +115,7 @@ describe('pnpm Adapter', () => {
   });
 
   describe('#cleanup', () => {
-    it('restores the `package.json` and `yarn-lock.yaml` files, and then runs `pnpm install`', async () => {
+    it('restores the `package.json` and `pnpm-lock.yaml` files, and then runs `pnpm install`', async () => {
       await fs.outputJson('package.json', { modifiedPackageJSON: true });
       await fs.outputJson('package.json.ember-try', { originalPackageJSON: true });
       await fs.outputFile('pnpm-lock.yaml', 'modifiedYAML: true\n');
@@ -125,7 +125,7 @@ describe('pnpm Adapter', () => {
       let stubbedRun = generateMockRun(
         [
           {
-            command: 'pnpm install --frozen-lockfile=false',
+            command: 'pnpm install --frozen-lockfile=false --no-lockfile',
             async callback(command, args, opts) {
               runCount++;
               expect(opts).to.have.property('cwd', tmpdir);
