@@ -150,6 +150,7 @@ jobs:
 
   npm-smoke-tests:
     strategy:
+      fail-fast: false
       matrix:
         node: ['16', '18']
 
@@ -177,6 +178,7 @@ jobs:
 
   yarn-smoke-tests:
     strategy:
+      fail-fast: false
       matrix:
         node: ['16', '18']
 
