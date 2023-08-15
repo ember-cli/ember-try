@@ -85,9 +85,9 @@ jobs:
           - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
 
           # try:ember
-          - ./node_modules/.bin/ember try:ember '> 3.28.0 < 4.2.0'
-          - ./node_modules/.bin/ember try:ember '4.1.0' --config-path='../test/fixtures/dummy-ember-try-config.js'
-          - ./node_modules/.bin/ember try:ember '4.2.0' --skip-cleanup=true
+          - ./node_modules/.bin/ember try:ember '> 4.10.0 < 5.2.0'
+          - ./node_modules/.bin/ember try:ember '4.9.0' --config-path='../test/fixtures/dummy-ember-try-config.js'
+          - ./node_modules/.bin/ember try:ember '4.8.3' --skip-cleanup=true
 
           # try:config
           - ./node_modules/.bin/ember try:config
