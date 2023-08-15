@@ -38,6 +38,7 @@
     "fs-extra": "^6.0.1",
     "resolve": "^1.20.0",
     "rimraf": "^3.0.2",
+    "semver": "^7.5.4",
     "walk-sync": "^2.2.0"
   },
   "devDependencies": {
@@ -60,7 +61,7 @@
     "tmp-sync": "^1.1.0"
   },
   "engines": {
-    "node": "14.* || 16.* || >= 18.*"
+    "node": "16.* || >= 18.*"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

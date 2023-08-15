@@ -402,6 +402,75 @@ describe('npmAdapter', () => {
       expect(resultJSON.dependencies['ember-cli-babel']).to.equal('6.0.0');
     });
 
+    describe('overrides', () => {
+      it('adds an override if you use a pre-release version for something', () => {
+        let npmAdapter = new NpmAdapter({
+          cwd: tmpdir,
+        });
+        let packageJSON = { dependencies: { ember: '4.1.4' } };
+        let depSet = {
+          dependencies: { ember: '4.8.0-beta.1' },
+        };
+
+        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+        expect(resultJSON).to.deep.equal({
+          dependencies: { ember: '4.8.0-beta.1' },
+          overrides: { ember: '$ember' },
+        });
+      });
+
+      it('does not add an override if you use a pre-release version with yarn', () => {
+        let npmAdapter = new NpmAdapter({
+          cwd: tmpdir,
+          useYarnCommand: true,
+        });
+        let packageJSON = { dependencies: { ember: '4.1.4' } };
+        let depSet = {
+          dependencies: { ember: '4.8.0-beta.1' },
+        };
+
+        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+        expect(resultJSON).to.deep.equal({
+          dependencies: { ember: '4.8.0-beta.1' },
+        });
+      });
+
+      it('adds an override if you specify a version with a link to a .tgz file', () => {
+        let npmAdapter = new NpmAdapter({
+          cwd: tmpdir,
+        });
+        let packageJSON = { dependencies: { ember: '4.1.4' } };
+        let depSet = {
+          dependencies: { ember: 'https://somesite.com/dependencies/funtime.tgz' },
+        };
+
+        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+        expect(resultJSON).to.deep.equal({
+          dependencies: { ember: 'https://somesite.com/dependencies/funtime.tgz' },
+          overrides: { ember: '$ember' },
+        });
+      });
+
+      it('does not add an override if you specify any other kind of link', () => {
+        let npmAdapter = new NpmAdapter({
+          cwd: tmpdir,
+        });
+        let packageJSON = { dependencies: { ember: '4.1.4' } };
+        let depSet = {
+          dependencies: { ember: 'https://github.com/github/super-secret' },
+        };
+
+        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+
+        expect(resultJSON).to.deep.equal({
+          dependencies: { ember: 'https://github.com/github/super-secret' },
+        });
+      });
+    });
+
     describe('ember property', () => {
       it('adds the ember property to project package.json', () => {
         let npmAdapter = new NpmAdapter({

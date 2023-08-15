@@ -18,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
 
       - run: yarn install
       - run: yarn lint
@@ -35,7 +35,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16.x
           cache: yarn
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
@@ -51,7 +51,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16.x
           cache: yarn
       - name: Install Dependencies
         run: yarn install --no-lockfile
@@ -85,9 +85,9 @@ jobs:
           - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
 
           # try:ember
-          - ./node_modules/.bin/ember try:ember '> 3.28.0 < 4.2.0'
-          - ./node_modules/.bin/ember try:ember '4.1.0' --config-path='../test/fixtures/dummy-ember-try-config.js'
-          - ./node_modules/.bin/ember try:ember '4.2.0' --skip-cleanup=true
+          - ./node_modules/.bin/ember try:ember '> 4.10.0 < 5.2.0'
+          - ./node_modules/.bin/ember try:ember '4.9.0' --config-path='../test/fixtures/dummy-ember-try-config.js'
+          - ./node_modules/.bin/ember try:ember '4.8.3' --skip-cleanup=true
 
           # try:config
           - ./node_modules/.bin/ember try:config
@@ -132,10 +132,10 @@ jobs:
           - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config-fs-extra-scenarios.js'
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
 
       - name: install deps
         run: yarn install
@@ -150,8 +150,9 @@ jobs:
 
   npm-smoke-tests:
     strategy:
+      fail-fast: false
       matrix:
-        node: ['14', '16', '18']
+        node: ['16', '18']
 
     name: Smoke Tests (Node v${{ matrix.node }} with npm)
     runs-on: ubuntu-latest
@@ -162,8 +163,8 @@ jobs:
       - test
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
 
@@ -177,8 +178,9 @@ jobs:
 
   yarn-smoke-tests:
     strategy:
+      fail-fast: false
       matrix:
-        node: ['14', '16', '18']
+        node: ['16', '18']
 
     name: Smoke Tests (Node v${{ matrix.node }} with yarn)
     runs-on: ubuntu-latest
@@ -189,8 +191,8 @@ jobs:
       - test
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
 
@@ -212,10 +214,10 @@ jobs:
       - test
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
 
       - name: install deps
         run: yarn install
