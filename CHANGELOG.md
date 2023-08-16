@@ -1,6 +1,30 @@
 # Changelog
 
 
+
+## v3.0.0 (2023-08-16)
+
+#### :boom: Breaking Change
+* [#920](https://github.com/ember-cli/ember-try/pull/920) Drop Node.js 14 support ([@SergeAstapov](https://github.com/SergeAstapov))
+
+#### :rocket: Enhancement
+* [#960](https://github.com/ember-cli/ember-try/pull/960) Use pnpm's --no-lockfile ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+* [#956](https://github.com/ember-cli/ember-try/pull/956) Remove warning about pnpm ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+* [#850](https://github.com/ember-cli/ember-try/pull/850) Add support for npm overrides ([@mansona](https://github.com/mansona))
+
+#### :memo: Documentation
+* [#957](https://github.com/ember-cli/ember-try/pull/957) Document pnpm options and behavior ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+
+#### :house: Internal
+* [#934](https://github.com/ember-cli/ember-try/pull/934) Update github CI yaml ([@mansona](https://github.com/mansona))
+* [#933](https://github.com/ember-cli/ember-try/pull/933) Update smoke test to fix CI ([@mansona](https://github.com/mansona))
+* [#893](https://github.com/ember-cli/ember-try/pull/893) update smoke-test-app to fix CI ([@mansona](https://github.com/mansona))
+
+#### Committers: 3
+- Chris Manson ([@mansona](https://github.com/mansona))
+- Sergey Astapov ([@SergeAstapov](https://github.com/SergeAstapov))
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## v3.0.0-beta.1 (2023-03-01)
 
 #### :boom: Breaking Change
