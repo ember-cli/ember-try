@@ -81,7 +81,7 @@ describe('npmAdapter', () => {
         let stubbedRun = generateMockRun(
           [
             {
-              command: 'npm install --no-shrinkwrap',
+              command: 'npm install --no-package-lock',
               callback(command, args, opts) {
                 runCount++;
                 expect(opts).to.have.property('cwd', tmpdir);
@@ -105,7 +105,8 @@ describe('npmAdapter', () => {
         });
 
         await adapter._install();
-        expect(runCount).to.equal(2);
+        // checking for 3 commands because install checks for npm version too
+        expect(runCount).to.equal(3, 'both commands run');
       });
 
       it('runs npm prune and npm install with npm 4', async () => {
@@ -146,7 +147,8 @@ describe('npmAdapter', () => {
         });
 
         await adapter._install();
-        expect(runCount).to.equal(3, 'All three commands should run');
+        // checking for 4 commands because install checks for npm version too
+        expect(runCount).to.equal(4, 'All three commands should run');
       });
 
       it('uses managerOptions for npm commands', async () => {
@@ -155,7 +157,7 @@ describe('npmAdapter', () => {
         let stubbedRun = generateMockRun(
           [
             {
-              command: 'npm install --no-optional --no-shrinkwrap',
+              command: 'npm install --no-optional --no-package-lock',
               callback() {
                 runCount++;
                 return RSVP.resolve();
@@ -179,7 +181,8 @@ describe('npmAdapter', () => {
         });
 
         await adapter._install();
-        expect(runCount).to.equal(2);
+        // checking for 3 commands because install checks for npm version too
+        expect(runCount).to.equal(3, 'both commands run');
       });
 
       it('uses buildManagerOptions for npm commands', async () => {
