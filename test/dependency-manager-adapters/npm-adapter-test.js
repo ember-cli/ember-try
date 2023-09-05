@@ -67,7 +67,7 @@ describe('npmAdapter', () => {
 
   describe('#_install', () => {
     describe('without yarn', () => {
-      it('only runs npm install with npm 5', async () => {
+      it('runs npm install', async () => {
         writeJSONFile('package.json', fixturePackage);
         let runCount = 0;
         let stubbedRun = generateMockRun(
@@ -80,13 +80,6 @@ describe('npmAdapter', () => {
                 return RSVP.resolve();
               },
             },
-            {
-              command: 'npm --version',
-              callback() {
-                runCount++;
-                return RSVP.resolve({ stdout: '5.7.1' });
-              },
-            },
           ],
           { allowPassthrough: false }
         );
@@ -97,48 +90,7 @@ describe('npmAdapter', () => {
         });
 
         await adapter._install();
-        expect(runCount).to.equal(2);
-      });
-
-      it('runs npm prune and npm install with npm 4', async () => {
-        writeJSONFile('package.json', fixturePackage);
-        let runCount = 0;
-        let stubbedRun = generateMockRun(
-          [
-            {
-              command: 'npm install --no-shrinkwrap',
-              callback(command, args, opts) {
-                runCount++;
-                expect(opts).to.have.property('cwd', tmpdir);
-                return RSVP.resolve();
-              },
-            },
-            {
-              command: 'npm prune',
-              callback(command, args, opts) {
-                runCount++;
-                expect(opts).to.have.property('cwd', tmpdir);
-                return RSVP.resolve();
-              },
-            },
-            {
-              command: 'npm --version',
-              callback() {
-                runCount++;
-                return RSVP.resolve({ stdout: '4.7.1' });
-              },
-            },
-          ],
-          { allowPassthrough: false }
-        );
-
-        let adapter = new NpmAdapter({
-          cwd: tmpdir,
-          run: stubbedRun,
-        });
-
-        await adapter._install();
-        expect(runCount).to.equal(3, 'All three commands should run');
+        expect(runCount).to.equal(1);
       });
 
       it('uses managerOptions for npm commands', async () => {
@@ -153,13 +105,6 @@ describe('npmAdapter', () => {
                 return RSVP.resolve();
               },
             },
-            {
-              command: 'npm --version',
-              callback() {
-                runCount++;
-                return RSVP.resolve({ stdout: '5.7.1' });
-              },
-            },
           ],
           { allowPassthrough: false }
         );
@@ -171,7 +116,7 @@ describe('npmAdapter', () => {
         });
 
         await adapter._install();
-        expect(runCount).to.equal(2);
+        expect(runCount).to.equal(1);
       });
 
       it('uses buildManagerOptions for npm commands', async () => {
@@ -184,13 +129,6 @@ describe('npmAdapter', () => {
               callback() {
                 runCount++;
                 return RSVP.resolve();
-              },
-            },
-            {
-              command: 'npm --version',
-              callback() {
-                runCount++;
-                return RSVP.resolve({ stdout: '5.7.1' });
               },
             },
           ],
@@ -206,7 +144,7 @@ describe('npmAdapter', () => {
         });
 
         await adapter._install();
-        expect(runCount).to.equal(2, 'npm install should run with buildManagerOptions');
+        expect(runCount).to.equal(1, 'npm install should run with buildManagerOptions');
       });
 
       it('throws an error if buildManagerOptions does not return an array', async () => {
@@ -382,13 +320,6 @@ describe('npmAdapter', () => {
               return Promise.resolve();
             },
           },
-          {
-            command: 'npm --version',
-            callback() {
-              runCount++;
-              return RSVP.resolve({ stdout: '10.0.0' });
-            },
-          },
         ],
         { allowPassthrough: false }
       );
@@ -400,7 +331,7 @@ describe('npmAdapter', () => {
 
       await adapter._restoreOriginalDependencies();
 
-      expect(runCount).to.equal(2);
+      expect(runCount).to.equal(1);
     });
   });
 
