@@ -26,7 +26,6 @@ describe('pnpm Adapter', () => {
     it('backs up the `package.json` and `pnpm-lock.yaml` files', async () => {
       await fs.outputJson('package.json', { originalPackageJSON: true });
       await fs.outputFile('pnpm-lock.yaml', 'originalYAML: true\n');
-      await fs.outputJson('node_modules/prove-it.json', { originalNodeModules: true });
 
       let adapter = new PnpmAdapter({ cwd: tmpdir });
       await adapter.setup();
@@ -37,12 +36,10 @@ describe('pnpm Adapter', () => {
       expect(await fs.readFile('pnpm-lock.ember-try.yaml', 'utf-8')).to.equal(
         'originalYAML: true\n'
       );
-      expect(fs.existsSync('.node_modules.ember-try')).to.be.false;
     });
 
     it('ignores missing `pnpm-lock.yaml` files', async () => {
       await fs.outputJson('package.json', { originalPackageJSON: true });
-      await fs.outputJson('node_modules/prove-it.json', { originalNodeModules: true });
 
       let adapter = new PnpmAdapter({ cwd: tmpdir });
       await adapter.setup();
@@ -51,7 +48,6 @@ describe('pnpm Adapter', () => {
         originalPackageJSON: true,
       });
       expect(fs.existsSync('pnpm-lock.ember-try.yaml')).to.be.false;
-      expect(fs.existsSync('.node_modules.ember-try')).to.be.false;
     });
   });
 
@@ -145,7 +141,6 @@ describe('pnpm Adapter', () => {
       expect(await fs.readFile('pnpm-lock.yaml', 'utf-8')).to.equal('originalYAML: true\n');
       expect(fs.existsSync('package.json.ember-try')).to.be.false;
       expect(fs.existsSync('pnpm-lock.ember-try.yaml')).to.be.false;
-      expect(fs.existsSync('.node_modules.ember-try')).to.be.false;
 
       expect(runCount).to.equal(1);
     });

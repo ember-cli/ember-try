@@ -30,7 +30,6 @@ describe('npmAdapter', () => {
   describe('#setup', () => {
     it('backs up the package.json file and node_modules', async () => {
       fs.mkdirSync('node_modules');
-      writeJSONFile('node_modules/prove-it.json', { originalNodeModules: true });
       writeJSONFile('package.json', { originalPackageJSON: true });
 
       let adapter = new NpmAdapter({ cwd: tmpdir });
@@ -39,14 +38,10 @@ describe('npmAdapter', () => {
       assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), {
         originalPackageJSON: true,
       });
-      assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), {
-        originalNodeModules: true,
-      });
     });
 
     it('backs up the yarn.lock file, npm-shrinkwrap.json and package-lock.json if they exist', async () => {
       fs.mkdirSync('node_modules');
-      writeJSONFile('node_modules/prove-it.json', { originalNodeModules: true });
       writeJSONFile('package.json', { originalPackageJSON: true });
       writeJSONFile('yarn.lock', { originalYarnLock: true });
       writeJSONFile('npm-shrinkwrap.json', { originalNpmShrinkWrap: true });
@@ -57,9 +52,6 @@ describe('npmAdapter', () => {
 
       assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), {
         originalPackageJSON: true,
-      });
-      assertFileContainsJSON(path.join(tmpdir, '.node_modules.ember-try/prove-it.json'), {
-        originalNodeModules: true,
       });
       assertFileContainsJSON(path.join(tmpdir, 'yarn.lock.ember-try'), {
         originalYarnLock: true,
@@ -347,23 +339,16 @@ describe('npmAdapter', () => {
     it('replaces the package.json with the backed up version', async () => {
       writeJSONFile('package.json.ember-try', { originalPackageJSON: true });
       writeJSONFile('package.json', { originalPackageJSON: false });
-      fs.mkdirSync('.node_modules.ember-try');
-      writeJSONFile('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
 
       let adapter = new NpmAdapter({ cwd: tmpdir });
       await adapter._restoreOriginalDependencies();
 
       assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
-      assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), {
-        originalNodeModules: true,
-      });
     });
 
     it('replaces the yarn.lock, npm-shrinkwrap.json and package-lock.json with the backed up version if they exist', async () => {
       writeJSONFile('package.json.ember-try', { originalPackageJSON: true });
       writeJSONFile('package.json', { originalPackageJSON: false });
-      fs.mkdirSync('.node_modules.ember-try');
-      writeJSONFile('.node_modules.ember-try/prove-it.json', { originalNodeModules: true });
       writeJSONFile('yarn.lock.ember-try', { originalYarnLock: true });
       writeJSONFile('yarn.lock', { originalYarnLock: false });
       writeJSONFile('npm-shrinkwrap.json.ember-try', { originalNpmShrinkWrap: true });
@@ -375,9 +360,6 @@ describe('npmAdapter', () => {
       await adapter._restoreOriginalDependencies();
 
       assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
-      assertFileContainsJSON(path.join(tmpdir, 'node_modules/prove-it.json'), {
-        originalNodeModules: true,
-      });
       assertFileContainsJSON(path.join(tmpdir, 'yarn.lock'), { originalYarnLock: true });
       assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json'), {
         originalNpmShrinkWrap: true,

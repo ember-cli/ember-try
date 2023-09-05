@@ -33,7 +33,6 @@ describe('workspaceAdapter', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
       writeJSONFile('packages/test/package.json', { originalPackageJSON: true });
-      writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
 
       return new WorkspaceAdapter({
         cwd: tmpdir,
@@ -44,10 +43,6 @@ describe('workspaceAdapter', () => {
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json.ember-try'), {
             originalPackageJSON: true,
           });
-          assertFileContainsJSON(
-            path.join(tmpdir, 'packages/test/.node_modules.ember-try/prove-it.json'),
-            { originalNodeModules: true }
-          );
         });
     });
 
@@ -63,7 +58,6 @@ describe('workspaceAdapter', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
       writeJSONFile('packages/test/package.json', { originalPackageJSON: true });
-      writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
 
       return new WorkspaceAdapter({
         cwd: tmpdir,
@@ -74,10 +68,6 @@ describe('workspaceAdapter', () => {
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json.ember-try'), {
             originalPackageJSON: true,
           });
-          assertFileContainsJSON(
-            path.join(tmpdir, 'packages/test/.node_modules.ember-try/prove-it.json'),
-            { originalNodeModules: true }
-          );
         });
     });
 
@@ -85,7 +75,6 @@ describe('workspaceAdapter', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
       writeJSONFile('packages/test/package.json', { originalPackageJSON: true });
-      writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
       writeJSONFile('packages/test/yarn.lock', { originalYarnLock: true });
       writeJSONFile('packages/test/npm-shrinkwrap.json', { originalNpmShrinkWrap: true });
       writeJSONFile('packages/test/package-lock.json', { originalPackageLock: true });
@@ -98,10 +87,6 @@ describe('workspaceAdapter', () => {
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json.ember-try'), {
             originalPackageJSON: true,
           });
-          assertFileContainsJSON(
-            path.join(tmpdir, 'packages/test/.node_modules.ember-try/prove-it.json'),
-            { originalNodeModules: true }
-          );
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/yarn.lock.ember-try'), {
             originalYarnLock: true,
           });
@@ -247,7 +232,6 @@ describe('workspaceAdapter', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
       writeJSONFile('packages/test/package.json', { originalPackageJSON: false });
-      writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: false });
 
       let workspaceAdapter = new WorkspaceAdapter({
         cwd: tmpdir,
@@ -255,19 +239,11 @@ describe('workspaceAdapter', () => {
         run: () => Promise.resolve(),
       });
 
-      fs.ensureDirSync('packages/test/.node_modules.ember-try');
-
       writeJSONFile('packages/test/package.json.ember-try', { originalPackageJSON: true });
-      writeJSONFile('packages/test/.node_modules.ember-try/prove-it.json', {
-        originalNodeModules: true,
-      });
 
       return workspaceAdapter.cleanup().then(() => {
         assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
           originalPackageJSON: true,
-        });
-        assertFileContainsJSON(path.join(tmpdir, 'packages/test/node_modules/prove-it.json'), {
-          originalNodeModules: true,
         });
       });
     });
@@ -276,7 +252,6 @@ describe('workspaceAdapter', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
       writeJSONFile('packages/test/package.json', { originalPackageJSON: true });
-      writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
 
       let workspaceAdapter = new WorkspaceAdapter({
         cwd: tmpdir,
@@ -288,16 +263,12 @@ describe('workspaceAdapter', () => {
         .setup()
         .then(() => {
           writeJSONFile('packages/test/package.json', { originalPackageJSON: false });
-          writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
 
           return workspaceAdapter.cleanup();
         })
         .then(() => {
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
             originalPackageJSON: true,
-          });
-          assertFileContainsJSON(path.join(tmpdir, 'packages/test/node_modules/prove-it.json'), {
-            originalNodeModules: true,
           });
         });
     });
@@ -306,7 +277,6 @@ describe('workspaceAdapter', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
       writeJSONFile('packages/test/package.json', { originalPackageJSON: true });
-      writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
       writeJSONFile('packages/test/yarn.lock', { originalYarnLock: true });
       writeJSONFile('packages/test/npm-shrinkwrap.json', { originalNpmShrinkWrap: true });
       writeJSONFile('packages/test/package-lock.json', { originalPackageLock: true });
@@ -321,7 +291,6 @@ describe('workspaceAdapter', () => {
         .setup()
         .then(() => {
           writeJSONFile('packages/test/package.json', { originalPackageJSON: false });
-          writeJSONFile('packages/test/node_modules/prove-it.json', { originalNodeModules: true });
           writeJSONFile('packages/test/yarn.lock', { originalYarnLock: false });
           writeJSONFile('packages/test/npm-shrinkwrap.json', { originalNpmShrinkWrap: false });
           writeJSONFile('packages/test/package-lock.json', { originalPackageLock: false });
@@ -331,9 +300,6 @@ describe('workspaceAdapter', () => {
         .then(() => {
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/package.json'), {
             originalPackageJSON: true,
-          });
-          assertFileContainsJSON(path.join(tmpdir, 'packages/test/node_modules/prove-it.json'), {
-            originalNodeModules: true,
           });
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/yarn.lock'), {
             originalYarnLock: true,
