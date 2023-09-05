@@ -368,6 +368,40 @@ describe('npmAdapter', () => {
         originalPackageLock: true,
       });
     });
+
+    it('installs the original node modules again', async () => {
+      writeJSONFile('package.json.ember-try', {});
+
+      let runCount = 0;
+      let stubbedRun = generateMockRun(
+        [
+          {
+            command: 'npm install --no-shrinkwrap',
+            callback() {
+              runCount++;
+              return Promise.resolve();
+            },
+          },
+          {
+            command: 'npm --version',
+            callback() {
+              runCount++;
+              return RSVP.resolve({ stdout: '10.0.0' });
+            },
+          },
+        ],
+        { allowPassthrough: false }
+      );
+
+      let adapter = new NpmAdapter({
+        cwd: tmpdir,
+        run: stubbedRun,
+      });
+
+      await adapter._restoreOriginalDependencies();
+
+      expect(runCount).to.equal(2);
+    });
   });
 
   describe('#_packageJSONForDependencySet', () => {
