@@ -40,11 +40,10 @@ describe('npmAdapter', () => {
       });
     });
 
-    it('backs up the yarn.lock file, npm-shrinkwrap.json and package-lock.json if they exist', async () => {
+    it('backs up the yarn.lock file and package-lock.json if they exist', async () => {
       fs.mkdirSync('node_modules');
       writeJSONFile('package.json', { originalPackageJSON: true });
       writeJSONFile('yarn.lock', { originalYarnLock: true });
-      writeJSONFile('npm-shrinkwrap.json', { originalNpmShrinkWrap: true });
       writeJSONFile('package-lock.json', { originalPackageLock: true });
 
       let adapter = new NpmAdapter({ cwd: tmpdir });
@@ -55,9 +54,6 @@ describe('npmAdapter', () => {
       });
       assertFileContainsJSON(path.join(tmpdir, 'yarn.lock.ember-try'), {
         originalYarnLock: true,
-      });
-      assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json.ember-try'), {
-        originalNpmShrinkWrap: true,
       });
       assertFileContainsJSON(path.join(tmpdir, 'package-lock.json.ember-try'), {
         originalPackageLock: true,
@@ -73,7 +69,7 @@ describe('npmAdapter', () => {
         let stubbedRun = generateMockRun(
           [
             {
-              command: 'npm install --no-shrinkwrap',
+              command: 'npm install --no-package-lock',
               callback(command, args, opts) {
                 runCount++;
                 expect(opts).to.have.property('cwd', tmpdir);
@@ -99,7 +95,7 @@ describe('npmAdapter', () => {
         let stubbedRun = generateMockRun(
           [
             {
-              command: 'npm install --no-optional --no-shrinkwrap',
+              command: 'npm install --no-optional --no-package-lock',
               callback() {
                 runCount++;
                 return RSVP.resolve();
@@ -284,13 +280,11 @@ describe('npmAdapter', () => {
       assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
     });
 
-    it('replaces the yarn.lock, npm-shrinkwrap.json and package-lock.json with the backed up version if they exist', async () => {
+    it('replaces the yarn.lock and package-lock.json with the backed up version if they exist', async () => {
       writeJSONFile('package.json.ember-try', { originalPackageJSON: true });
       writeJSONFile('package.json', { originalPackageJSON: false });
       writeJSONFile('yarn.lock.ember-try', { originalYarnLock: true });
       writeJSONFile('yarn.lock', { originalYarnLock: false });
-      writeJSONFile('npm-shrinkwrap.json.ember-try', { originalNpmShrinkWrap: true });
-      writeJSONFile('npm-shrinkwrap.json', { originalNpmShrinkWrap: false });
       writeJSONFile('package-lock.json.ember-try', { originalPackageLock: true });
       writeJSONFile('package-lock.json', { originalPackageLock: false });
 
@@ -299,9 +293,6 @@ describe('npmAdapter', () => {
 
       assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
       assertFileContainsJSON(path.join(tmpdir, 'yarn.lock'), { originalYarnLock: true });
-      assertFileContainsJSON(path.join(tmpdir, 'npm-shrinkwrap.json'), {
-        originalNpmShrinkWrap: true,
-      });
       assertFileContainsJSON(path.join(tmpdir, 'package-lock.json'), {
         originalPackageLock: true,
       });
@@ -314,7 +305,7 @@ describe('npmAdapter', () => {
       let stubbedRun = generateMockRun(
         [
           {
-            command: 'npm install --no-shrinkwrap',
+            command: 'npm install --no-package-lock',
             callback() {
               runCount++;
               return Promise.resolve();
