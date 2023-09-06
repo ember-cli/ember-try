@@ -61,7 +61,7 @@ In order to use an alternate config path or to group various scenarios, you can 
 
 #### `ember try:reset`
 
-This command restores all original files, and installs the original node modules again. For use if any of the other commands fail to clean up after (they run this by default on completion).
+This command restores all original files, and installs the original node modules again. For use if any of the other commands fail to clean up after (they run this by default on completion) or after running with ‘—skip-cleanup’.
 
 #### `ember try:ember <semver-string>`
 
