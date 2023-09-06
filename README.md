@@ -109,7 +109,7 @@ module.exports = async function() {
     /*
       `npmOptions` - options to be passed to `npm`.
     */
-    npmOptions: ['--loglevel=silent', '--no-shrinkwrap=true'],
+    npmOptions: ['--loglevel=silent'],
     /*
       If set to true, the `versionCompatibility` key under `ember-addon` in `package.json` will be used to
       automatically generate scenarios that will deep merge with any in this configuration file.
@@ -218,7 +218,7 @@ If you include `usePnpm: true` in your `ember-try` config, all npm scenarios wil
 
 ##### A note on npm scenarios with lockfiles
 
-Lockfiles are ignored by `ember-try`. (`yarn` will run with `--no-lockfile` and `npm` will be run with `--no-shrinkwrap` and `pnpm` will be run with `--no-lockfile`).
+Lockfiles are ignored by `ember-try`. (`yarn` will run with `--no-lockfile` and `npm` will be run with `--no-package-lock` and `pnpm` will be run with `--no-lockfile`).
 When testing various scenarios, it's important to "float" dependencies so that the scenarios are run with the latest satisfying versions of dependencies a user of the project would get.
 
 ##### Workspaces

@@ -71,12 +71,11 @@ describe('workspaceAdapter', () => {
         });
     });
 
-    it('backs up the yarn.lock file, npm-shrinkwrap.json and package-lock.json if they exist', () => {
+    it('backs up the yarn.lock file and package-lock.json if they exist', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
       writeJSONFile('packages/test/package.json', { originalPackageJSON: true });
       writeJSONFile('packages/test/yarn.lock', { originalYarnLock: true });
-      writeJSONFile('packages/test/npm-shrinkwrap.json', { originalNpmShrinkWrap: true });
       writeJSONFile('packages/test/package-lock.json', { originalPackageLock: true });
       return new WorkspaceAdapter({
         cwd: tmpdir,
@@ -89,9 +88,6 @@ describe('workspaceAdapter', () => {
           });
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/yarn.lock.ember-try'), {
             originalYarnLock: true,
-          });
-          assertFileContainsJSON(path.join(tmpdir, 'packages/test/npm-shrinkwrap.json.ember-try'), {
-            originalNpmShrinkWrap: true,
           });
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/package-lock.json.ember-try'), {
             originalPackageLock: true,
@@ -273,12 +269,11 @@ describe('workspaceAdapter', () => {
         });
     });
 
-    it('replaces the yarn.lock, npm-shrinkwrap.json and package-lock.json with the backed up version if they exist', () => {
+    it('replaces the yarn.lock and package-lock.json with the backed up version if they exist', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
       writeJSONFile('packages/test/package.json', { originalPackageJSON: true });
       writeJSONFile('packages/test/yarn.lock', { originalYarnLock: true });
-      writeJSONFile('packages/test/npm-shrinkwrap.json', { originalNpmShrinkWrap: true });
       writeJSONFile('packages/test/package-lock.json', { originalPackageLock: true });
 
       let workspaceAdapter = new WorkspaceAdapter({
@@ -292,7 +287,6 @@ describe('workspaceAdapter', () => {
         .then(() => {
           writeJSONFile('packages/test/package.json', { originalPackageJSON: false });
           writeJSONFile('packages/test/yarn.lock', { originalYarnLock: false });
-          writeJSONFile('packages/test/npm-shrinkwrap.json', { originalNpmShrinkWrap: false });
           writeJSONFile('packages/test/package-lock.json', { originalPackageLock: false });
 
           return workspaceAdapter.cleanup();
@@ -303,9 +297,6 @@ describe('workspaceAdapter', () => {
           });
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/yarn.lock'), {
             originalYarnLock: true,
-          });
-          assertFileContainsJSON(path.join(tmpdir, 'packages/test/npm-shrinkwrap.json'), {
-            originalNpmShrinkWrap: true,
           });
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/package-lock.json'), {
             originalPackageLock: true,
