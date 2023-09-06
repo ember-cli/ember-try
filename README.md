@@ -37,26 +37,26 @@ This command will run any `ember-cli` command with the specified scenario. The c
 For example:
 
 ```
-  ember try:one ember-1.11-with-ember-data-beta-16 --- ember test --reporter xunit
+  ember try:one ember-beta --- ember test --reporter xunit
 ```
 
 or
 
 ```
-  ember try:one ember-1.11-with-ember-data-beta-16 --- ember serve
+  ember try:one ember-beta --- ember serve
 ```
 
 When running in a CI environment where changes are discarded you can skip resetting your environment back to its original state by specifying --skip-cleanup=true as an option to ember try.
 *Warning: If you use this option and, without cleaning up, build and deploy as the result of a passing test suite, it will build with the last set of dependencies ember try was run with.*
 
 ```
-  ember try:one ember-1.11 --skip-cleanup=true --- ember test
+  ember try:one ember-beta --skip-cleanup=true --- ember test
 ```
 
 In order to use an alternate config path or to group various scenarios, you can use the `--config-path` option.
 
 ```
-  ember try:one ember-1.13 --config-path="config/legacy-scenarios.js"
+  ember try:one ember-beta --config-path="config/legacy-scenarios.js"
 ```
 
 #### `ember try:reset`
