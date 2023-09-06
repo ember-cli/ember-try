@@ -28,35 +28,23 @@ describe('npmAdapter', () => {
   });
 
   describe('#setup', () => {
-    it('backs up the package.json file and node_modules', async () => {
-      fs.mkdirSync('node_modules');
+    it('backs up the `package.json`, `package-lock.json` and `yarn.lock` files if they exist', async () => {
       writeJSONFile('package.json', { originalPackageJSON: true });
-
-      let adapter = new NpmAdapter({ cwd: tmpdir });
-      await adapter.setup();
-
-      assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), {
-        originalPackageJSON: true,
-      });
-    });
-
-    it('backs up the yarn.lock file and package-lock.json if they exist', async () => {
-      fs.mkdirSync('node_modules');
-      writeJSONFile('package.json', { originalPackageJSON: true });
-      writeJSONFile('yarn.lock', { originalYarnLock: true });
       writeJSONFile('package-lock.json', { originalPackageLock: true });
+      writeJSONFile('yarn.lock', { originalYarnLock: true });
 
       let adapter = new NpmAdapter({ cwd: tmpdir });
+
       await adapter.setup();
 
-      assertFileContainsJSON(path.join(tmpdir, 'package.json.ember-try'), {
+      assertFileContainsJSON(adapter.backup.pathForFile('package.json'), {
         originalPackageJSON: true,
       });
-      assertFileContainsJSON(path.join(tmpdir, 'yarn.lock.ember-try'), {
-        originalYarnLock: true,
-      });
-      assertFileContainsJSON(path.join(tmpdir, 'package-lock.json.ember-try'), {
+      assertFileContainsJSON(adapter.backup.pathForFile('package-lock.json'), {
         originalPackageLock: true,
+      });
+      assertFileContainsJSON(adapter.backup.pathForFile('yarn.lock'), {
+        originalYarnLock: true,
       });
     });
   });
@@ -270,37 +258,34 @@ describe('npmAdapter', () => {
   });
 
   describe('#_restoreOriginalDependencies', () => {
-    it('replaces the package.json with the backed up version', async () => {
-      writeJSONFile('package.json.ember-try', { originalPackageJSON: true });
-      writeJSONFile('package.json', { originalPackageJSON: false });
+    it('restores the `package.json`, `package-lock.json` and `yarn.lock` files if they exist', async () => {
+      writeJSONFile('package.json', { originalPackageJSON: true });
+      writeJSONFile('package-lock.json', { originalPackageLock: true });
+      writeJSONFile('yarn.lock', { originalYarnLock: true });
 
       let adapter = new NpmAdapter({ cwd: tmpdir });
-      await adapter._restoreOriginalDependencies();
 
-      assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
-    });
+      await adapter.setup();
 
-    it('replaces the yarn.lock and package-lock.json with the backed up version if they exist', async () => {
-      writeJSONFile('package.json.ember-try', { originalPackageJSON: true });
+      // Simulate modifying the files:
       writeJSONFile('package.json', { originalPackageJSON: false });
-      writeJSONFile('yarn.lock.ember-try', { originalYarnLock: true });
-      writeJSONFile('yarn.lock', { originalYarnLock: false });
-      writeJSONFile('package-lock.json.ember-try', { originalPackageLock: true });
       writeJSONFile('package-lock.json', { originalPackageLock: false });
+      writeJSONFile('yarn.lock', { originalYarnLock: false });
 
-      let adapter = new NpmAdapter({ cwd: tmpdir });
       await adapter._restoreOriginalDependencies();
 
-      assertFileContainsJSON(path.join(tmpdir, 'package.json'), { originalPackageJSON: true });
-      assertFileContainsJSON(path.join(tmpdir, 'yarn.lock'), { originalYarnLock: true });
+      assertFileContainsJSON(path.join(tmpdir, 'package.json'), {
+        originalPackageJSON: true,
+      });
       assertFileContainsJSON(path.join(tmpdir, 'package-lock.json'), {
         originalPackageLock: true,
+      });
+      assertFileContainsJSON(path.join(tmpdir, 'yarn.lock'), {
+        originalYarnLock: true,
       });
     });
 
     it('installs the original node modules again', async () => {
-      writeJSONFile('package.json.ember-try', {});
-
       let runCount = 0;
       let stubbedRun = generateMockRun(
         [

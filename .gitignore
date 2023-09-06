@@ -17,10 +17,6 @@
 /testem.log
 /yarn-error.log
 
-# ember-try
-/bower.json.ember-try
-/package.json.ember-try
-
 /.nyc_output
 *.tgz
 .scratch
