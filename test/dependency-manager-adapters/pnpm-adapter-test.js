@@ -30,10 +30,10 @@ describe('pnpm Adapter', () => {
       let adapter = new PnpmAdapter({ cwd: tmpdir });
       await adapter.setup();
 
-      expect(await fs.readJson('package.json.ember-try')).to.deep.equal({
+      expect(await fs.readJson(adapter.backup.pathForFile('package.json'))).to.deep.equal({
         originalPackageJSON: true,
       });
-      expect(await fs.readFile('pnpm-lock.ember-try.yaml', 'utf-8')).to.equal(
+      expect(await fs.readFile(adapter.backup.pathForFile('pnpm-lock.yaml'), 'utf-8')).to.equal(
         'originalYAML: true\n'
       );
     });
@@ -44,10 +44,10 @@ describe('pnpm Adapter', () => {
       let adapter = new PnpmAdapter({ cwd: tmpdir });
       await adapter.setup();
 
-      expect(await fs.readJson('package.json.ember-try')).to.deep.equal({
+      expect(await fs.readJson(adapter.backup.pathForFile('package.json'))).to.deep.equal({
         originalPackageJSON: true,
       });
-      expect(fs.existsSync('pnpm-lock.ember-try.yaml')).to.be.false;
+      expect(fs.existsSync(adapter.backup.pathForFile('pnpm-lock.yaml'))).to.be.false;
     });
   });
 
@@ -100,7 +100,7 @@ describe('pnpm Adapter', () => {
         },
       });
 
-      expect(await fs.readJson('package.json.ember-try')).to.deep.equal({
+      expect(await fs.readJson(adapter.backup.pathForFile('package.json'))).to.deep.equal({
         devDependencies: {
           'ember-try-test-suite-helper': '0.1.0',
         },
@@ -112,10 +112,8 @@ describe('pnpm Adapter', () => {
 
   describe('#cleanup', () => {
     it('restores the `package.json` and `pnpm-lock.yaml` files, and then runs `pnpm install`', async () => {
-      await fs.outputJson('package.json', { modifiedPackageJSON: true });
-      await fs.outputJson('package.json.ember-try', { originalPackageJSON: true });
-      await fs.outputFile('pnpm-lock.yaml', 'modifiedYAML: true\n');
-      await fs.outputFile('pnpm-lock.ember-try.yaml', 'originalYAML: true\n');
+      await fs.outputJson('package.json', { originalPackageJSON: true });
+      await fs.outputFile('pnpm-lock.yaml', 'originalYAML: true\n');
 
       let runCount = 0;
       let stubbedRun = generateMockRun(
@@ -135,12 +133,17 @@ describe('pnpm Adapter', () => {
         cwd: tmpdir,
         run: stubbedRun,
       });
+
+      await adapter.setup();
+
+      // Simulate modifying the files:
+      await fs.outputJson('package.json', { originalPackageJSON: false });
+      await fs.outputFile('pnpm-lock.yaml', 'originalYAML: false\n');
+
       await adapter.cleanup();
 
       expect(await fs.readJson('package.json')).to.deep.equal({ originalPackageJSON: true });
       expect(await fs.readFile('pnpm-lock.yaml', 'utf-8')).to.equal('originalYAML: true\n');
-      expect(fs.existsSync('package.json.ember-try')).to.be.false;
-      expect(fs.existsSync('pnpm-lock.ember-try.yaml')).to.be.false;
 
       expect(runCount).to.equal(1);
     });

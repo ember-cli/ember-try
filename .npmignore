@@ -30,10 +30,6 @@
 /yarn.lock
 .gitkeep
 
-# ember-try
-/bower.json.ember-try
-/package.json.ember-try
-
 # custom
 /.codeclimate.yml
 /test

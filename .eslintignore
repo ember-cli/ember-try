@@ -14,7 +14,3 @@
 /coverage/
 !.*
 .eslintrc.js
-
-# ember-try
-/bower.json.ember-try
-/package.json.ember-try

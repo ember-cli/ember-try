@@ -45,7 +45,6 @@ describe('reset', () => {
     });
 
     writeJSONFile('package.json', fixturePackageJson);
-    writeJSONFile('package.json.ember-try', fixturePackageJson);
 
     return resetTask.run();
   });

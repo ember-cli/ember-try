@@ -39,6 +39,7 @@
     "resolve": "^1.20.0",
     "rimraf": "^3.0.2",
     "semver": "^7.5.4",
+    "temp-dir": "^2.0.0",
     "walk-sync": "^2.2.0"
   },
   "devDependencies": {
