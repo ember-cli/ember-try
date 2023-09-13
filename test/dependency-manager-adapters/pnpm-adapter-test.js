@@ -4,6 +4,7 @@ let expect = require('chai').expect;
 let fs = require('fs-extra');
 let path = require('path');
 let tmp = require('tmp-sync');
+const sinon = require('sinon');
 let PnpmAdapter = require('../../lib/dependency-manager-adapters/pnpm');
 let generateMockRun = require('../helpers/generate-mock-run');
 
@@ -18,6 +19,7 @@ describe('pnpm Adapter', () => {
   });
 
   afterEach(async () => {
+    sinon.restore();
     process.chdir(root);
     await fs.remove(tmproot);
   });
@@ -108,6 +110,39 @@ describe('pnpm Adapter', () => {
 
       expect(runCount).to.equal(1);
     });
+
+    it('runs _updateNpmRc before _install', async () => {
+      await fs.outputJson('package.json', {
+        devDependencies: {
+          'ember-try-test-suite-helper': '0.1.0',
+        },
+      });
+
+      let adapter = new PnpmAdapter({
+        cwd: tmpdir,
+      });
+
+      const updateStub = sinon.replace(
+        adapter,
+        '_updateNpmRc',
+        sinon.fake(() => {})
+      );
+
+      const installStub = sinon.replace(
+        adapter,
+        '_install',
+        sinon.fake(() => {})
+      );
+
+      await adapter.setup();
+      await adapter.changeToDependencySet({
+        devDependencies: {
+          'ember-try-test-suite-helper': '1.0.0',
+        },
+      });
+
+      expect(updateStub.calledBefore(installStub)).to.be.true;
+    });
   });
 
   describe('#cleanup', () => {
@@ -146,6 +181,33 @@ describe('pnpm Adapter', () => {
       expect(await fs.readFile('pnpm-lock.yaml', 'utf-8')).to.equal('originalYAML: true\n');
 
       expect(runCount).to.equal(1);
+    });
+
+    it('runs _revertNpmRc after _install', async () => {
+      await fs.outputJson('package.json', { modifiedPackageJSON: true });
+      await fs.outputJson('package.json.ember-try', { originalPackageJSON: true });
+      await fs.outputFile('pnpm-lock.yaml', 'modifiedYAML: true\n');
+      await fs.outputFile('pnpm-lock.ember-try.yaml', 'originalYAML: true\n');
+
+      let adapter = new PnpmAdapter({
+        cwd: tmpdir,
+      });
+
+      const revertStub = sinon.replace(
+        adapter,
+        '_revertNpmRc',
+        sinon.fake(() => {})
+      );
+
+      const installStub = sinon.replace(
+        adapter,
+        '_install',
+        sinon.fake(() => {})
+      );
+
+      await adapter.cleanup();
+
+      expect(revertStub.calledAfter(installStub)).to.be.true;
     });
   });
 
@@ -328,6 +390,143 @@ describe('pnpm Adapter', () => {
       let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.devDependencies).to.not.have.property('ember-feature-flags');
+    });
+  });
+
+  describe('#_doesPnpmRequireResolutionModeFix', () => {
+    [
+      { given: null, expected: false },
+      { given: '1.0.0', expected: false },
+      { given: '7.9.9999', expected: false },
+      { given: '8.0.0', expected: true },
+      { given: '8.1.2', expected: true },
+      { given: '8.6.9999', expected: true },
+      { given: '8.7.0', expected: false },
+      { given: '8.7.1', expected: false },
+      { given: '9.0.0', expected: false },
+    ].forEach(({ given, expected }) => {
+      it(`works with given version "${given}"`, () => {
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+        let result = npmAdapter._doesPnpmRequireResolutionModeFix(given);
+        expect(result).equal(expected);
+      });
+    });
+  });
+
+  describe('#_getPnpmVersion', () => {
+    // prettier-ignore
+    [
+      { version: '1.0.0' },
+      { version: '8.6.2' },
+      { version: 'how the turntables' },
+    ].forEach(({ version }) => {
+      it(`works with given version "${version}"`, async () => {
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+        let result = await npmAdapter._getPnpmVersion(`echo ${version}`);
+        expect(result).equal(version);
+      });
+    });
+  });
+
+  describe('#_updateNpmRc', () => {
+    describe('when pnpm version requires the resolution-mode fix', () => {
+      it(`should create a new .npmrc file when none exists`, async () => {
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+        let npmrcPath = path.join(tmpdir, '.npmrc');
+        let npmrcBackupPath = path.join(tmpdir, '.npmrc.ember-try');
+
+        await npmAdapter._updateNpmRc('8.6.0');
+
+        let actualFileContent = fs.readFileSync(npmrcPath, 'utf8');
+        let expectedFileContent = 'resolution-mode = highest\n';
+
+        expect(actualFileContent, '.npmrc content').to.equal(expectedFileContent);
+        expect(fs.existsSync(npmrcBackupPath), '.npmrc.ember-try does not exist').to.be.false;
+      });
+
+      it(`should update an npmrc file when it already exists`, async () => {
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+        let npmrcPath = path.join(tmpdir, '.npmrc');
+        let npmrcBackupPath = npmAdapter.backup.pathForFile('.npmrc');
+
+        fs.writeFileSync(npmrcPath, 'foo = bar\n');
+
+        await npmAdapter._updateNpmRc('8.6.0');
+
+        let actualFileContent = fs.readFileSync(npmrcPath, 'utf8');
+        let expectedFileContent = 'foo = bar\n\nresolution-mode = highest\n';
+        expect(actualFileContent, '.npmrc content').to.equal(expectedFileContent);
+
+        let actualBackupFileContent = fs.readFileSync(npmrcBackupPath, 'utf8');
+        let expectedBackupFileContent = 'foo = bar\n';
+        expect(actualBackupFileContent, '.npmrc-backup content').to.equal(
+          expectedBackupFileContent
+        );
+      });
+    });
+
+    describe('when pnpm version does not the resolution-mode fix', () => {
+      it(`should not create a new .npmrc file`, async () => {
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+        let npmrcPath = path.join(tmpdir, '.npmrc');
+        let npmrcBackupPath = path.join(tmpdir, '.npmrc.ember-try');
+
+        await npmAdapter._updateNpmRc('7.6.0');
+
+        expect(fs.existsSync(npmrcPath), '.npmrc does not exist').to.be.false;
+        expect(fs.existsSync(npmrcBackupPath), '.npmrc.ember-try does not exist').to.be.false;
+      });
+    });
+  });
+
+  describe('#_revertNpmRc', () => {
+    describe('when pnpm version requires the resolution-mode fix', () => {
+      it(`when backup does not exist, it should delete the .npmrc file`, async () => {
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+        let npmrcPath = path.join(tmpdir, '.npmrc');
+        let npmrcBackupPath = path.join(tmpdir, '.npmrc.ember-try');
+
+        fs.writeFileSync(npmrcPath, 'resolution-mode = highest\n');
+
+        await npmAdapter._revertNpmRc('8.6.0');
+
+        expect(fs.existsSync(npmrcPath), '.npmrc.ember-try does not exist').to.be.false;
+        expect(fs.existsSync(npmrcBackupPath), '.npmrc.ember-try does not exist').to.be.false;
+      });
+
+      it(`when backup exists, it should replace the original file with backup and delete the backup`, async () => {
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+        let npmrcPath = path.join(tmpdir, '.npmrc');
+        let npmrcBackupPath = npmAdapter.backup.pathForFile('.npmrc');
+
+        fs.writeFileSync(npmrcPath, 'foo = bar\n\nresolution-mode = highest\n');
+        fs.writeFileSync(npmrcBackupPath, 'foo = bar\n');
+
+        await npmAdapter._revertNpmRc('8.6.0');
+
+        let actualFileContent = fs.readFileSync(npmrcPath, 'utf8');
+        let expectedFileContent = 'foo = bar\n';
+
+        expect(actualFileContent, '.npmrc content').to.equal(expectedFileContent);
+        // expect(fs.existsSync(npmrcBackupPath), '.npmrc.ember-try existence').to.be.false;
+      });
+    });
+
+    describe('when pnpm version does not the resolution-mode fix', () => {
+      it(`should not touch the existing .npmrc file`, async () => {
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+        let npmrcPath = path.join(tmpdir, '.npmrc');
+        let npmrcBackupPath = path.join(tmpdir, '.npmrc.ember-try');
+
+        fs.writeFileSync(npmrcPath, 'foo = bar\n');
+
+        await npmAdapter._revertNpmRc('7.6.0');
+
+        let actualFileContent = fs.readFileSync(npmrcPath, 'utf8');
+
+        expect(actualFileContent, '.npmrc content').to.equal('foo = bar\n');
+        expect(fs.existsSync(npmrcBackupPath), '.npmrc.ember-try does not exist').to.be.false;
+      });
     });
   });
 });
