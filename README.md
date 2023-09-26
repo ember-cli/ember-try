@@ -215,6 +215,9 @@ If you include `useYarn: true` in your `ember-try` config, all npm scenarios wil
 
 If you include `usePnpm: true` in your `ember-try` config, all npm scenarios will use `pnpm` for install with the `--no-lockfile` options. At cleanup, your dependencies will be restored to their prior state.
 
+> ⚠ pnpm versions from 8.0.0 to 8.6.x have the default value of [resolution-mode](https://pnpm.io/npmrc#resolution-mode) setting changed to `lowest-direct`. This violates `ember-try` expectations as `resolution-mode` is expected to be `highest`, like in `npm` and `pnpm` versions < 8.0.0 and >= 8.7.0.
+>
+> If you run into this issue, we recommend to upgrade pnpm to latest version. If you are unable to upgrade, you can set `resolution-mode = highest` in the `.npmrc` file.
 
 ##### A note on npm scenarios with lockfiles
 
