@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
     "codecov": "^3.8.3",
     "ember-cli": "~3.22.0",
     "eslint": "^7.31.0",
@@ -59,6 +60,7 @@
     "release-it": "^14.11.6",
     "release-it-lerna-changelog": "^3.1.0",
     "rsvp": "^4.7.0",
+    "sinon": "^15.2.0",
     "tmp-sync": "^1.1.0"
   },
   "engines": {

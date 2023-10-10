@@ -1,15 +1,28 @@
 'use strict';
 
-let expect = require('chai').expect;
+let chai = require('chai');
+let chaiAsPromised = require('chai-as-promised');
+chai.use(chaiAsPromised);
+let { expect } = chai;
 let fs = require('fs-extra');
 let path = require('path');
 let tmp = require('tmp-sync');
+const sinon = require('sinon');
 let PnpmAdapter = require('../../lib/dependency-manager-adapters/pnpm');
 let generateMockRun = require('../helpers/generate-mock-run');
 
 let root = process.cwd();
 let tmproot = path.join(root, 'tmp');
 let tmpdir;
+
+function setResolutionModeToHighest(dir) {
+  // package.json is required for `pnpm config get` to work
+  let packageJsonPath = path.join(dir, 'package.json');
+  fs.writeFileSync(packageJsonPath, '{"private": true}');
+
+  let npmrcPath = path.join(dir, '.npmrc');
+  fs.writeFileSync(npmrcPath, 'resolution-mode = highest');
+}
 
 describe('pnpm Adapter', () => {
   beforeEach(() => {
@@ -18,16 +31,39 @@ describe('pnpm Adapter', () => {
   });
 
   afterEach(async () => {
+    sinon.restore();
     process.chdir(root);
     await fs.remove(tmproot);
   });
 
   describe('#setup', () => {
+    beforeEach(() => {
+      setResolutionModeToHighest(tmpdir);
+    });
+
     it('backs up the `package.json` and `pnpm-lock.yaml` files', async () => {
       await fs.outputJson('package.json', { originalPackageJSON: true });
       await fs.outputFile('pnpm-lock.yaml', 'originalYAML: true\n');
 
-      let adapter = new PnpmAdapter({ cwd: tmpdir });
+      let stubbedRun = generateMockRun(
+        [
+          {
+            command: 'pnpm --version',
+            async callback(/* command, args, opts */) {
+              return { stdout: '9.0.0\n' };
+            },
+          },
+          {
+            command: 'pnpm config get resolution-mode',
+            async callback(/* command, args, opts */) {
+              return { stdout: 'highest\n' };
+            },
+          },
+        ],
+        { allowPassthrough: false }
+      );
+
+      let adapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
       await adapter.setup();
 
       expect(await fs.readJson(adapter.backup.pathForFile('package.json'))).to.deep.equal({
@@ -41,7 +77,25 @@ describe('pnpm Adapter', () => {
     it('ignores missing `pnpm-lock.yaml` files', async () => {
       await fs.outputJson('package.json', { originalPackageJSON: true });
 
-      let adapter = new PnpmAdapter({ cwd: tmpdir });
+      let stubbedRun = generateMockRun(
+        [
+          {
+            command: 'pnpm --version',
+            async callback(/* command, args, opts */) {
+              return { stdout: '9.0.0\n' };
+            },
+          },
+          {
+            command: 'pnpm config get resolution-mode',
+            async callback(/* command, args, opts */) {
+              return { stdout: 'highest\n' };
+            },
+          },
+        ],
+        { allowPassthrough: false }
+      );
+
+      let adapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
       await adapter.setup();
 
       expect(await fs.readJson(adapter.backup.pathForFile('package.json'))).to.deep.equal({
@@ -52,6 +106,10 @@ describe('pnpm Adapter', () => {
   });
 
   describe('#changeToDependencySet', () => {
+    beforeEach(() => {
+      setResolutionModeToHighest(tmpdir);
+    });
+
     it('updates the `package.json` and runs `pnpm install`', async () => {
       await fs.outputJson('package.json', {
         devDependencies: {
@@ -67,6 +125,18 @@ describe('pnpm Adapter', () => {
             async callback(command, args, opts) {
               runCount++;
               expect(opts).to.have.property('cwd', tmpdir);
+            },
+          },
+          {
+            command: 'pnpm --version',
+            async callback(/* command, args, opts */) {
+              return { stdout: '9.0.0\n' };
+            },
+          },
+          {
+            command: 'pnpm config get resolution-mode',
+            async callback(/* command, args, opts */) {
+              return { stdout: 'highest\n' };
             },
           },
         ],
@@ -108,9 +178,46 @@ describe('pnpm Adapter', () => {
 
       expect(runCount).to.equal(1);
     });
+
+    it('runs _throwOnResolutionMode before _install', async () => {
+      await fs.outputJson('package.json', {
+        devDependencies: {
+          'ember-try-test-suite-helper': '0.1.0',
+        },
+      });
+
+      let adapter = new PnpmAdapter({
+        cwd: tmpdir,
+      });
+
+      const updateStub = sinon.replace(
+        adapter,
+        '_throwOnResolutionMode',
+        sinon.fake(() => {})
+      );
+
+      const installStub = sinon.replace(
+        adapter,
+        '_install',
+        sinon.fake(() => {})
+      );
+
+      await adapter.setup();
+      await adapter.changeToDependencySet({
+        devDependencies: {
+          'ember-try-test-suite-helper': '1.0.0',
+        },
+      });
+
+      expect(updateStub.calledBefore(installStub)).to.be.true;
+    });
   });
 
   describe('#cleanup', () => {
+    beforeEach(() => {
+      setResolutionModeToHighest(tmpdir);
+    });
+
     it('restores the `package.json` and `pnpm-lock.yaml` files, and then runs `pnpm install`', async () => {
       await fs.outputJson('package.json', { originalPackageJSON: true });
       await fs.outputFile('pnpm-lock.yaml', 'originalYAML: true\n');
@@ -123,6 +230,18 @@ describe('pnpm Adapter', () => {
             async callback(command, args, opts) {
               runCount++;
               expect(opts).to.have.property('cwd', tmpdir);
+            },
+          },
+          {
+            command: 'pnpm --version',
+            async callback(/* command, args, opts */) {
+              return { stdout: '9.0.0\n' };
+            },
+          },
+          {
+            command: 'pnpm config get resolution-mode',
+            async callback(/* command, args, opts */) {
+              return { stdout: 'highest\n' };
             },
           },
         ],
@@ -328,6 +447,193 @@ describe('pnpm Adapter', () => {
       let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.devDependencies).to.not.have.property('ember-feature-flags');
+    });
+  });
+
+  describe('#_isResolutionModeWrong', () => {
+    [
+      { expected: false, pnpmVersion: '1.0.0', resolutionMode: '' },
+      { expected: false, pnpmVersion: '7.9.9999', resolutionMode: '' },
+      { expected: true, pnpmVersion: '8.0.0', resolutionMode: '' },
+      { expected: true, pnpmVersion: '8.1.2', resolutionMode: '' },
+      { expected: true, pnpmVersion: '8.6.9999', resolutionMode: '' },
+      { expected: false, pnpmVersion: '8.7.0', resolutionMode: '' },
+      { expected: false, pnpmVersion: '8.7.1', resolutionMode: '' },
+      { expected: false, pnpmVersion: '9.0.0', resolutionMode: '' },
+      { expected: false, pnpmVersion: '1.0.0', resolutionMode: 'highest' },
+      { expected: false, pnpmVersion: '7.9.9999', resolutionMode: 'highest' },
+      { expected: false, pnpmVersion: '8.0.0', resolutionMode: 'highest' },
+      { expected: false, pnpmVersion: '8.1.2', resolutionMode: 'highest' },
+      { expected: false, pnpmVersion: '8.6.9999', resolutionMode: 'highest' },
+      { expected: false, pnpmVersion: '8.7.0', resolutionMode: 'highest' },
+      { expected: false, pnpmVersion: '8.7.1', resolutionMode: 'highest' },
+      { expected: false, pnpmVersion: '9.0.0', resolutionMode: 'highest' },
+      { expected: false, pnpmVersion: '1.0.0', resolutionMode: 'lowest-direct' },
+      { expected: false, pnpmVersion: '7.9.9999', resolutionMode: 'lowest-direct' },
+      { expected: false, pnpmVersion: '8.0.0', resolutionMode: 'lowest-direct' },
+      { expected: false, pnpmVersion: '8.1.2', resolutionMode: 'lowest-direct' },
+      { expected: false, pnpmVersion: '8.6.9999', resolutionMode: 'lowest-direct' },
+      { expected: false, pnpmVersion: '8.7.0', resolutionMode: 'lowest-direct' },
+      { expected: false, pnpmVersion: '8.7.1', resolutionMode: 'lowest-direct' },
+      { expected: false, pnpmVersion: '9.0.0', resolutionMode: 'lowest-direct' },
+    ].forEach(({ pnpmVersion, resolutionMode, expected }) => {
+      it(`works with given version "${pnpmVersion}" and resolutionMode "${resolutionMode}"`, () => {
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+
+        let result = npmAdapter._isResolutionModeWrong(pnpmVersion, resolutionMode);
+        expect(result).equal(expected);
+      });
+    });
+  });
+
+  describe('#_getPnpmVersion', () => {
+    // prettier-ignore
+    [
+      { version: '1.0.0' },
+      { version: '8.6.2' },
+      { version: 'how the turntables' },
+    ].forEach(({ version }) => {
+      it(`works with given version "${version}"`, async () => {
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'pnpm --version',
+              async callback(/* command, args, opts */) {
+                return {  stdout: `${version}\n` };
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
+
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+        let result = await npmAdapter._getPnpmVersion();
+        expect(result).equal(version);
+      });
+    });
+  });
+
+  describe('#_getResolutionMode', () => {
+    it('when no .npmrc is present, it should return an empty string', async () => {
+      let stubbedRun = generateMockRun(
+        [
+          {
+            command: 'pnpm config get resolution-mode',
+            async callback(/* command, args, opts */) {
+              return { stdout: '' };
+            },
+          },
+        ],
+        { allowPassthrough: false }
+      );
+
+      let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+
+      let result = await npmAdapter._getResolutionMode();
+      expect(result).equal('');
+    });
+
+    it('when .npmrc contains reslution-mode, it should return the given resolution mode', async () => {
+      let stubbedRun = generateMockRun(
+        [
+          {
+            command: 'pnpm config get resolution-mode',
+            async callback(/* command, args, opts */) {
+              return { stdout: 'highest\n' };
+            },
+          },
+        ],
+        { allowPassthrough: false }
+      );
+
+      let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+
+      setResolutionModeToHighest(tmpdir);
+
+      let result = await npmAdapter._getResolutionMode();
+      expect(result).equal('highest');
+    });
+  });
+
+  describe('#_throwOnResolutionMode', () => {
+    describe('when pnpm version requires the resolution-mode fix', () => {
+      it(`when resoultion-mode is not highest, should throw an error`, async () => {
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'pnpm --version',
+              async callback(/* command, args, opts */) {
+                return { stdout: '8.6.0\n' };
+              },
+            },
+            {
+              command: 'pnpm config get resolution-mode',
+              async callback(/* command, args, opts */) {
+                return { stdout: '' };
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
+
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+
+        return expect(npmAdapter._throwOnResolutionMode()).to.eventually.be.rejectedWith(
+          'You are using an old version of pnpm that uses wrong resolution mode that violates ember-try expectations. Please either upgrade pnpm or set `resolution-mode` to `highest` in `.npmrc`.'
+        );
+      });
+
+      it(`when resoultion-mode is highest, should not throw an error`, async () => {
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'pnpm --version',
+              async callback(/* command, args, opts */) {
+                return { stdout: '8.6.0\n' };
+              },
+            },
+            {
+              command: 'pnpm config get resolution-mode',
+              async callback(/* command, args, opts */) {
+                return { stdout: 'highest\n' };
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
+
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+
+        setResolutionModeToHighest(tmpdir);
+
+        await npmAdapter._throwOnResolutionMode('8.6.0');
+      });
+    });
+
+    describe('when pnpm version does not the resolution-mode fix', () => {
+      it(`should not throw an error`, async () => {
+        let stubbedRun = generateMockRun(
+          [
+            {
+              command: 'pnpm --version',
+              async callback(/* command, args, opts */) {
+                return { stdout: '7.6.0\n' };
+              },
+            },
+            {
+              command: 'pnpm config get resolution-mode',
+              async callback(/* command, args, opts */) {
+                return { stdout: 'highest\n' };
+              },
+            },
+          ],
+          { allowPassthrough: false }
+        );
+
+        let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+
+        await npmAdapter._throwOnResolutionMode();
+      });
     });
   });
 });
