@@ -14,7 +14,7 @@ ember install ember-try
 
 This addon provides a few commands:
 
-### `ember try:each`
+#### `ember try:each`
 
 This command will run `ember test` or the configured command with each scenario's specified in the config and exit appropriately.
 
