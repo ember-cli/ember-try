@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
       - run: yarn install
       - run: yarn lint
@@ -35,7 +35,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18
           cache: yarn
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
@@ -51,7 +51,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18
           cache: yarn
       - name: Install Dependencies
         run: yarn install --no-lockfile
@@ -135,7 +135,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
       - name: install deps
         run: yarn install
@@ -152,7 +152,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['16', '18']
+        node: [18, 20, 21]
 
     name: Smoke Tests (Node v${{ matrix.node }} with npm)
     runs-on: ubuntu-latest
@@ -180,7 +180,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['16', '18']
+        node: [18, 20, 21]
 
     name: Smoke Tests (Node v${{ matrix.node }} with yarn)
     runs-on: ubuntu-latest
@@ -217,7 +217,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
       - name: install deps
         run: yarn install
