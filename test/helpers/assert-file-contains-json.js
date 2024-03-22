@@ -14,7 +14,7 @@ function assertFileContains(filePath, expectedContents) {
   let result = regex.test(actualContents);
   expect(result).to.equal(
     true,
-    `File ${path.basename(filePath)} is expected to contain ${expectedContents}`
+    `File ${path.basename(filePath)} is expected to contain ${expectedContents}`,
   );
 }
 

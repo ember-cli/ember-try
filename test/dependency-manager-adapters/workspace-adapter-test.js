@@ -113,7 +113,7 @@ describe('workspaceAdapter', () => {
           useYarnCommand: true,
         }).setup();
       }).to.throw(
-        /you must define the `workspaces` property in package.json with at least one workspace to use workspaces with ember-try/
+        /you must define the `workspaces` property in package.json with at least one workspace to use workspaces with ember-try/,
       );
     });
   });
@@ -126,7 +126,7 @@ describe('workspaceAdapter', () => {
             cwd: tmpdir,
           });
         }).to.throw(
-          /workspaces are currently only supported by Yarn, you must set `useYarn` to true/
+          /workspaces are currently only supported by Yarn, you must set `useYarn` to true/,
         );
       });
     });
@@ -145,7 +145,7 @@ describe('workspaceAdapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         return new WorkspaceAdapter({
@@ -171,7 +171,7 @@ describe('workspaceAdapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         return new WorkspaceAdapter({
@@ -198,7 +198,7 @@ describe('workspaceAdapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         return new WorkspaceAdapter({
@@ -442,7 +442,7 @@ describe('workspaceAdapter', () => {
             },
           },
         ],
-        { allowPassthrough: false }
+        { allowPassthrough: false },
       );
       workspaceAdapter.buildManagerOptions = function (scenario) {
         if (scenario.name === 'scenario1') {
@@ -459,7 +459,7 @@ describe('workspaceAdapter', () => {
         .then(() => {
           expect(runCount).to.equal(
             1,
-            'yarn install should run with correct options from buildManagerOptions'
+            'yarn install should run with correct options from buildManagerOptions',
           );
         });
     });

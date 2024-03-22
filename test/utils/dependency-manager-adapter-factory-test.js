@@ -29,7 +29,7 @@ describe('DependencyManagerAdapterFactory', () => {
     it('creates the adapter', () => {
       let adapters = DependencyManagerAdapterFactory.generateFromConfig(
         { scenarios: [{ npm: {} }] },
-        'here'
+        'here',
       );
       expect(adapters[0].configKey).to.equal('npm');
       expect(adapters.length).to.equal(1);
@@ -39,7 +39,7 @@ describe('DependencyManagerAdapterFactory', () => {
       expect(() => {
         DependencyManagerAdapterFactory.generateFromConfig(
           { scenarios: [{ bower: {}, npm: {} }] },
-          'here'
+          'here',
         );
       }).to.throw(/bower configuration is no longer supported/);
     });
@@ -48,7 +48,7 @@ describe('DependencyManagerAdapterFactory', () => {
       expect(() => {
         DependencyManagerAdapterFactory.generateFromConfig(
           { scenarios: [{ dependencies: {} }] },
-          'here'
+          'here',
         );
       }).to.throw(/bower configuration is no longer supported/);
     });
@@ -57,7 +57,7 @@ describe('DependencyManagerAdapterFactory', () => {
       expect(() => {
         DependencyManagerAdapterFactory.generateFromConfig(
           { scenarios: [{ devDependencies: {} }] },
-          'here'
+          'here',
         );
       }).to.throw(/bower configuration is no longer supported/);
     });
@@ -74,7 +74,7 @@ describe('DependencyManagerAdapterFactory', () => {
           useWorkspaces: true,
           scenarios: [{ npm: {} }],
         },
-        tmpdir
+        tmpdir,
       );
       expect(adapters[0]).to.be.instanceOf(WorkspaceAdapter);
       expect(adapters.length).to.equal(1);
