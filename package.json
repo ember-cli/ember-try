@@ -43,6 +43,7 @@
     "walk-sync": "^2.2.0"
   },
   "devDependencies": {
+    "@release-it-plugins/lerna-changelog": "^7.0.0",
     "chai": "^4.4.1",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.8.3",
@@ -55,8 +56,7 @@
     "mockery": "^2.1.0",
     "nyc": "^15.1.0",
     "prettier": "^3.2.5",
-    "release-it": "^14.11.6",
-    "release-it-lerna-changelog": "^3.1.0",
+    "release-it": "^17.10.0",
     "rsvp": "^4.7.0",
     "sinon": "^17.0.1",
     "tmp-sync": "^1.1.0"
@@ -72,7 +72,7 @@
   },
   "release-it": {
     "plugins": {
-      "release-it-lerna-changelog": {
+      "@release-it-plugins/lerna-changelog": {
         "infile": "CHANGELOG.md",
         "launchEditor": true
       }
