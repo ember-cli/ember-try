@@ -98,7 +98,7 @@ describe('tryEach', () => {
       return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(output).to.include(
-          'Detected a yarn.lock file. Add `useYarn: true` to your `config/ember-try.js` configuration file if you want to use Yarn to install npm dependencies.'
+          'Detected a yarn.lock file. Add `useYarn: true` to your `config/ember-try.js` configuration file if you want to use Yarn to install npm dependencies.',
         );
         expect(output).to.include('Scenario first: SUCCESS');
         expect(output).to.include('Scenario second: SUCCESS');
@@ -588,11 +588,11 @@ describe('tryEach', () => {
 
           expect(ranDefaultCommandCount).to.equal(
             2,
-            'Should run the default command scenarios without their own commands specified'
+            'Should run the default command scenarios without their own commands specified',
           );
           expect(ranScenarioCommandCount).to.equal(
             1,
-            'Should run the scenario command for scenario that specified it'
+            'Should run the scenario command for scenario that specified it',
           );
         });
       });
@@ -631,7 +631,7 @@ describe('tryEach', () => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
           expect(output).to.include(
             'Scenario first: SUCCESS',
-            'Passing scenario means options were passed along'
+            'Passing scenario means options were passed along',
           );
         });
       });

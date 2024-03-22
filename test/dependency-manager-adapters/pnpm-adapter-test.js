@@ -60,7 +60,7 @@ describe('pnpm Adapter', () => {
             },
           },
         ],
-        { allowPassthrough: false }
+        { allowPassthrough: false },
       );
 
       let adapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
@@ -70,7 +70,7 @@ describe('pnpm Adapter', () => {
         originalPackageJSON: true,
       });
       expect(await fs.readFile(adapter.backup.pathForFile('pnpm-lock.yaml'), 'utf-8')).to.equal(
-        'originalYAML: true\n'
+        'originalYAML: true\n',
       );
     });
 
@@ -92,7 +92,7 @@ describe('pnpm Adapter', () => {
             },
           },
         ],
-        { allowPassthrough: false }
+        { allowPassthrough: false },
       );
 
       let adapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
@@ -140,7 +140,7 @@ describe('pnpm Adapter', () => {
             },
           },
         ],
-        { allowPassthrough: false }
+        { allowPassthrough: false },
       );
 
       let adapter = new PnpmAdapter({
@@ -193,13 +193,13 @@ describe('pnpm Adapter', () => {
       const updateStub = sinon.replace(
         adapter,
         '_throwOnResolutionMode',
-        sinon.fake(() => {})
+        sinon.fake(() => {}),
       );
 
       const installStub = sinon.replace(
         adapter,
         '_install',
-        sinon.fake(() => {})
+        sinon.fake(() => {}),
       );
 
       await adapter.setup();
@@ -245,7 +245,7 @@ describe('pnpm Adapter', () => {
             },
           },
         ],
-        { allowPassthrough: false }
+        { allowPassthrough: false },
       );
 
       let adapter = new PnpmAdapter({
@@ -524,7 +524,7 @@ describe('pnpm Adapter', () => {
             },
           },
         ],
-        { allowPassthrough: false }
+        { allowPassthrough: false },
       );
 
       let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
@@ -543,7 +543,7 @@ describe('pnpm Adapter', () => {
             },
           },
         ],
-        { allowPassthrough: false }
+        { allowPassthrough: false },
       );
 
       let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
@@ -573,13 +573,13 @@ describe('pnpm Adapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
 
         return expect(npmAdapter._throwOnResolutionMode()).to.eventually.be.rejectedWith(
-          'You are using an old version of pnpm that uses wrong resolution mode that violates ember-try expectations. Please either upgrade pnpm or set `resolution-mode` to `highest` in `.npmrc`.'
+          'You are using an old version of pnpm that uses wrong resolution mode that violates ember-try expectations. Please either upgrade pnpm or set `resolution-mode` to `highest` in `.npmrc`.',
         );
       });
 
@@ -599,7 +599,7 @@ describe('pnpm Adapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
@@ -627,7 +627,7 @@ describe('pnpm Adapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
