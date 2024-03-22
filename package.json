@@ -43,7 +43,7 @@
     "walk-sync": "^2.2.0"
   },
   "devDependencies": {
-    "chai": "^4.3.4",
+    "chai": "^4.4.1",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.8.3",
     "ember-cli": "~3.22.0",
@@ -53,14 +53,14 @@
     "eslint-plugin-prettier": "^3.1.4",
     "glob": "^7.2.0",
     "json": "^10.0.0",
-    "mocha": "^8.2.1",
+    "mocha": "^10.3.0",
     "mockery": "^2.1.0",
     "nyc": "^15.1.0",
     "prettier": "^2.4.1",
     "release-it": "^14.11.6",
     "release-it-lerna-changelog": "^3.1.0",
     "rsvp": "^4.7.0",
-    "sinon": "^15.2.0",
+    "sinon": "^17.0.1",
     "tmp-sync": "^1.1.0"
   },
   "engines": {
