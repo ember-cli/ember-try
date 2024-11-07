@@ -58,7 +58,7 @@
     "prettier": "^3.3.3",
     "release-it": "^17.10.0",
     "rsvp": "^4.7.0",
-    "sinon": "^17.0.1",
+    "sinon": "^19.0.2",
     "tmp-sync": "^1.1.0"
   },
   "engines": {
