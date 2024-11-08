@@ -65,7 +65,7 @@ describe('npmAdapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         let adapter = new NpmAdapter({
@@ -90,7 +90,7 @@ describe('npmAdapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         let adapter = new NpmAdapter({
@@ -116,7 +116,7 @@ describe('npmAdapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         let adapter = new NpmAdapter({
@@ -166,7 +166,7 @@ describe('npmAdapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         let adapter = new NpmAdapter({
@@ -192,7 +192,7 @@ describe('npmAdapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         let adapter = new NpmAdapter({
@@ -219,7 +219,7 @@ describe('npmAdapter', () => {
               },
             },
           ],
-          { allowPassthrough: false }
+          { allowPassthrough: false },
         );
 
         let adapter = new NpmAdapter({
@@ -297,7 +297,7 @@ describe('npmAdapter', () => {
             },
           },
         ],
-        { allowPassthrough: false }
+        { allowPassthrough: false },
       );
 
       let adapter = new NpmAdapter({

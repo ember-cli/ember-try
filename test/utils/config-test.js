@@ -38,7 +38,7 @@ describe('utils/config', () => {
   it('uses specified options.configFile if present', () => {
     generateConfigFile(
       'module.exports = { scenarios: [ { qux: "baz" }] };',
-      'config/non-default.js'
+      'config/non-default.js',
     );
 
     return getConfig({ project, configPath: 'config/non-default.js' }).then((config) => {
@@ -50,7 +50,7 @@ describe('utils/config', () => {
   it('uses projects configured configPath if present', async () => {
     generateConfigFile(
       'module.exports = { scenarios: [ { foo: "bar" }] };',
-      'other-path/ember-try.js'
+      'other-path/ember-try.js',
     );
 
     project.pkg['ember-addon'] = {
@@ -113,7 +113,7 @@ describe('utils/config', () => {
 
   it('config file exporting a function is passed the project', () => {
     generateConfigFile(
-      'module.exports =  function(project) { return { scenarios: [ { foo: project.blah }] } };'
+      'module.exports =  function(project) { return { scenarios: [ { foo: project.blah }] } };',
     );
 
     project.blah = 'passed-in';
@@ -126,7 +126,7 @@ describe('utils/config', () => {
   it('throws error if project.root/config/ember-try.js is not present and no versionCompatibility', () => {
     return getConfig({ project }).catch((error) => {
       expect(error).to.match(
-        /No ember-try configuration found\. Please see the README for configuration options/
+        /No ember-try configuration found\. Please see the README for configuration options/,
       );
     });
   });
@@ -134,7 +134,7 @@ describe('utils/config', () => {
   it('uses specified options.configFile over project config/ember-try.js', () => {
     generateConfigFile(
       'module.exports = { scenarios: [ { qux: "baz" }] };',
-      'config/non-default.js'
+      'config/non-default.js',
     );
     generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };'); // Should not be used
 
@@ -217,7 +217,7 @@ describe('utils/config', () => {
 
     it('is merged with config if config has useVersionCompatibility', () => {
       generateConfigFile(
-        'module.exports = { useVersionCompatibility: true, npmOptions: ["--whatever=true"], scenarios: [ { name: "bar" }, { name: "ember-beta", allowedToFail: false } ] };'
+        'module.exports = { useVersionCompatibility: true, npmOptions: ["--whatever=true"], scenarios: [ { name: "bar" }, { name: "ember-beta", allowedToFail: false } ] };',
       );
       return getConfig({ project }).then((config) => {
         expect(config.useVersionCompatibility).to.equal(true);
