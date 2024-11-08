@@ -41,6 +41,11 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Run Tests
         run: yarn node-test-with-coverage
+      - uses: codecov/codecov-action@v4
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
 
   floating:
     name: "Floating Dependencies"

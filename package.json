@@ -24,7 +24,7 @@
   "scripts": {
     "lint": "eslint .",
     "node-test": "mocha test/**/*.js",
-    "node-test-with-coverage": "nyc --reporter lcov npm run-script node-test && node_modules/.bin/codecov",
+    "node-test-with-coverage": "nyc --reporter lcov npm run-script node-test",
     "start": "ember serve",
     "test": "npm run-script lint && npm run-script node-test"
   },
