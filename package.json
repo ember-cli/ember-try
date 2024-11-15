@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "chalk": "^4.1.2",
-    "cli-table3": "^0.6.0",
+    "cli-table3": "^0.6.1",
     "core-object": "^3.1.5",
     "debug": "^4.3.2",
     "ember-try-config": "^4.0.0",
