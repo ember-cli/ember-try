@@ -121,7 +121,7 @@ describe('pnpm Adapter', () => {
       let stubbedRun = generateMockRun(
         [
           {
-            command: 'pnpm install --no-lockfile',
+            command: 'pnpm install --no-lockfile --ignore-scripts',
             async callback(command, args, opts) {
               runCount++;
               expect(opts).to.have.property('cwd', tmpdir);
@@ -226,7 +226,7 @@ describe('pnpm Adapter', () => {
       let stubbedRun = generateMockRun(
         [
           {
-            command: 'pnpm install --no-lockfile',
+            command: 'pnpm install --no-lockfile --ignore-scripts',
             async callback(command, args, opts) {
               runCount++;
               expect(opts).to.have.property('cwd', tmpdir);
