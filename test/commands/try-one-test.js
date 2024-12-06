@@ -117,7 +117,7 @@ async function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
   TryOneCommand._commandLineArguments = function () {
     return [].concat(
       ['/usr/local/Cellar/node/5.3.0/bin/node', '/usr/local/bin/ember'],
-      additionalArgs
+      additionalArgs,
     );
   };
 

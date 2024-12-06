@@ -22,7 +22,7 @@ module.exports = function generateMockRun() {
       return passthrough().apply(this, arguments);
     } else {
       throw new Error(
-        `${actualCommand} ${actualArgs.join(' ')} not stubbed and not allowed to passthrough`
+        `${actualCommand} ${actualArgs.join(' ')} not stubbed and not allowed to passthrough`,
       );
     }
   };
@@ -46,7 +46,7 @@ function mockedCommandIsEmberAndArgumentsMatch(
   mockedCommand,
   mockedArgs,
   actualCommand,
-  actualArgs
+  actualArgs,
 ) {
   return (
     mockedCommand === 'ember' &&

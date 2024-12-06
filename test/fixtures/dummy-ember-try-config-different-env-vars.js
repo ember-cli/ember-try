@@ -1,5 +1,4 @@
 module.exports = {
-  useYarn: true,
   scenarios: [
     {
       name: 'test1',
