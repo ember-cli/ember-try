@@ -52,7 +52,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "mocha": "^10.8.2",
+    "mocha": "^11.0.1",
     "mockery": "^2.1.0",
     "nyc": "^17.1.0",
     "prettier": "^3.3.3",
