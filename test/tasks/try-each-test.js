@@ -89,8 +89,9 @@ describe('tryEach', () => {
         ui: { writeLine: outputFn },
         project: { root: tmpdir },
         config,
-        _on() {},
       });
+
+      tryEachTask._on = () => {};
 
       writeJSONFile('package.json', fixturePackage);
       fs.writeFileSync('yarn.lock', '');
@@ -143,8 +144,9 @@ describe('tryEach', () => {
         ui: { writeLine: outputFn },
         project: { root: tmpdir },
         config,
-        _on() {},
       });
+
+      tryEachTask._on = () => {};
 
       writeJSONFile('package.json', fixturePackage);
       fs.mkdirSync('node_modules');
@@ -207,8 +209,9 @@ describe('tryEach', () => {
         project: { root: tmpdir },
         config,
         dependencyManagerAdapters: [],
-        _on() {},
       });
+
+      tryEachTask._on = () => {};
 
       let exitCode = await tryEachTask.run(config.scenarios, {});
 
@@ -256,8 +259,9 @@ describe('tryEach', () => {
         commandArgs: ['ember', 'serve'],
         commandOptions: { timeout: { length: 20000, isSuccess: true } },
         dependencyManagerAdapters: [new StubDependencyAdapter()],
-        _on() {},
       });
+
+      tryEachTask._on = () => {};
 
       return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
@@ -306,8 +310,9 @@ describe('tryEach', () => {
           project: { root: tmpdir },
           config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on() {},
         });
+
+        tryEachTask._on = () => {};
 
         return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(output).to.include('Scenario first: FAIL (Allowed)');
@@ -355,8 +360,9 @@ describe('tryEach', () => {
           project: { root: tmpdir },
           config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on() {},
         });
+
+        tryEachTask._on = () => {};
 
         return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(output).to.include('Scenario first: FAIL');
@@ -405,8 +411,9 @@ describe('tryEach', () => {
           project: { root: tmpdir },
           config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on() {},
         });
+
+        tryEachTask._on = () => {};
 
         return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(output).to.include('Scenario first: SUCCESS');
@@ -460,8 +467,9 @@ describe('tryEach', () => {
           config,
           commandArgs: [],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on() {},
         });
+
+        tryEachTask._on = () => {};
 
         return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
@@ -506,8 +514,9 @@ describe('tryEach', () => {
           config,
           commandArgs: ['ember', 'serve'],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on() {},
         });
+
+        tryEachTask._on = () => {};
 
         return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
@@ -576,8 +585,9 @@ describe('tryEach', () => {
           project: { root: tmpdir },
           config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on() {},
         });
+
+        tryEachTask._on = () => {};
 
         return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
@@ -624,8 +634,9 @@ describe('tryEach', () => {
           config,
           commandArgs: ['ember', 'help', '--json', 'true'],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on() {},
         });
+
+        tryEachTask._on = () => {};
 
         return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
@@ -677,8 +688,9 @@ describe('tryEach', () => {
           project: { root: tmpdir },
           config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
-          _on() {},
         });
+
+        tryEachTask._on = () => {};
 
         return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
           expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
@@ -730,9 +742,10 @@ describe('tryEach', () => {
         project: { root: tmpdir },
         config,
         dependencyManagerAdapters: [new StubDependencyAdapter()],
-        _on() {},
-        _runCommand: mockRunCommand,
       });
+
+      tryEachTask._on = () => {};
+      tryEachTask._runCommand = mockRunCommand;
 
       return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
