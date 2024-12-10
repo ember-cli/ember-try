@@ -43,6 +43,7 @@
     "walk-sync": "^2.2.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.25.9",
     "@release-it-plugins/lerna-changelog": "^7.0.0",
     "chai": "^4.4.1",
     "chai-as-promised": "^7.1.1",
