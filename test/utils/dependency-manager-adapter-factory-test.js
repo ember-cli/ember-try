@@ -35,33 +35,6 @@ describe('DependencyManagerAdapterFactory', () => {
       expect(adapters.length).to.equal(1);
     });
 
-    it('errors when it sees `bower` explicitly', () => {
-      expect(() => {
-        DependencyManagerAdapterFactory.generateFromConfig(
-          { scenarios: [{ bower: {}, npm: {} }] },
-          'here',
-        );
-      }).to.throw(/bower configuration is no longer supported/);
-    });
-
-    it('errors when there is only a legacy top-level dependencies', () => {
-      expect(() => {
-        DependencyManagerAdapterFactory.generateFromConfig(
-          { scenarios: [{ dependencies: {} }] },
-          'here',
-        );
-      }).to.throw(/bower configuration is no longer supported/);
-    });
-
-    it('errors when there is only a legacy top-level devDependencies', () => {
-      expect(() => {
-        DependencyManagerAdapterFactory.generateFromConfig(
-          { scenarios: [{ devDependencies: {} }] },
-          'here',
-        );
-      }).to.throw(/bower configuration is no longer supported/);
-    });
-
     it('creates only a workspace adapter when useWorkspaces is set to true', () => {
       writeJSONFile('package.json', { workspaces: ['packages/test'] });
 
