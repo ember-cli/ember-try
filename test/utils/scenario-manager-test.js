@@ -2,7 +2,6 @@
 
 const expect = require('chai').expect;
 const ScenarioManager = require('../../lib/utils/scenario-manager');
-const RSVP = require('rsvp');
 
 describe('scenarioManager', () => {
   it('does not require any dependency managers', () => {
@@ -39,13 +38,13 @@ describe('scenarioManager', () => {
         new (class {
           configKey = 'adapterA';
           changeToDependencySet() {
-            return RSVP.resolve(['a', 'b', 'r']);
+            return Promise.resolve(['a', 'b', 'r']);
           }
         })(),
         new (class {
           configKey = 'adapterB';
           changeToDependencySet() {
-            return RSVP.resolve(['u', 'q', 'a']);
+            return Promise.resolve(['u', 'q', 'a']);
           }
         })(),
       ];

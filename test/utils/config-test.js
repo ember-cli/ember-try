@@ -1,7 +1,6 @@
 'use strict';
 
 const expect = require('chai').expect;
-const RSVP = require('rsvp');
 const fs = require('fs-extra');
 const path = require('path');
 const tmp = require('tmp-sync');
@@ -9,7 +8,6 @@ const fixturePackage = require('../fixtures/package.json');
 const writeJSONFile = require('../helpers/write-json-file');
 const getConfig = require('../../lib/utils/config');
 
-const remove = RSVP.denodeify(fs.remove);
 const root = process.cwd();
 const tmproot = path.join(root, 'tmp');
 
@@ -25,7 +23,7 @@ describe('utils/config', () => {
 
   afterEach(() => {
     process.chdir(root);
-    return remove(tmproot);
+    return fs.remove(tmproot);
   });
 
   function generateConfigFile(contents, filename = 'config/ember-try.js') {

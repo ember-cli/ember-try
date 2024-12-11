@@ -1,7 +1,6 @@
 'use strict';
 
 const expect = require('chai').expect;
-const RSVP = require('rsvp');
 const TryEachCommand = require('../../lib/commands/try-each');
 
 const origTryEachTask = TryEachCommand._TryEachTask;
@@ -16,7 +15,7 @@ describe('commands/try-each', () => {
 
     beforeEach(() => {
       TryEachCommand._getConfig = function () {
-        return RSVP.resolve(mockConfig || { scenarios: [] });
+        return Promise.resolve(mockConfig || { scenarios: [] });
       };
 
       TryEachCommand._TryEachTask = MockTryEachTask;
@@ -33,7 +32,7 @@ describe('commands/try-each', () => {
       TryEachCommand._getConfig = function (options) {
         configPath = options.configPath;
 
-        return RSVP.resolve({ scenarios: [{ name: 'foo' }] });
+        return Promise.resolve({ scenarios: [{ name: 'foo' }] });
       };
 
       TryEachCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
