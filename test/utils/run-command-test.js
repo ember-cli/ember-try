@@ -2,7 +2,6 @@
 
 const expect = require('chai').expect;
 const mockery = require('mockery');
-const RSVP = require('rsvp');
 
 describe('utils/run-command', () => {
   beforeEach(() => {
@@ -24,7 +23,7 @@ describe('utils/run-command', () => {
       expect(args[1]).to.equal('help');
       expect(args[2]).to.equal('--json');
       expect(args[3]).to.equal('true');
-      return RSVP.resolve(0);
+      return Promise.resolve(0);
     };
 
     mockery.registerMock('./run', mockedRun);

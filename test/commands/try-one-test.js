@@ -1,7 +1,6 @@
 'use strict';
 
 const expect = require('chai').expect;
-const RSVP = require('rsvp');
 const TryOneCommand = require('../../lib/commands/try-one');
 
 const origTryEachTask = TryOneCommand._TryEachTask;
@@ -41,7 +40,7 @@ describe('commands/try-one', () => {
 
     beforeEach(() => {
       TryOneCommand._getConfig = function () {
-        return RSVP.resolve(mockConfig || { scenarios: [] });
+        return Promise.resolve(mockConfig || { scenarios: [] });
       };
 
       TryOneCommand._TryEachTask = MockTryEachTask;
@@ -122,7 +121,7 @@ async function testCommandSetsTheseAsCommandArgs(command, expectedArgs) {
   };
 
   TryOneCommand._getConfig = async function () {
-    return RSVP.resolve({ scenarios: [{ name: 'default' }] });
+    return Promise.resolve({ scenarios: [{ name: 'default' }] });
   };
 
   return await TryOneCommand.run({}, ['default']);

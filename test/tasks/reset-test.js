@@ -2,12 +2,10 @@
 
 const tmp = require('tmp-sync');
 const path = require('path');
-const RSVP = require('rsvp');
 const fs = require('fs-extra');
 const fixturePackageJson = require('../fixtures/package.json');
 const writeJSONFile = require('../helpers/write-json-file');
 
-const remove = RSVP.denodeify(fs.remove);
 const root = process.cwd();
 const tmproot = path.join(root, 'tmp');
 
@@ -20,7 +18,7 @@ describe('reset', () => {
 
   afterEach(() => {
     process.chdir(root);
-    return remove(tmproot);
+    return fs.remove(tmproot);
   });
 
   it('runs without blowing up', function () {

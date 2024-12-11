@@ -3,7 +3,6 @@
 const expect = require('chai').expect;
 const tmp = require('tmp-sync');
 const path = require('path');
-const RSVP = require('rsvp');
 const fs = require('fs-extra');
 const fixturePackage = require('../fixtures/package.json');
 const writeJSONFile = require('../helpers/write-json-file');
@@ -13,7 +12,6 @@ const mockery = require('mockery');
 const StubDependencyAdapter = require('../helpers/stub-dependency-manager-adapter');
 const generateMockRun = require('../helpers/generate-mock-run');
 
-const remove = RSVP.denodeify(fs.remove);
 const root = process.cwd();
 const tmproot = path.join(root, 'tmp');
 
@@ -66,7 +64,7 @@ describe('tryEach', () => {
     mockery.deregisterAll();
     mockery.disable();
     process.chdir(root);
-    return remove(tmproot);
+    return fs.remove(tmproot);
   });
 
   describe('with npm scenarios', () => {
@@ -74,7 +72,7 @@ describe('tryEach', () => {
       this.timeout(300000);
 
       let mockedRun = generateMockRun('ember test', () => {
-        return RSVP.resolve(0);
+        return Promise.resolve(0);
       });
 
       mockery.registerMock('./run', mockedRun);
@@ -126,9 +124,9 @@ describe('tryEach', () => {
       let mockedRun = generateMockRun('ember test', () => {
         runTestCount++;
         if (runTestCount === 1) {
-          return RSVP.reject(1);
+          return Promise.reject(1);
         } else {
-          return RSVP.resolve(0);
+          return Promise.resolve(0);
         }
       });
 
@@ -241,7 +239,7 @@ describe('tryEach', () => {
         if (options.timeout && options.timeout.length === 20000 && options.timeout.isSuccess) {
           passedInOptions = true;
         }
-        return RSVP.resolve(0);
+        return Promise.resolve(0);
       });
 
       mockery.registerMock('./run', mockedRun);
@@ -295,7 +293,7 @@ describe('tryEach', () => {
         };
 
         let mockedRun = generateMockRun('ember test', () => {
-          return RSVP.reject(1);
+          return Promise.reject(1);
         });
         mockery.registerMock('./run', mockedRun);
 
@@ -345,7 +343,7 @@ describe('tryEach', () => {
         };
 
         let mockedRun = generateMockRun('ember test', () => {
-          return RSVP.reject(1);
+          return Promise.reject(1);
         });
         mockery.registerMock('./run', mockedRun);
 
@@ -396,7 +394,7 @@ describe('tryEach', () => {
         };
 
         let mockedRun = generateMockRun('ember test', () => {
-          return RSVP.resolve(0);
+          return Promise.resolve(0);
         });
         mockery.registerMock('./run', mockedRun);
 
@@ -450,7 +448,7 @@ describe('tryEach', () => {
 
         let mockedRun = generateMockRun('ember test', () => {
           ranDefaultCommand = true;
-          return RSVP.resolve(0);
+          return Promise.resolve(0);
         });
 
         mockery.registerMock('./run', mockedRun);
@@ -498,7 +496,7 @@ describe('tryEach', () => {
         let ranPassedInCommand = false;
         let mockedRun = generateMockRun('ember serve', () => {
           ranPassedInCommand = true;
-          return RSVP.resolve(0);
+          return Promise.resolve(0);
         });
         mockery.registerMock('./run', mockedRun);
 
@@ -561,14 +559,14 @@ describe('tryEach', () => {
             command: 'ember test --test-port=2345',
             callback() {
               ranDefaultCommandCount++;
-              return RSVP.resolve(0);
+              return Promise.resolve(0);
             },
           },
           {
             command: 'npm run-script different',
             callback() {
               ranScenarioCommandCount++;
-              return RSVP.resolve(0);
+              return Promise.resolve(0);
             },
           },
         ]);
@@ -673,7 +671,7 @@ describe('tryEach', () => {
         let actualOptions = [];
         let mockedRun = generateMockRun('true', (actualCommand, actualArgs, opts) => {
           actualOptions.push(opts);
-          return RSVP.resolve(0);
+          return Promise.resolve(0);
         });
         mockery.registerMock('./run', mockedRun);
 
@@ -733,7 +731,7 @@ describe('tryEach', () => {
       let mockRunCommand = function () {
         let currentScenario = process.env.EMBER_TRY_CURRENT_SCENARIO;
         scenarios.push(currentScenario);
-        return RSVP.resolve(true);
+        return Promise.resolve(true);
       };
 
       let TryEachTask = require('../../lib/tasks/try-each');

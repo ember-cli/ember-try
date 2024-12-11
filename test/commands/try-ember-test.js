@@ -1,7 +1,6 @@
 'use strict';
 
 const expect = require('chai').expect;
-const RSVP = require('rsvp');
 const TryEmberCommand = require('../../lib/commands/try-ember');
 
 const origTryEachTask = TryEmberCommand._TryEachTask;
@@ -16,7 +15,7 @@ describe('commands/try-ember', () => {
 
     beforeEach(() => {
       TryEmberCommand._getConfig = function () {
-        return RSVP.resolve(mockConfig || { scenarios: [] });
+        return Promise.resolve(mockConfig || { scenarios: [] });
       };
 
       TryEmberCommand._TryEachTask = MockTryEachTask;
@@ -33,7 +32,7 @@ describe('commands/try-ember', () => {
       TryEmberCommand._getConfig = function (options) {
         configPath = options.configPath;
 
-        return RSVP.resolve({ scenarios: [{ name: 'foo' }] });
+        return Promise.resolve({ scenarios: [{ name: 'foo' }] });
       };
 
       TryEmberCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
@@ -45,7 +44,7 @@ describe('commands/try-ember', () => {
       TryEmberCommand._getConfig = function (options) {
         versionCompatibility = options.versionCompatibility;
 
-        return RSVP.resolve({ scenarios: [{ name: 'foo' }] });
+        return Promise.resolve({ scenarios: [{ name: 'foo' }] });
       };
 
       TryEmberCommand.run({}, ['1.13.0']);

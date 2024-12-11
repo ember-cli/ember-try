@@ -1,7 +1,6 @@
 'use strict';
 
 let expect = require('chai').expect;
-let RSVP = require('rsvp');
 let fs = require('fs-extra');
 let path = require('path');
 let tmp = require('tmp-sync');
@@ -11,7 +10,6 @@ let writeJSONFile = require('../helpers/write-json-file');
 let assertFileContainsJSON = require('../helpers/assert-file-contains-json');
 let generateMockRun = require('../helpers/generate-mock-run');
 
-let remove = RSVP.denodeify(fs.remove);
 let root = process.cwd();
 let tmproot = path.join(root, 'tmp');
 let tmpdir;
@@ -24,7 +22,7 @@ describe('npmAdapter', () => {
 
   afterEach(() => {
     process.chdir(root);
-    return remove(tmproot);
+    return fs.remove(tmproot);
   });
 
   describe('#setup', () => {
@@ -61,7 +59,7 @@ describe('npmAdapter', () => {
               callback(command, args, opts) {
                 runCount++;
                 expect(opts).to.have.property('cwd', tmpdir);
-                return RSVP.resolve();
+                return Promise.resolve();
               },
             },
           ],
@@ -86,7 +84,7 @@ describe('npmAdapter', () => {
               command: 'npm install --no-optional --no-package-lock',
               callback() {
                 runCount++;
-                return RSVP.resolve();
+                return Promise.resolve();
               },
             },
           ],
@@ -112,7 +110,7 @@ describe('npmAdapter', () => {
               command: 'npm install --flat',
               callback() {
                 runCount++;
-                return RSVP.resolve();
+                return Promise.resolve();
               },
             },
           ],
@@ -162,7 +160,7 @@ describe('npmAdapter', () => {
               callback(command, args, opts) {
                 runCount++;
                 expect(opts).to.have.property('cwd', tmpdir);
-                return RSVP.resolve();
+                return Promise.resolve();
               },
             },
           ],
@@ -188,7 +186,7 @@ describe('npmAdapter', () => {
               command: 'yarn install --flat --no-lockfile --ignore-engines',
               callback() {
                 runCount++;
-                return RSVP.resolve();
+                return Promise.resolve();
               },
             },
           ],
@@ -215,7 +213,7 @@ describe('npmAdapter', () => {
               command: 'yarn install --flat',
               callback() {
                 runCount++;
-                return RSVP.resolve();
+                return Promise.resolve();
               },
             },
           ],
