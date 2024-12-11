@@ -2,7 +2,6 @@
 
 const expect = require('chai').expect;
 const ScenarioManager = require('../../lib/utils/scenario-manager');
-const CoreObject = require('core-object');
 const RSVP = require('rsvp');
 
 describe('scenarioManager', () => {
@@ -15,16 +14,16 @@ describe('scenarioManager', () => {
       let calledFirstAdapter = false;
       let calledSecondAdapter = false;
       let fakeAdapters = [
-        new CoreObject({
+        new (class {
           setup() {
             calledFirstAdapter = true;
-          },
-        }),
-        new CoreObject({
+          }
+        })(),
+        new (class {
           setup() {
             calledSecondAdapter = true;
-          },
-        }),
+          }
+        })(),
       ];
 
       return new ScenarioManager({ dependencyManagerAdapters: fakeAdapters }).setup().then(() => {
@@ -37,18 +36,18 @@ describe('scenarioManager', () => {
   describe('#changeTo', () => {
     it('changes dependency sets on each of the managers, in order, and concats results', () => {
       let fakeAdapters = [
-        new CoreObject({
-          configKey: 'adapterA',
+        new (class {
+          configKey = 'adapterA';
           changeToDependencySet() {
             return RSVP.resolve(['a', 'b', 'r']);
-          },
-        }),
-        new CoreObject({
-          configKey: 'adapterB',
+          }
+        })(),
+        new (class {
+          configKey = 'adapterB';
           changeToDependencySet() {
             return RSVP.resolve(['u', 'q', 'a']);
-          },
-        }),
+          }
+        })(),
       ];
 
       let manager = new ScenarioManager({ dependencyManagerAdapters: fakeAdapters });
@@ -63,16 +62,16 @@ describe('scenarioManager', () => {
       let calledFirstAdapter = false;
       let calledSecondAdapter = false;
       let fakeAdapters = [
-        new CoreObject({
+        new (class {
           cleanup() {
             calledFirstAdapter = true;
-          },
-        }),
-        new CoreObject({
+          }
+        })(),
+        new (class {
           cleanup() {
             calledSecondAdapter = true;
-          },
-        }),
+          }
+        })(),
       ];
 
       return new ScenarioManager({ dependencyManagerAdapters: fakeAdapters }).cleanup().then(() => {
