@@ -1,5 +1,5 @@
 module.exports = {
-  useYarn: true,
+  packageManager: 'yarn',
   scenarios: [
     {
       name: 'test2',

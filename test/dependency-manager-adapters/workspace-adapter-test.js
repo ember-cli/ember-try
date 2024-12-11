@@ -124,7 +124,7 @@ describe('workspaceAdapter', () => {
             cwd: tmpdir,
           });
         }).to.throw(
-          /workspaces are currently only supported by Yarn, you must set `useYarn` to true/,
+          /workspaces are currently only supported by Yarn, you must set `packageManager` to `yarn`/,
         );
       });
     });

@@ -240,6 +240,32 @@ describe('utils/config', () => {
       });
     });
   });
+
+  describe('old package-manager options', () => {
+    it("replaces `usePnpm` with `packageManager: 'pnpm'`", () => {
+      generateConfigFile(
+        'module.exports = { usePnpm: true, scenarios: [] };',
+        'config/use-pnpm.js',
+      );
+
+      return getConfig({ configPath: 'config/use-pnpm.js', project }).then((config) => {
+        expect(config.usePnpm).to.be.undefined;
+        expect(config.packageManager).to.be.equal('pnpm');
+      });
+    });
+
+    it("replaces `useYarn` with `packageManager: 'yarn'`", () => {
+      generateConfigFile(
+        'module.exports = { useYarn: true, scenarios: [] };',
+        'config/use-yarn.js',
+      );
+
+      return getConfig({ configPath: 'config/use-yarn.js', project }).then((config) => {
+        expect(config.useYarn).to.be.undefined;
+        expect(config.packageManager).to.be.equal('yarn');
+      });
+    });
+  });
 });
 
 function writePackageJSONWithVersionCompatibility() {
