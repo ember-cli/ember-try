@@ -1,22 +1,21 @@
 'use strict';
 
-const CoreObject = require('core-object');
-const RSVP = require('rsvp');
-
-module.exports = CoreObject.extend({
+module.exports = class {
   setup() {
-    return RSVP.resolve();
-  },
+    return Promise.resolve();
+  }
+
   changeToDependencySet() {
-    return RSVP.resolve([
+    return Promise.resolve([
       {
         name: 'testDep',
         versionExpected: '2.0.0',
         versionSeen: '2.1.0',
       },
     ]);
-  },
+  }
+
   cleanup() {
-    return RSVP.resolve();
-  },
-});
+    return Promise.resolve();
+  }
+};
