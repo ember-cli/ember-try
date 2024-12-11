@@ -632,7 +632,7 @@ describe('tryEach', () => {
           ui: { writeLine: outputFn },
           project: { root: tmpdir },
           config,
-          commandArgs: ['ember', 'help', '--json', 'true'],
+          commandArgs: ['ember', 'version', '--verbose', 'true'],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
         });
 
