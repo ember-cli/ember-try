@@ -44,6 +44,11 @@ module.exports = {
         // add your custom rules and overrides for node files here
         'no-process-exit': 'off'
       }
+    },
+    // test files
+    {
+      env: { mocha: true },
+      files: ['test/**/*.js'],
     }
   ]
 };
