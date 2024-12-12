@@ -43,7 +43,7 @@ describe('DependencyManagerAdapterFactory', () => {
 
       let adapters = DependencyManagerAdapterFactory.generateFromConfig(
         {
-          useYarn: true,
+          packageManager: 'yarn',
           useWorkspaces: true,
           scenarios: [{ npm: {} }],
         },

@@ -97,7 +97,7 @@ describe('tryEach', () => {
       return tryEachTask.run(config.scenarios, {}).then((exitCode) => {
         expect(exitCode).to.equal(0, 'exits 0 when all scenarios succeed');
         expect(output).to.include(
-          'Detected a yarn.lock file. Add `useYarn: true` to your `config/ember-try.js` configuration file if you want to use Yarn to install npm dependencies.',
+          "Detected a yarn.lock file. Add `packageManager: 'yarn'` to your `config/ember-try.js` configuration file if you want to use Yarn to install npm dependencies.",
         );
         expect(output).to.include('Scenario first: SUCCESS');
         expect(output).to.include('Scenario second: SUCCESS');
