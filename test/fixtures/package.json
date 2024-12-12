@@ -1,7 +1,6 @@
 {
   "name": "a-test-project",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "repository": "kategengler/ember-try",
   "private": true,
   "version": "1.0.0",

@@ -1,9 +1,5 @@
 module.exports = {
-  extends: [
-    'eslint:recommended',
-    'plugin:n/recommended',
-    'prettier',
-  ],
+  extends: ['eslint:recommended', 'plugin:n/recommended', 'prettier'],
   overrides: [
     {
       env: { mocha: true },
