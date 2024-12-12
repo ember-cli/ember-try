@@ -238,7 +238,7 @@ describe('workspace Adapter', () => {
 
       let adapter = workspaceAdapter._packageAdapters[0];
 
-      await adapter._backupOriginalDependencies();
+      await adapter.setup();
 
       // Simulate modifying the file:
       writeJSONFile('packages/test/package.json', { originalPackageJSON: false });

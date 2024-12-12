@@ -144,7 +144,7 @@ describe('npm Adapter', () => {
     });
   });
 
-  describe('#_restoreOriginalDependencies', () => {
+  describe('#cleanup', () => {
     it('restores the `package.json` and `package-lock.json` files if they exist', async () => {
       writeJSONFile('package.json', { originalPackageJSON: true });
       writeJSONFile('package-lock.json', { originalPackageLock: true });
@@ -157,7 +157,7 @@ describe('npm Adapter', () => {
       writeJSONFile('package.json', { originalPackageJSON: false });
       writeJSONFile('package-lock.json', { originalPackageLock: false });
 
-      await adapter._restoreOriginalDependencies();
+      await adapter.cleanup();
 
       assertFileContainsJSON(path.join(tmpdir, 'package.json'), {
         originalPackageJSON: true,
@@ -187,7 +187,7 @@ describe('npm Adapter', () => {
         run: stubbedRun,
       });
 
-      await adapter._restoreOriginalDependencies();
+      await adapter.cleanup();
 
       expect(runCount).to.equal(1);
     });

@@ -349,12 +349,14 @@ describe('pnpm Adapter', () => {
       };
       let depSet = {
         dependencies: { 'ember-cli-babel': '6.0.0' },
-        overrides: { 'ember-cli-babel': '6.0.0' },
+        pnpm: {
+          overrides: { 'ember-cli-babel': '6.0.0' },
+        },
       };
 
       let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
-      expect(resultJSON.overrides['ember-cli-babel']).to.equal('6.0.0');
+      expect(resultJSON.pnpm.overrides['ember-cli-babel']).to.equal('6.0.0');
     });
 
     it('removes a dependency from overrides if its version is null', () => {
@@ -363,16 +365,20 @@ describe('pnpm Adapter', () => {
       });
       let packageJSON = {
         dependencies: { 'ember-cli-babel': '5.0.0' },
-        overrides: { 'ember-cli-babel': '5.0.0' },
+        pnpm: {
+          overrides: { 'ember-cli-babel': '5.0.0' },
+        },
       };
       let depSet = {
         dependencies: { 'ember-cli-babel': '6.0.0' },
-        overrides: { 'ember-cli-babel': null },
+        pnpm: {
+          overrides: { 'ember-cli-babel': null },
+        },
       };
 
       let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
-      expect(resultJSON.overrides['ember-cli-babel']).to.be.undefined;
+      expect(resultJSON.pnpm.overrides['ember-cli-babel']).to.be.undefined;
     });
 
     it('changes specified npm dev dependency versions', () => {

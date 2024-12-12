@@ -144,7 +144,7 @@ describe('yarn Adapter', () => {
     });
   });
 
-  describe('#_restoreOriginalDependencies', () => {
+  describe('#cleanup', () => {
     it('restores the `package.json` and `yarn.lock` files if they exist', async () => {
       writeJSONFile('package.json', { originalPackageJSON: true });
       writeJSONFile('yarn.lock', { originalYarnLock: true });
@@ -157,7 +157,7 @@ describe('yarn Adapter', () => {
       writeJSONFile('package.json', { originalPackageJSON: false });
       writeJSONFile('yarn.lock', { originalYarnLock: false });
 
-      await adapter._restoreOriginalDependencies();
+      await adapter.cleanup();
 
       assertFileContainsJSON(path.join(tmpdir, 'package.json'), {
         originalPackageJSON: true,
@@ -187,7 +187,7 @@ describe('yarn Adapter', () => {
         run: stubbedRun,
       });
 
-      await adapter._restoreOriginalDependencies();
+      await adapter.cleanup();
 
       expect(runCount).to.equal(1);
     });
