@@ -16,6 +16,7 @@
 /testem.log
 /yarn-error.log
 
+/.eslintcache
 /.nyc_output
 *.tgz
 .scratch
