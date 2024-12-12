@@ -270,84 +270,79 @@ describe('pnpm Adapter', () => {
 
   describe('#_packageJSONForDependencySet', () => {
     it('changes specified dependency versions', () => {
-      let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+      let adapter = new PnpmAdapter({ cwd: tmpdir });
       let packageJSON = {
         devDependencies: { 'ember-feature-flags': '1.0.0' },
         dependencies: { 'ember-cli-babel': '5.0.0' },
       };
       let depSet = { dependencies: { 'ember-cli-babel': '6.0.0' } };
 
-      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+      let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.dependencies['ember-cli-babel']).to.equal('6.0.0');
     });
 
     describe('ember property', () => {
       it('adds the ember property to project package.json', () => {
-        let npmAdapter = new PnpmAdapter({
+        let adapter = new PnpmAdapter({
           cwd: tmpdir,
-          useYarnCommand: true,
         });
         let packageJSON = {};
         let depSet = {
           ember: { edition: 'octane' },
         };
 
-        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+        let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
         expect(resultJSON).to.deep.equal({ ember: { edition: 'octane' } });
       });
 
       it('merges the ember property to project package.json', () => {
-        let npmAdapter = new PnpmAdapter({
+        let adapter = new PnpmAdapter({
           cwd: tmpdir,
-          useYarnCommand: true,
         });
         let packageJSON = { ember: { foo: 'bar' } };
         let depSet = {
           ember: { edition: 'octane' },
         };
 
-        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+        let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
         expect(resultJSON).to.deep.equal({ ember: { foo: 'bar', edition: 'octane' } });
       });
 
       it('overrides existing fields inside the ember property to project package.json', () => {
-        let npmAdapter = new PnpmAdapter({
+        let adapter = new PnpmAdapter({
           cwd: tmpdir,
-          useYarnCommand: true,
         });
         let packageJSON = { ember: { edition: 'classic' } };
         let depSet = {
           ember: { edition: 'octane' },
         };
 
-        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+        let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
         expect(resultJSON).to.deep.equal({ ember: { edition: 'octane' } });
       });
 
       it('removes any items with a null value', () => {
-        let npmAdapter = new PnpmAdapter({
+        let adapter = new PnpmAdapter({
           cwd: tmpdir,
-          useYarnCommand: true,
         });
         let packageJSON = { ember: { edition: 'octane' } };
         let depSet = {
           ember: { edition: null },
         };
 
-        let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+        let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
         expect(resultJSON).to.deep.equal({ ember: {} });
       });
     });
 
     it('adds an override for the specified dependency version', () => {
-      let npmAdapter = new PnpmAdapter({
+      let adapter = new PnpmAdapter({
         cwd: tmpdir,
-        useYarnCommand: true,
       });
       let packageJSON = {
         dependencies: { 'ember-cli-babel': '5.0.0' },
@@ -357,15 +352,14 @@ describe('pnpm Adapter', () => {
         overrides: { 'ember-cli-babel': '6.0.0' },
       };
 
-      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+      let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.overrides['ember-cli-babel']).to.equal('6.0.0');
     });
 
     it('removes a dependency from overrides if its version is null', () => {
-      let npmAdapter = new PnpmAdapter({
+      let adapter = new PnpmAdapter({
         cwd: tmpdir,
-        useYarnCommand: true,
       });
       let packageJSON = {
         dependencies: { 'ember-cli-babel': '5.0.0' },
@@ -376,75 +370,40 @@ describe('pnpm Adapter', () => {
         overrides: { 'ember-cli-babel': null },
       };
 
-      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+      let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.overrides['ember-cli-babel']).to.be.undefined;
     });
 
-    it('doesnt add resolutions if there are none specified', () => {
-      let npmAdapter = new PnpmAdapter({
-        cwd: tmpdir,
-        useYarnCommand: true,
-      });
-      let packageJSON = {
-        dependencies: { 'ember-cli-babel': '5.0.0' },
-      };
-      let depSet = {
-        dependencies: { 'ember-cli-babel': '6.0.0' },
-      };
-
-      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
-
-      expect(resultJSON.resolutions).to.be.undefined;
-    });
-
-    it('doesnt add resolutions when not using yarn', () => {
-      let npmAdapter = new PnpmAdapter({
-        cwd: tmpdir,
-        useYarnCommand: false,
-      });
-      let packageJSON = {
-        dependencies: { 'ember-cli-babel': '5.0.0' },
-      };
-      let depSet = {
-        dependencies: { 'ember-cli-babel': '6.0.0' },
-        resolutions: { 'ember-cli-babel': '6.0.0' },
-      };
-
-      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
-
-      expect(resultJSON.resolutions).to.be.undefined;
-    });
-
     it('changes specified npm dev dependency versions', () => {
-      let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+      let adapter = new PnpmAdapter({ cwd: tmpdir });
       let packageJSON = {
         devDependencies: { 'ember-feature-flags': '1.0.0' },
         dependencies: { 'ember-cli-babel': '5.0.0' },
       };
       let depSet = { devDependencies: { 'ember-feature-flags': '2.0.1' } };
 
-      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+      let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.devDependencies['ember-feature-flags']).to.equal('2.0.1');
     });
 
     it('changes specified npm peer dependency versions', () => {
-      let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+      let adapter = new PnpmAdapter({ cwd: tmpdir });
       let packageJSON = { peerDependencies: { 'ember-cli-babel': '5.0.0' } };
       let depSet = { peerDependencies: { 'ember-cli-babel': '4.0.0' } };
 
-      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+      let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.peerDependencies['ember-cli-babel']).to.equal('4.0.0');
     });
 
     it('can remove a package', () => {
-      let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+      let adapter = new PnpmAdapter({ cwd: tmpdir });
       let packageJSON = { devDependencies: { 'ember-feature-flags': '1.0.0' } };
       let depSet = { devDependencies: { 'ember-feature-flags': null } };
 
-      let resultJSON = npmAdapter._packageJSONForDependencySet(packageJSON, depSet);
+      let resultJSON = adapter._packageJSONForDependencySet(packageJSON, depSet);
 
       expect(resultJSON.devDependencies).to.not.have.property('ember-feature-flags');
     });
@@ -478,9 +437,9 @@ describe('pnpm Adapter', () => {
       { expected: false, pnpmVersion: '9.0.0', resolutionMode: 'lowest-direct' },
     ].forEach(({ pnpmVersion, resolutionMode, expected }) => {
       it(`works with given version "${pnpmVersion}" and resolutionMode "${resolutionMode}"`, () => {
-        let npmAdapter = new PnpmAdapter({ cwd: tmpdir });
+        let adapter = new PnpmAdapter({ cwd: tmpdir });
 
-        let result = npmAdapter._isResolutionModeWrong(pnpmVersion, resolutionMode);
+        let result = adapter._isResolutionModeWrong(pnpmVersion, resolutionMode);
         expect(result).equal(expected);
       });
     });
@@ -506,8 +465,8 @@ describe('pnpm Adapter', () => {
           { allowPassthrough: false }
         );
 
-        let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
-        let result = await npmAdapter._getPnpmVersion();
+        let adapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+        let result = await adapter._getPnpmVersion();
         expect(result).equal(version);
       });
     });
@@ -527,9 +486,9 @@ describe('pnpm Adapter', () => {
         { allowPassthrough: false },
       );
 
-      let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+      let adapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
 
-      let result = await npmAdapter._getResolutionMode();
+      let result = await adapter._getResolutionMode();
       expect(result).equal('');
     });
 
@@ -546,11 +505,11 @@ describe('pnpm Adapter', () => {
         { allowPassthrough: false },
       );
 
-      let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+      let adapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
 
       setResolutionModeToHighest(tmpdir);
 
-      let result = await npmAdapter._getResolutionMode();
+      let result = await adapter._getResolutionMode();
       expect(result).equal('highest');
     });
   });
@@ -576,9 +535,9 @@ describe('pnpm Adapter', () => {
           { allowPassthrough: false },
         );
 
-        let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+        let adapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
 
-        return expect(npmAdapter._throwOnResolutionMode()).to.eventually.be.rejectedWith(
+        return expect(adapter._throwOnResolutionMode()).to.eventually.be.rejectedWith(
           'You are using an old version of pnpm that uses wrong resolution mode that violates ember-try expectations. Please either upgrade pnpm or set `resolution-mode` to `highest` in `.npmrc`.',
         );
       });
@@ -602,11 +561,11 @@ describe('pnpm Adapter', () => {
           { allowPassthrough: false },
         );
 
-        let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+        let adapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
 
         setResolutionModeToHighest(tmpdir);
 
-        await npmAdapter._throwOnResolutionMode('8.6.0');
+        await adapter._throwOnResolutionMode('8.6.0');
       });
     });
 
@@ -630,9 +589,9 @@ describe('pnpm Adapter', () => {
           { allowPassthrough: false },
         );
 
-        let npmAdapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
+        let adapter = new PnpmAdapter({ cwd: tmpdir, run: stubbedRun });
 
-        await npmAdapter._throwOnResolutionMode();
+        await adapter._throwOnResolutionMode();
       });
     });
   });

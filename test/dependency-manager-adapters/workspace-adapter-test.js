@@ -14,7 +14,7 @@ let root = process.cwd();
 let tmproot = path.join(root, 'tmp');
 let tmpdir;
 
-describe('workspaceAdapter', () => {
+describe('workspace Adapter', () => {
   beforeEach(() => {
     tmpdir = tmp.in(tmproot);
     process.chdir(tmpdir);
@@ -34,13 +34,13 @@ describe('workspaceAdapter', () => {
 
       let workspaceAdapter = new WorkspaceAdapter({
         cwd: tmpdir,
-        useYarnCommand: true,
+        packageManager: 'yarn',
       });
 
       return workspaceAdapter.setup().then(() => {
-        let npmAdapter = workspaceAdapter._packageAdapters[0];
+        let adapter = workspaceAdapter._packageAdapters[0];
 
-        assertFileContainsJSON(npmAdapter.backup.pathForFile('package.json'), {
+        assertFileContainsJSON(adapter.backup.pathForFile('package.json'), {
           originalPackageJSON: true,
         });
       });
@@ -61,40 +61,36 @@ describe('workspaceAdapter', () => {
 
       let workspaceAdapter = new WorkspaceAdapter({
         cwd: tmpdir,
-        useYarnCommand: true,
+        packageManager: 'yarn',
       });
 
       return workspaceAdapter.setup().then(() => {
-        let npmAdapter = workspaceAdapter._packageAdapters[0];
+        let adapter = workspaceAdapter._packageAdapters[0];
 
-        assertFileContainsJSON(npmAdapter.backup.pathForFile('package.json'), {
+        assertFileContainsJSON(adapter.backup.pathForFile('package.json'), {
           originalPackageJSON: true,
         });
       });
     });
 
-    it('backs up the `package.json`, `package-lock.json` and `yarn.lock` files if they exist', () => {
+    it('backs up the `package.json` and `yarn.lock` files if they exist', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
       writeJSONFile('packages/test/package.json', { originalPackageJSON: true });
-      writeJSONFile('packages/test/package-lock.json', { originalPackageLock: true });
       writeJSONFile('packages/test/yarn.lock', { originalYarnLock: true });
 
       let workspaceAdapter = new WorkspaceAdapter({
         cwd: tmpdir,
-        useYarnCommand: true,
+        packageManager: 'yarn',
       });
 
       return workspaceAdapter.setup().then(() => {
-        let npmAdapter = workspaceAdapter._packageAdapters[0];
+        let adapter = workspaceAdapter._packageAdapters[0];
 
-        assertFileContainsJSON(npmAdapter.backup.pathForFile('package.json'), {
+        assertFileContainsJSON(adapter.backup.pathForFile('package.json'), {
           originalPackageJSON: true,
         });
-        assertFileContainsJSON(npmAdapter.backup.pathForFile('package-lock.json'), {
-          originalPackageLock: true,
-        });
-        assertFileContainsJSON(npmAdapter.backup.pathForFile('yarn.lock'), {
+        assertFileContainsJSON(adapter.backup.pathForFile('yarn.lock'), {
           originalYarnLock: true,
         });
       });
@@ -108,7 +104,7 @@ describe('workspaceAdapter', () => {
       expect(() => {
         return new WorkspaceAdapter({
           cwd: tmpdir,
-          useYarnCommand: true,
+          packageManager: 'yarn',
         }).setup();
       }).to.throw(
         /you must define the `workspaces` property in package.json with at least one workspace to use workspaces with ember-try/,
@@ -149,7 +145,7 @@ describe('workspaceAdapter', () => {
         return new WorkspaceAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-          useYarnCommand: true,
+          packageManager: 'yarn',
         })
           ._install()
           .then(() => {
@@ -175,7 +171,7 @@ describe('workspaceAdapter', () => {
         return new WorkspaceAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-          useYarnCommand: true,
+          packageManager: 'yarn',
           managerOptions: ['--flat'],
         })
           ._install()
@@ -202,7 +198,7 @@ describe('workspaceAdapter', () => {
         return new WorkspaceAdapter({
           cwd: tmpdir,
           run: stubbedRun,
-          useYarnCommand: true,
+          packageManager: 'yarn',
           buildManagerOptions: function () {
             return ['--flat'];
           },
@@ -218,7 +214,7 @@ describe('workspaceAdapter', () => {
           new WorkspaceAdapter({
             cwd: tmpdir,
             run: () => {},
-            useYarnCommand: true,
+            packageManager: 'yarn',
             buildManagerOptions: function () {
               return 'string';
             },
@@ -236,13 +232,13 @@ describe('workspaceAdapter', () => {
 
       let workspaceAdapter = new WorkspaceAdapter({
         cwd: tmpdir,
-        useYarnCommand: true,
+        packageManager: 'yarn',
         run: () => Promise.resolve(),
       });
 
-      let npmAdapter = workspaceAdapter._packageAdapters[0];
+      let adapter = workspaceAdapter._packageAdapters[0];
 
-      await npmAdapter._backupOriginalDependencies();
+      await adapter._backupOriginalDependencies();
 
       // Simulate modifying the file:
       writeJSONFile('packages/test/package.json', { originalPackageJSON: false });
@@ -261,7 +257,7 @@ describe('workspaceAdapter', () => {
 
       let workspaceAdapter = new WorkspaceAdapter({
         cwd: tmpdir,
-        useYarnCommand: true,
+        packageManager: 'yarn',
         run: () => Promise.resolve(),
       });
 
@@ -279,16 +275,15 @@ describe('workspaceAdapter', () => {
         });
     });
 
-    it('replaces the yarn.lock and package-lock.json with the backed up version if they exist', () => {
+    it('replaces the yarn.lock with the backed up version if they exist', () => {
       fs.ensureDirSync('packages/test/node_modules');
 
       writeJSONFile('packages/test/package.json', { originalPackageJSON: true });
       writeJSONFile('packages/test/yarn.lock', { originalYarnLock: true });
-      writeJSONFile('packages/test/package-lock.json', { originalPackageLock: true });
 
       let workspaceAdapter = new WorkspaceAdapter({
         cwd: tmpdir,
-        useYarnCommand: true,
+        packageManager: 'yarn',
         run: () => Promise.resolve(),
       });
 
@@ -297,7 +292,6 @@ describe('workspaceAdapter', () => {
         .then(() => {
           writeJSONFile('packages/test/package.json', { originalPackageJSON: false });
           writeJSONFile('packages/test/yarn.lock', { originalYarnLock: false });
-          writeJSONFile('packages/test/package-lock.json', { originalPackageLock: false });
 
           return workspaceAdapter.cleanup();
         })
@@ -307,9 +301,6 @@ describe('workspaceAdapter', () => {
           });
           assertFileContainsJSON(path.join(tmpdir, 'packages/test/yarn.lock'), {
             originalYarnLock: true,
-          });
-          assertFileContainsJSON(path.join(tmpdir, 'packages/test/package-lock.json'), {
-            originalPackageLock: true,
           });
         });
     });
@@ -329,7 +320,7 @@ describe('workspaceAdapter', () => {
 
       workspaceAdapter = new WorkspaceAdapter({
         cwd: tmpdir,
-        useYarnCommand: true,
+        packageManager: 'yarn',
         run: () => Promise.resolve(),
       });
 
