@@ -22,7 +22,12 @@
     "test": "tests"
   },
   "scripts": {
-    "lint": "eslint .",
+    "format": "prettier . --cache --write",
+    "lint": "concurrently --group --prefix-colors auto --timings \"yarn:lint:*(!fix)\"",
+    "lint:fix": "concurrently --group --prefix-colors auto --timings \"yarn:lint:*:fix\" && yarn format",
+    "lint:format": "prettier . --cache --check",
+    "lint:js": "eslint . --cache",
+    "lint:js:fix": "eslint . --fix",
     "node-test": "mocha test/**/*.js",
     "node-test-with-coverage": "nyc --reporter lcov npm run-script node-test",
     "start": "ember serve",
@@ -42,16 +47,17 @@
     "walk-sync": "^2.2.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
     "@babel/eslint-parser": "^7.25.9",
     "@release-it-plugins/lerna-changelog": "^7.0.0",
     "chai": "^4.4.1",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.8.3",
+    "concurrently": "^9.1.0",
     "ember-cli": "~5.12.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-n": "^17.15.0",
     "mocha": "^10.8.2",
     "mockery": "^2.1.0",
     "nyc": "^17.1.0",

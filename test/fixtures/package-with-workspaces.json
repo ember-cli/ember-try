@@ -1,6 +1,4 @@
 {
   "name": "a-test-project-with-workspaces",
-  "workspaces": [
-    "packages/*"
-  ]
+  "workspaces": ["packages/*"]
 }

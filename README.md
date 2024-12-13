@@ -47,7 +47,7 @@ or
 ```
 
 When running in a CI environment where changes are discarded you can skip resetting your environment back to its original state by specifying --skip-cleanup=true as an option to ember try.
-*Warning: If you use this option and, without cleaning up, build and deploy as the result of a passing test suite, it will build with the last set of dependencies ember try was run with.*
+_Warning: If you use this option and, without cleaning up, build and deploy as the result of a passing test suite, it will build with the last set of dependencies ember try was run with._
 
 ```
   ember try:one ember-beta --skip-cleanup=true --- ember test
@@ -74,6 +74,7 @@ Displays the configuration that will be used. Also takes an optional `--config-p
 ### Config
 
 ##### versionCompatibility
+
 If you're using `ember-try` with an Ember addon, there is a short cut to test many Ember versions. In your `package.json` under the `ember-addon` key, add the following:
 
 ```json
@@ -226,6 +227,7 @@ in `package.json`, allowing you to try scenarios in monorepo style repositories.
 [Yarn's documentation of workspaces](https://yarnpkg.com/lang/en/docs/workspaces/) for more details.
 
 ### Video
+
 [![How to use EmberTry](https://i.vimeocdn.com/video/559399937_500.jpg)](https://vimeo.com/157688157)
 
 See an example of using `ember-try` for CI [here](https://github.com/kategengler/ember-feature-flags/commit/aaf0226975c76630c875cf6b923fdc23b025aa79), and the resulting build [output](https://travis-ci.org/kategengler/ember-feature-flags/builds/55597086).
@@ -233,7 +235,6 @@ See an example of using `ember-try` for CI [here](https://github.com/kategengler
 ### Special Thanks
 
 - Much credit is due to [Edward Faulkner](https://github.com/ef4) The scripts in [liquid-fire](https://github.com/ef4/liquid-fire) that test against multiple ember versions were the inspiration for this project.
-
 
 ### Developing
 
