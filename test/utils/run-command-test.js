@@ -1,19 +1,11 @@
 'use strict';
 
 const expect = require('chai').expect;
-const mockery = require('mockery');
+const { _mockRun, _restoreRun } = require('../../lib/utils/run');
 
 describe('utils/run-command', () => {
-  beforeEach(() => {
-    mockery.enable({
-      warnOnUnregistered: false,
-      useCleanCache: true,
-    });
-  });
-
   afterEach(() => {
-    mockery.deregisterAll();
-    mockery.disable();
+    _restoreRun();
   });
 
   it('passes arguments to run', () => {
@@ -26,7 +18,7 @@ describe('utils/run-command', () => {
       return Promise.resolve(0);
     };
 
-    mockery.registerMock('./run', mockedRun);
+    _mockRun(mockedRun);
 
     let runCommand = require('../../lib/utils/run-command');
 
