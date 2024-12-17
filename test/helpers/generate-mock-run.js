@@ -1,5 +1,7 @@
 'use strict';
 
+const { _originalRunFunction } = require('../../lib/utils/run');
+
 module.exports = function generateMockRun() {
   let mockedRuns = [];
   let options = { allowPassthrough: true };
@@ -39,7 +41,7 @@ function isCommandMocked(mockedRun, actualCommand, actualArgs) {
 }
 
 function passthrough() {
-  return require('../../lib/utils/run');
+  return _originalRunFunction;
 }
 
 function mockedCommandIsEmberAndArgumentsMatch(

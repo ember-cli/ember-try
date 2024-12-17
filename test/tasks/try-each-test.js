@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const fixturePackage = require('../fixtures/package.json');
 const writeJSONFile = require('../helpers/write-json-file');
-const mockery = require('mockery');
+const { _mockRun, _restoreRun } = require('../../lib/utils/run');
 
 /* Some of the tests in this file intentionally DO NOT stub dependency manager adapter*/
 const StubDependencyAdapter = require('../helpers/stub-dependency-manager-adapter');
@@ -53,16 +53,11 @@ describe('tryEach', () => {
   beforeEach(() => {
     tmpdir = tmp.in(tmproot);
     process.chdir(tmpdir);
-    mockery.enable({
-      warnOnUnregistered: false,
-      useCleanCache: true,
-    });
     require('chalk').level = 0;
   });
 
   afterEach(() => {
-    mockery.deregisterAll();
-    mockery.disable();
+    _restoreRun();
     process.chdir(root);
     return fs.remove(tmproot);
   });
@@ -75,7 +70,7 @@ describe('tryEach', () => {
         return Promise.resolve(0);
       });
 
-      mockery.registerMock('./run', mockedRun);
+      _mockRun(mockedRun);
 
       let output = [];
       let outputFn = function (log) {
@@ -130,7 +125,7 @@ describe('tryEach', () => {
         }
       });
 
-      mockery.registerMock('./run', mockedRun);
+      _mockRun(mockedRun);
 
       let output = [];
       let outputFn = function (log) {
@@ -194,7 +189,8 @@ describe('tryEach', () => {
           },
         },
       ]);
-      mockery.registerMock('./run', mockedRun);
+
+      _mockRun(mockedRun);
 
       let output = [];
       let outputFn = function (log) {
@@ -242,7 +238,7 @@ describe('tryEach', () => {
         return Promise.resolve(0);
       });
 
-      mockery.registerMock('./run', mockedRun);
+      _mockRun(mockedRun);
 
       let output = [];
       let outputFn = function (log) {
@@ -295,7 +291,8 @@ describe('tryEach', () => {
         let mockedRun = generateMockRun('ember test', () => {
           return Promise.reject(1);
         });
-        mockery.registerMock('./run', mockedRun);
+
+        _mockRun(mockedRun);
 
         let output = [];
         let outputFn = function (log) {
@@ -345,7 +342,8 @@ describe('tryEach', () => {
         let mockedRun = generateMockRun('ember test', () => {
           return Promise.reject(1);
         });
-        mockery.registerMock('./run', mockedRun);
+
+        _mockRun(mockedRun);
 
         let output = [];
         let outputFn = function (log) {
@@ -396,7 +394,8 @@ describe('tryEach', () => {
         let mockedRun = generateMockRun('ember test', () => {
           return Promise.resolve(0);
         });
-        mockery.registerMock('./run', mockedRun);
+
+        _mockRun(mockedRun);
 
         let output = [];
         let outputFn = function (log) {
@@ -451,7 +450,7 @@ describe('tryEach', () => {
           return Promise.resolve(0);
         });
 
-        mockery.registerMock('./run', mockedRun);
+        _mockRun(mockedRun);
 
         let output = [];
         let outputFn = function (log) {
@@ -498,7 +497,8 @@ describe('tryEach', () => {
           ranPassedInCommand = true;
           return Promise.resolve(0);
         });
-        mockery.registerMock('./run', mockedRun);
+
+        _mockRun(mockedRun);
 
         let output = [];
         let outputFn = function (log) {
@@ -570,7 +570,8 @@ describe('tryEach', () => {
             },
           },
         ]);
-        mockery.registerMock('./run', mockedRun);
+
+        _mockRun(mockedRun);
 
         let output = [];
         let outputFn = function (log) {
@@ -673,7 +674,8 @@ describe('tryEach', () => {
           actualOptions.push(opts);
           return Promise.resolve(0);
         });
-        mockery.registerMock('./run', mockedRun);
+
+        _mockRun(mockedRun);
 
         let output = [];
         let outputFn = function (log) {
