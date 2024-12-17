@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const fixturePackage = require('../fixtures/package.json');
 const writeJSONFile = require('../helpers/write-json-file');
+const { _mockLog, _restoreLog } = require('../../lib/utils/console');
 const { _mockRun, _restoreRun } = require('../../lib/utils/run');
 
 /* Some of the tests in this file intentionally DO NOT stub dependency manager adapter*/
@@ -57,6 +58,7 @@ describe('tryEach', () => {
   });
 
   afterEach(() => {
+    _restoreLog();
     _restoreRun();
     process.chdir(root);
     return fs.remove(tmproot);
@@ -77,9 +79,10 @@ describe('tryEach', () => {
         output.push(log);
       };
 
+      _mockLog(outputFn);
+
       let TryEachTask = require('../../lib/tasks/try-each');
       let tryEachTask = new TryEachTask({
-        ui: { writeLine: outputFn },
         project: { root: tmpdir },
         config,
       });
@@ -132,9 +135,10 @@ describe('tryEach', () => {
         output.push(log);
       };
 
+      _mockLog(outputFn);
+
       let TryEachTask = require('../../lib/tasks/try-each');
       let tryEachTask = new TryEachTask({
-        ui: { writeLine: outputFn },
         project: { root: tmpdir },
         config,
       });
@@ -197,9 +201,10 @@ describe('tryEach', () => {
         output.push(log);
       };
 
+      _mockLog(outputFn);
+
       let TryEachTask = require('../../lib/tasks/try-each');
       let tryEachTask = new TryEachTask({
-        ui: { writeLine: outputFn },
         project: { root: tmpdir },
         config,
         dependencyManagerAdapters: [],
@@ -245,9 +250,10 @@ describe('tryEach', () => {
         output.push(log);
       };
 
+      _mockLog(outputFn);
+
       let TryEachTask = require('../../lib/tasks/try-each');
       let tryEachTask = new TryEachTask({
-        ui: { writeLine: outputFn },
         project: { root: tmpdir },
         config,
         commandArgs: ['ember', 'serve'],
@@ -299,9 +305,10 @@ describe('tryEach', () => {
           output.push(log);
         };
 
+        _mockLog(outputFn);
+
         let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
-          ui: { writeLine: outputFn },
           project: { root: tmpdir },
           config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
@@ -350,9 +357,10 @@ describe('tryEach', () => {
           output.push(log);
         };
 
+        _mockLog(outputFn);
+
         let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
-          ui: { writeLine: outputFn },
           project: { root: tmpdir },
           config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
@@ -402,9 +410,10 @@ describe('tryEach', () => {
           output.push(log);
         };
 
+        _mockLog(outputFn);
+
         let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
-          ui: { writeLine: outputFn },
           project: { root: tmpdir },
           config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
@@ -457,9 +466,10 @@ describe('tryEach', () => {
           output.push(log);
         };
 
+        _mockLog(outputFn);
+
         let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
-          ui: { writeLine: outputFn },
           project: { root: tmpdir },
           config,
           commandArgs: [],
@@ -505,9 +515,10 @@ describe('tryEach', () => {
           output.push(log);
         };
 
+        _mockLog(outputFn);
+
         let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
-          ui: { writeLine: outputFn },
           project: { root: tmpdir },
           config,
           commandArgs: ['ember', 'serve'],
@@ -578,9 +589,10 @@ describe('tryEach', () => {
           output.push(log);
         };
 
+        _mockLog(outputFn);
+
         let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
-          ui: { writeLine: outputFn },
           project: { root: tmpdir },
           config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
@@ -626,9 +638,10 @@ describe('tryEach', () => {
           output.push(log);
         };
 
+        _mockLog(outputFn);
+
         let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
-          ui: { writeLine: outputFn },
           project: { root: tmpdir },
           config,
           commandArgs: ['ember', 'version', '--verbose', 'true'],
@@ -682,9 +695,10 @@ describe('tryEach', () => {
           output.push(log);
         };
 
+        _mockLog(outputFn);
+
         let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
-          ui: { writeLine: outputFn },
           project: { root: tmpdir },
           config,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
@@ -729,6 +743,8 @@ describe('tryEach', () => {
         output.push(log);
       };
 
+      _mockLog(outputFn);
+
       let scenarios = [];
       let mockRunCommand = function () {
         let currentScenario = process.env.EMBER_TRY_CURRENT_SCENARIO;
@@ -738,7 +754,6 @@ describe('tryEach', () => {
 
       let TryEachTask = require('../../lib/tasks/try-each');
       let tryEachTask = new TryEachTask({
-        ui: { writeLine: outputFn },
         project: { root: tmpdir },
         config,
         dependencyManagerAdapters: [new StubDependencyAdapter()],
