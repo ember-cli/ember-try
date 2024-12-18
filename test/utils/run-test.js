@@ -1,11 +1,8 @@
-'use strict';
-
-const expect = require('chai').expect;
+import { expect } from 'chai';
+import run from '../../lib/utils/run.js';
 
 describe('utils/run', () => {
   it('rejects if command exits non-zero', () => {
-    let run = require('../../lib/utils/run');
-
     return run('exit 1', [], {})
       .then(() => {
         expect(true).to.equal(false, 'Should not succeed');

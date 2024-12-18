@@ -1,14 +1,13 @@
-'use strict';
+import { expect } from 'chai';
+import fs from 'fs-extra';
+import path from 'path';
+import tmp from 'tmp-sync';
+import WorkspaceAdapter from '../../lib/dependency-manager-adapters/workspace.js';
+import writeJSONFile from '../helpers/write-json-file.js';
+import assertFileContainsJSON from '../helpers/assert-file-contains-json.js';
+import generateMockRun from '../helpers/generate-mock-run.js';
 
-let expect = require('chai').expect;
-let fs = require('fs-extra');
-let path = require('path');
-let tmp = require('tmp-sync');
-let fixtureWorkspaces = require('../fixtures/package-with-workspaces.json');
-let WorkspaceAdapter = require('../../lib/dependency-manager-adapters/workspace');
-let writeJSONFile = require('../helpers/write-json-file');
-let assertFileContainsJSON = require('../helpers/assert-file-contains-json');
-let generateMockRun = require('../helpers/generate-mock-run');
+const fixtureWorkspaces = fs.readJsonSync('./test/fixtures/package-with-workspaces.json');
 
 let root = process.cwd();
 let tmproot = path.join(root, 'tmp');

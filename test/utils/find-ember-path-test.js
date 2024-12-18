@@ -1,7 +1,5 @@
-'use strict';
-
-const expect = require('chai').expect;
-const findEmberPath = require('../../lib/utils/find-ember-path');
+import { expect } from 'chai';
+import findEmberPath from '../../lib/utils/find-ember-path.js';
 
 describe('findEmberPath()', () => {
   it('refers to the ember-cli in node_modules', () => {

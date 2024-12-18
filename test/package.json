@@ -1,0 +1,6 @@
+{
+  "description": "This `package.json` file solely exists to use ES modules in the test suite.",
+  "name": "test",
+  "private": true,
+  "type": "module"
+}

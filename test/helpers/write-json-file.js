@@ -1,7 +1,5 @@
-'use strict';
+import fs from 'fs-extra';
 
-const fs = require('fs-extra');
-
-module.exports = function writeJSONFile(filename, contents) {
+export default function writeJSONFile(filename, contents) {
   fs.writeFileSync(filename, JSON.stringify(contents, null, 2));
-};
+}

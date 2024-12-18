@@ -1,7 +1,5 @@
-'use strict';
-
-const expect = require('chai').expect;
-const TryEachCommand = require('../../lib/commands/try-each');
+import { expect } from 'chai';
+import TryEachCommand from '../../lib/commands/try-each.js';
 
 const origTryEachTask = TryEachCommand._TryEachTask;
 const origGetConfig = TryEachCommand._getConfig;

@@ -1,8 +1,6 @@
-'use strict';
+import { _originalRunFunction } from '../../lib/utils/run.js';
 
-const { _originalRunFunction } = require('../../lib/utils/run');
-
-module.exports = function generateMockRun() {
+export default function generateMockRun() {
   let mockedRuns = [];
   let options = { allowPassthrough: true };
   if (typeof arguments[0] === 'string') {
@@ -28,7 +26,7 @@ module.exports = function generateMockRun() {
       );
     }
   };
-};
+}
 
 function isCommandMocked(mockedRun, actualCommand, actualArgs) {
   let mockedRunParts = mockedRun.command.split(' ');
