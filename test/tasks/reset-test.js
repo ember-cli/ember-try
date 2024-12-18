@@ -37,8 +37,8 @@ describe('reset', () => {
     };
 
     let resetTask = new ResetTask({
-      project: { root: tmpdir },
       config,
+      cwd: tmpdir,
     });
 
     writeJSONFile('package.json', fixturePackageJson);

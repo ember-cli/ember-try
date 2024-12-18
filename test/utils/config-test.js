@@ -11,13 +11,11 @@ const root = process.cwd();
 const tmproot = path.join(root, 'tmp');
 
 describe('utils/config', () => {
-  let project;
-  let tmpdir;
+  let cwd;
 
   beforeEach(() => {
-    tmpdir = tmp.in(tmproot);
-    process.chdir(tmpdir);
-    project = { root: tmpdir, pkg: {} };
+    cwd = tmp.in(tmproot);
+    process.chdir(cwd);
   });
 
   afterEach(() => {
@@ -38,7 +36,7 @@ describe('utils/config', () => {
       'config/non-default.js',
     );
 
-    return getConfig({ project, configPath: 'config/non-default.js' }).then((config) => {
+    return getConfig({ configPath: 'config/non-default.js', cwd }).then((config) => {
       expect(config.scenarios).to.have.lengthOf(1);
       expect(config.scenarios[0].qux).to.equal('baz');
     });
@@ -50,11 +48,9 @@ describe('utils/config', () => {
       'other-path/ember-try.js',
     );
 
-    project.pkg['ember-addon'] = {
-      configPath: 'other-path',
-    };
+    fs.writeJsonSync('package.json', { 'ember-addon': { configPath: 'other-path' } });
 
-    let config = await getConfig({ project });
+    let config = await getConfig({ cwd });
 
     expect(config.scenarios).to.have.lengthOf(1);
     expect(config.scenarios[0].foo).to.equal('bar');
@@ -63,11 +59,9 @@ describe('utils/config', () => {
   it('falls back to config/ember-try.js if projects configured configPath is not present', async () => {
     generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };');
 
-    project.pkg['ember-addon'] = {
-      configPath: 'other-path',
-    };
+    fs.writeJsonSync('package.json', { 'ember-addon': { configPath: 'other-path' } });
 
-    let config = await getConfig({ project });
+    let config = await getConfig({ cwd });
 
     expect(config.scenarios).to.have.lengthOf(1);
     expect(config.scenarios[0].foo).to.equal('bar');
@@ -76,7 +70,7 @@ describe('utils/config', () => {
   it('uses projects config/ember-try.js if present', () => {
     generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };');
 
-    return getConfig({ project }).then((config) => {
+    return getConfig({ cwd }).then((config) => {
       expect(config.scenarios).to.have.lengthOf(1);
       expect(config.scenarios[0].foo).to.equal('bar');
     });
@@ -85,7 +79,7 @@ describe('utils/config', () => {
   it('config file can export a function', () => {
     generateConfigFile('module.exports =  function() { return { scenarios: [ { foo: "bar" }] } };');
 
-    return getConfig({ project }).then((config) => {
+    return getConfig({ cwd }).then((config) => {
       expect(config.scenarios).to.have.lengthOf(1);
       expect(config.scenarios[0].foo).to.equal('bar');
     });
@@ -102,14 +96,14 @@ describe('utils/config', () => {
       '  });' +
       '};';
     generateConfigFile(configFile);
-    return getConfig({ project }).then((config) => {
+    return getConfig({ cwd }).then((config) => {
       expect(config.scenarios).to.have.lengthOf(1);
       expect(config.scenarios[0].bar).to.equal('baz');
     });
   });
 
   it('throws error if project.root/config/ember-try.js is not present and no versionCompatibility', () => {
-    return getConfig({ project }).catch((error) => {
+    return getConfig({ cwd }).catch((error) => {
       expect(error).to.match(
         /No ember-try configuration found\. Please see the README for configuration options/,
       );
@@ -123,7 +117,7 @@ describe('utils/config', () => {
     );
     generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };'); // Should not be used
 
-    return getConfig({ project, configPath: 'config/non-default.js' }).then((config) => {
+    return getConfig({ configPath: 'config/non-default.js', cwd }).then((config) => {
       expect(config.scenarios).to.have.lengthOf(1);
       expect(config.scenarios[0].qux).to.equal('baz');
     });
@@ -135,7 +129,7 @@ describe('utils/config', () => {
     });
 
     it('is used if there is no config file', () => {
-      return getConfig({ project }).then((config) => {
+      return getConfig({ cwd }).then((config) => {
         let scenarios = config.scenarios;
         expect(scenarios.length).to.equal(5);
         expect(scenarios).to.include.deep.members([
@@ -155,7 +149,7 @@ describe('utils/config', () => {
 
     it('is always used if passed in and behaves as if config file has "useVersionCompatibility: true"', () => {
       generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };');
-      return getConfig({ project, versionCompatibility: { ember: '2.18.0' } }).then((config) => {
+      return getConfig({ cwd, versionCompatibility: { ember: '2.18.0' } }).then((config) => {
         let scenarios = config.scenarios;
         expect(scenarios.length).to.equal(6);
         expect(scenarios).to.include.deep.members([
@@ -170,7 +164,7 @@ describe('utils/config', () => {
     });
 
     it('can be overridden by passed in versionCompatibility', () => {
-      return getConfig({ project, versionCompatibility: { ember: '2.18.0' } }).then((config) => {
+      return getConfig({ cwd, versionCompatibility: { ember: '2.18.0' } }).then((config) => {
         let scenarios = config.scenarios;
         expect(scenarios.length).to.equal(5);
         expect(scenarios).to.include.deep.members([
@@ -186,7 +180,7 @@ describe('utils/config', () => {
     it('is ignored if config file has scenarios', () => {
       generateConfigFile('module.exports = { scenarios: [ { foo: "bar" }] };');
 
-      return getConfig({ project }).then((config) => {
+      return getConfig({ cwd }).then((config) => {
         expect(config.scenarios).to.have.lengthOf(1);
         expect(config.scenarios[0].foo).to.equal('bar');
       });
@@ -194,7 +188,7 @@ describe('utils/config', () => {
 
     it('is merged with config if config does not have scenarios', () => {
       generateConfigFile('module.exports = { npmOptions: ["--some-thing=true"] };');
-      return getConfig({ project }).then((config) => {
+      return getConfig({ cwd }).then((config) => {
         expect(config.npmOptions).to.eql(['--some-thing=true']);
         expect(config.scenarios.length).to.equal(5);
       });
@@ -204,7 +198,7 @@ describe('utils/config', () => {
       generateConfigFile(
         'module.exports = { useVersionCompatibility: true, npmOptions: ["--whatever=true"], scenarios: [ { name: "bar" }, { name: "ember-beta", allowedToFail: false } ] };',
       );
-      return getConfig({ project }).then((config) => {
+      return getConfig({ cwd }).then((config) => {
         expect(config.useVersionCompatibility).to.equal(true);
         expect(config.npmOptions).to.eql(['--whatever=true']);
         expect(config.scenarios.length).to.equal(6);
@@ -235,7 +229,7 @@ describe('utils/config', () => {
         'config/use-pnpm.js',
       );
 
-      return getConfig({ configPath: 'config/use-pnpm.js', project }).then((config) => {
+      return getConfig({ configPath: 'config/use-pnpm.js', cwd }).then((config) => {
         expect(config.usePnpm).to.be.undefined;
         expect(config.packageManager).to.be.equal('pnpm');
       });
@@ -247,7 +241,7 @@ describe('utils/config', () => {
         'config/use-yarn.js',
       );
 
-      return getConfig({ configPath: 'config/use-yarn.js', project }).then((config) => {
+      return getConfig({ configPath: 'config/use-yarn.js', cwd }).then((config) => {
         expect(config.useYarn).to.be.undefined;
         expect(config.packageManager).to.be.equal('yarn');
       });

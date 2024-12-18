@@ -12,6 +12,8 @@ describe('commands/try-ember', () => {
     MockTryEachTask.prototype.run = function () {};
 
     beforeEach(() => {
+      TryEmberCommand.project = { root: '' };
+
       TryEmberCommand._getConfig = function () {
         return Promise.resolve(mockConfig || { scenarios: [] });
       };
@@ -20,6 +22,8 @@ describe('commands/try-ember', () => {
     });
 
     afterEach(() => {
+      delete TryEmberCommand.project;
+
       TryEmberCommand._TryEachTask = origTryEachTask;
       TryEmberCommand._getConfig = origGetConfig;
       mockConfig = null;
