@@ -1,4 +1,4 @@
-import chai, { expect } from 'chai';
+import { expect, use } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import fs from 'fs-extra';
 import path from 'path';
@@ -7,7 +7,7 @@ import sinon from 'sinon';
 import PnpmAdapter from '../../lib/dependency-manager-adapters/pnpm.js';
 import generateMockRun from '../helpers/generate-mock-run.js';
 
-chai.use(chaiAsPromised);
+use(chaiAsPromised);
 
 let root = process.cwd();
 let tmproot = path.join(root, 'tmp');
