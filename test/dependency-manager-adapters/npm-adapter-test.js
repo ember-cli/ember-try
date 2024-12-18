@@ -1,14 +1,13 @@
-'use strict';
+import { expect } from 'chai';
+import fs from 'fs-extra';
+import path from 'path';
+import tmp from 'tmp-sync';
+import NpmAdapter from '../../lib/dependency-manager-adapters/npm.js';
+import writeJSONFile from '../helpers/write-json-file.js';
+import assertFileContainsJSON from '../helpers/assert-file-contains-json.js';
+import generateMockRun from '../helpers/generate-mock-run.js';
 
-let expect = require('chai').expect;
-let fs = require('fs-extra');
-let path = require('path');
-let tmp = require('tmp-sync');
-let fixturePackage = require('../fixtures/package.json');
-let NpmAdapter = require('../../lib/dependency-manager-adapters/npm');
-let writeJSONFile = require('../helpers/write-json-file');
-let assertFileContainsJSON = require('../helpers/assert-file-contains-json');
-let generateMockRun = require('../helpers/generate-mock-run');
+const fixturePackage = fs.readJsonSync('./test/fixtures/package.json');
 
 let root = process.cwd();
 let tmproot = path.join(root, 'tmp');

@@ -4,6 +4,10 @@ module.exports = {
     {
       env: { mocha: true },
       files: ['test/**/*.js'],
+      parserOptions: { sourceType: 'module' },
+      rules: {
+        'n/no-extraneous-import': 'off',
+      },
     },
   ],
   parser: '@babel/eslint-parser',

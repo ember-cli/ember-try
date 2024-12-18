@@ -1,10 +1,10 @@
-'use strict';
+import tmp from 'tmp-sync';
+import path from 'path';
+import fs from 'fs-extra';
+import writeJSONFile from '../helpers/write-json-file.js';
+import ResetTask from '../../lib/tasks/reset.js';
 
-const tmp = require('tmp-sync');
-const path = require('path');
-const fs = require('fs-extra');
-const fixturePackageJson = require('../fixtures/package.json');
-const writeJSONFile = require('../helpers/write-json-file');
+const fixturePackageJson = fs.readJsonSync('./test/fixtures/package.json');
 
 const root = process.cwd();
 const tmproot = path.join(root, 'tmp');
@@ -36,7 +36,6 @@ describe('reset', () => {
       ],
     };
 
-    let ResetTask = require('../../lib/tasks/reset');
     let resetTask = new ResetTask({
       project: { root: tmpdir },
       config,

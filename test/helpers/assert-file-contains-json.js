@@ -1,12 +1,10 @@
-'use strict';
+import { expect } from 'chai';
+import fs from 'fs-extra';
+import path from 'path';
 
-let expect = require('chai').expect;
-let fs = require('fs-extra');
-let path = require('path');
-
-module.exports = function assertFileContainsJSON(filePath, expectedObj) {
+export default function assertFileContainsJSON(filePath, expectedObj) {
   return assertFileContains(filePath, JSON.stringify(expectedObj, null, 2));
-};
+}
 
 function assertFileContains(filePath, expectedContents) {
   let regex = new RegExp(`${escapeForRegex(expectedContents)}($|\\W)`, 'gm');

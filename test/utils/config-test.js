@@ -1,12 +1,11 @@
-'use strict';
+import { expect } from 'chai';
+import fs from 'fs-extra';
+import path from 'path';
+import tmp from 'tmp-sync';
+import writeJSONFile from '../helpers/write-json-file.js';
+import getConfig from '../../lib/utils/config.js';
 
-const expect = require('chai').expect;
-const fs = require('fs-extra');
-const path = require('path');
-const tmp = require('tmp-sync');
-const fixturePackage = require('../fixtures/package.json');
-const writeJSONFile = require('../helpers/write-json-file');
-const getConfig = require('../../lib/utils/config');
+const fixturePackage = fs.readJsonSync('./test/fixtures/package.json');
 
 const root = process.cwd();
 const tmproot = path.join(root, 'tmp');

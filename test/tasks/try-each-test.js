@@ -1,17 +1,18 @@
-'use strict';
-
-const expect = require('chai').expect;
-const tmp = require('tmp-sync');
-const path = require('path');
-const fs = require('fs-extra');
-const fixturePackage = require('../fixtures/package.json');
-const writeJSONFile = require('../helpers/write-json-file');
-const { _mockLog, _restoreLog } = require('../../lib/utils/console');
-const { _mockRun, _restoreRun } = require('../../lib/utils/run');
+import { expect } from 'chai';
+import chalk from 'chalk';
+import tmp from 'tmp-sync';
+import path from 'path';
+import fs from 'fs-extra';
+import writeJSONFile from '../helpers/write-json-file.js';
+import TryEachTask from '../../lib/tasks/try-each.js';
+import { _mockLog, _restoreLog } from '../../lib/utils/console.js';
+import { _mockRun, _restoreRun } from '../../lib/utils/run.js';
 
 /* Some of the tests in this file intentionally DO NOT stub dependency manager adapter*/
-const StubDependencyAdapter = require('../helpers/stub-dependency-manager-adapter');
-const generateMockRun = require('../helpers/generate-mock-run');
+import StubDependencyAdapter from '../helpers/stub-dependency-manager-adapter.js';
+import generateMockRun from '../helpers/generate-mock-run.js';
+
+const fixturePackage = fs.readJsonSync('./test/fixtures/package.json');
 
 const root = process.cwd();
 const tmproot = path.join(root, 'tmp');
@@ -54,7 +55,7 @@ describe('tryEach', () => {
   beforeEach(() => {
     tmpdir = tmp.in(tmproot);
     process.chdir(tmpdir);
-    require('chalk').level = 0;
+    chalk.level = 0;
   });
 
   afterEach(() => {
@@ -81,7 +82,6 @@ describe('tryEach', () => {
 
       _mockLog(outputFn);
 
-      let TryEachTask = require('../../lib/tasks/try-each');
       let tryEachTask = new TryEachTask({
         project: { root: tmpdir },
         config,
@@ -137,7 +137,6 @@ describe('tryEach', () => {
 
       _mockLog(outputFn);
 
-      let TryEachTask = require('../../lib/tasks/try-each');
       let tryEachTask = new TryEachTask({
         project: { root: tmpdir },
         config,
@@ -203,7 +202,6 @@ describe('tryEach', () => {
 
       _mockLog(outputFn);
 
-      let TryEachTask = require('../../lib/tasks/try-each');
       let tryEachTask = new TryEachTask({
         project: { root: tmpdir },
         config,
@@ -252,7 +250,6 @@ describe('tryEach', () => {
 
       _mockLog(outputFn);
 
-      let TryEachTask = require('../../lib/tasks/try-each');
       let tryEachTask = new TryEachTask({
         project: { root: tmpdir },
         config,
@@ -307,7 +304,6 @@ describe('tryEach', () => {
 
         _mockLog(outputFn);
 
-        let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
           project: { root: tmpdir },
           config,
@@ -359,7 +355,6 @@ describe('tryEach', () => {
 
         _mockLog(outputFn);
 
-        let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
           project: { root: tmpdir },
           config,
@@ -412,7 +407,6 @@ describe('tryEach', () => {
 
         _mockLog(outputFn);
 
-        let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
           project: { root: tmpdir },
           config,
@@ -468,7 +462,6 @@ describe('tryEach', () => {
 
         _mockLog(outputFn);
 
-        let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
           project: { root: tmpdir },
           config,
@@ -517,7 +510,6 @@ describe('tryEach', () => {
 
         _mockLog(outputFn);
 
-        let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
           project: { root: tmpdir },
           config,
@@ -591,7 +583,6 @@ describe('tryEach', () => {
 
         _mockLog(outputFn);
 
-        let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
           project: { root: tmpdir },
           config,
@@ -640,7 +631,6 @@ describe('tryEach', () => {
 
         _mockLog(outputFn);
 
-        let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
           project: { root: tmpdir },
           config,
@@ -697,7 +687,6 @@ describe('tryEach', () => {
 
         _mockLog(outputFn);
 
-        let TryEachTask = require('../../lib/tasks/try-each');
         let tryEachTask = new TryEachTask({
           project: { root: tmpdir },
           config,
@@ -752,7 +741,6 @@ describe('tryEach', () => {
         return Promise.resolve(true);
       };
 
-      let TryEachTask = require('../../lib/tasks/try-each');
       let tryEachTask = new TryEachTask({
         project: { root: tmpdir },
         config,

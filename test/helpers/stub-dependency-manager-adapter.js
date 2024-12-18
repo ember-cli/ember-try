@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = class {
+export default class {
   setup() {
     return Promise.resolve();
   }
@@ -18,4 +16,4 @@ module.exports = class {
   cleanup() {
     return Promise.resolve();
   }
-};
+}

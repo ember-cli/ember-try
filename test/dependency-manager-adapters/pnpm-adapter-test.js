@@ -1,15 +1,13 @@
-'use strict';
+import chai, { expect } from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import fs from 'fs-extra';
+import path from 'path';
+import tmp from 'tmp-sync';
+import sinon from 'sinon';
+import PnpmAdapter from '../../lib/dependency-manager-adapters/pnpm.js';
+import generateMockRun from '../helpers/generate-mock-run.js';
 
-let chai = require('chai');
-let chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
-let { expect } = chai;
-let fs = require('fs-extra');
-let path = require('path');
-let tmp = require('tmp-sync');
-const sinon = require('sinon');
-let PnpmAdapter = require('../../lib/dependency-manager-adapters/pnpm');
-let generateMockRun = require('../helpers/generate-mock-run');
 
 let root = process.cwd();
 let tmproot = path.join(root, 'tmp');

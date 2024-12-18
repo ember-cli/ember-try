@@ -1,12 +1,10 @@
-'use strict';
-
-const path = require('path');
-const fs = require('fs-extra');
-const tmp = require('tmp-sync');
-const expect = require('chai').expect;
-const DependencyManagerAdapterFactory = require('../../lib/utils/dependency-manager-adapter-factory');
-const WorkspaceAdapter = require('../../lib/dependency-manager-adapters/workspace');
-let writeJSONFile = require('../helpers/write-json-file');
+import path from 'path';
+import fs from 'fs-extra';
+import tmp from 'tmp-sync';
+import { expect } from 'chai';
+import DependencyManagerAdapterFactory from '../../lib/utils/dependency-manager-adapter-factory.js';
+import WorkspaceAdapter from '../../lib/dependency-manager-adapters/workspace.js';
+import writeJSONFile from '../helpers/write-json-file.js';
 
 const ROOT = process.cwd();
 let tmproot = path.join(ROOT, 'tmp');

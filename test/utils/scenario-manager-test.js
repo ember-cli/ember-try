@@ -1,7 +1,5 @@
-'use strict';
-
-const expect = require('chai').expect;
-const ScenarioManager = require('../../lib/utils/scenario-manager');
+import { expect } from 'chai';
+import ScenarioManager from '../../lib/utils/scenario-manager.js';
 
 describe('scenarioManager', () => {
   it('does not require any dependency managers', () => {

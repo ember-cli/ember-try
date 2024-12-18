@@ -1,7 +1,6 @@
-'use strict';
-
-const expect = require('chai').expect;
-const { _mockRun, _restoreRun } = require('../../lib/utils/run');
+import { expect } from 'chai';
+import { _mockRun, _restoreRun } from '../../lib/utils/run.js';
+import runCommand from '../../lib/utils/run-command.js';
 
 describe('utils/run-command', () => {
   afterEach(() => {
@@ -19,8 +18,6 @@ describe('utils/run-command', () => {
     };
 
     _mockRun(mockedRun);
-
-    let runCommand = require('../../lib/utils/run-command');
 
     return runCommand('rootPath', ['ember', 'help', '--json', 'true'], {}).then((result) => {
       expect(result).to.equal(true);
