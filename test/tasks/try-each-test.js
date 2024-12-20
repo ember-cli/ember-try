@@ -83,8 +83,8 @@ describe('tryEach', () => {
       _mockLog(outputFn);
 
       let tryEachTask = new TryEachTask({
-        project: { root: tmpdir },
         config,
+        cwd: tmpdir,
       });
 
       tryEachTask._on = () => {};
@@ -138,8 +138,8 @@ describe('tryEach', () => {
       _mockLog(outputFn);
 
       let tryEachTask = new TryEachTask({
-        project: { root: tmpdir },
         config,
+        cwd: tmpdir,
       });
 
       tryEachTask._on = () => {};
@@ -203,8 +203,8 @@ describe('tryEach', () => {
       _mockLog(outputFn);
 
       let tryEachTask = new TryEachTask({
-        project: { root: tmpdir },
         config,
+        cwd: tmpdir,
         dependencyManagerAdapters: [],
       });
 
@@ -251,8 +251,8 @@ describe('tryEach', () => {
       _mockLog(outputFn);
 
       let tryEachTask = new TryEachTask({
-        project: { root: tmpdir },
         config,
+        cwd: tmpdir,
         commandArgs: ['ember', 'serve'],
         commandOptions: { timeout: { length: 20000, isSuccess: true } },
         dependencyManagerAdapters: [new StubDependencyAdapter()],
@@ -305,8 +305,8 @@ describe('tryEach', () => {
         _mockLog(outputFn);
 
         let tryEachTask = new TryEachTask({
-          project: { root: tmpdir },
           config,
+          cwd: tmpdir,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
         });
 
@@ -356,8 +356,8 @@ describe('tryEach', () => {
         _mockLog(outputFn);
 
         let tryEachTask = new TryEachTask({
-          project: { root: tmpdir },
           config,
+          cwd: tmpdir,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
         });
 
@@ -408,8 +408,8 @@ describe('tryEach', () => {
         _mockLog(outputFn);
 
         let tryEachTask = new TryEachTask({
-          project: { root: tmpdir },
           config,
+          cwd: tmpdir,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
         });
 
@@ -463,8 +463,8 @@ describe('tryEach', () => {
         _mockLog(outputFn);
 
         let tryEachTask = new TryEachTask({
-          project: { root: tmpdir },
           config,
+          cwd: tmpdir,
           commandArgs: [],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
         });
@@ -511,8 +511,8 @@ describe('tryEach', () => {
         _mockLog(outputFn);
 
         let tryEachTask = new TryEachTask({
-          project: { root: tmpdir },
           config,
+          cwd: tmpdir,
           commandArgs: ['ember', 'serve'],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
         });
@@ -584,8 +584,8 @@ describe('tryEach', () => {
         _mockLog(outputFn);
 
         let tryEachTask = new TryEachTask({
-          project: { root: tmpdir },
           config,
+          cwd: tmpdir,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
         });
 
@@ -632,8 +632,8 @@ describe('tryEach', () => {
         _mockLog(outputFn);
 
         let tryEachTask = new TryEachTask({
-          project: { root: tmpdir },
           config,
+          cwd: tmpdir,
           commandArgs: ['ember', 'version', '--verbose', 'true'],
           dependencyManagerAdapters: [new StubDependencyAdapter()],
         });
@@ -688,8 +688,8 @@ describe('tryEach', () => {
         _mockLog(outputFn);
 
         let tryEachTask = new TryEachTask({
-          project: { root: tmpdir },
           config,
+          cwd: tmpdir,
           dependencyManagerAdapters: [new StubDependencyAdapter()],
         });
 
@@ -742,8 +742,8 @@ describe('tryEach', () => {
       };
 
       let tryEachTask = new TryEachTask({
-        project: { root: tmpdir },
         config,
+        cwd: tmpdir,
         dependencyManagerAdapters: [new StubDependencyAdapter()],
       });
 
