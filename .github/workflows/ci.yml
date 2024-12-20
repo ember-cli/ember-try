@@ -19,12 +19,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: pnpm
 
-      - run: yarn install
-      - run: yarn lint
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
   test:
     name: 'Tests'
     runs-on: ubuntu-latest
@@ -32,15 +36,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: yarn
+          cache: pnpm
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: Run Tests
-        run: yarn node-test-with-coverage
+        run: pnpm node-test-with-coverage
       - uses: codecov/codecov-action@v5
         with:
           fail_ci_if_error: true
@@ -53,14 +60,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: yarn
+          cache: pnpm
       - name: Install Dependencies
-        run: yarn install --no-lockfile
+        run: pnpm install --no-lockfile
       - name: Run Tests
-        run: yarn node-test
+        run: pnpm node-test
 
   all-commands-smoke-tests:
     name: Tests (commands smoke test)
@@ -137,12 +147,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: pnpm
 
       - name: install deps
-        run: yarn install
+        run: pnpm install --frozen-lockfile
       - name: install smoke-test-app deps
         # using `npm` to install in the smoke-test-app so that `file:` will be treated
         # as a symlink (npm handles `file:../` as symlink, and `yarn` treats it
@@ -168,12 +182,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: pnpm
 
       - name: install deps
-        run: yarn install
+        run: pnpm install --frozen-lockfile
       - name: install smoke-test-app deps
         run: npm install
         working-directory: smoke-test-app
@@ -196,12 +214,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: pnpm
 
       - name: install deps
-        run: yarn install
+        run: pnpm install --frozen-lockfile
       - name: install smoke-test-app deps
         run: yarn install
         working-directory: smoke-test-app
@@ -219,12 +241,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: pnpm
 
       - name: install deps
-        run: yarn install
+        run: pnpm install --frozen-lockfile
       - name: install smoke-test-app deps
         run: npm install
         working-directory: smoke-test-app
