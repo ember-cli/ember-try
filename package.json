@@ -23,8 +23,8 @@
   },
   "scripts": {
     "format": "prettier . --cache --write",
-    "lint": "concurrently --group --prefix-colors auto --timings \"yarn:lint:*(!fix)\"",
-    "lint:fix": "concurrently --group --prefix-colors auto --timings \"yarn:lint:*:fix\" && yarn format",
+    "lint": "concurrently --group --prefix-colors auto --timings \"pnpm:lint:*(!fix)\"",
+    "lint:fix": "concurrently --group --prefix-colors auto --timings \"pnpm:lint:*:fix\" && pnpm format",
     "lint:format": "prettier . --cache --check",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
