@@ -87,63 +87,63 @@ jobs:
       matrix:
         command:
           # try:each
-          - ./node_modules/.bin/ember try:each
+          - npx ember try:each
 
           # skip-cleanup option
-          - ./node_modules/.bin/ember try:each --skip-cleanup
+          - npx ember try:each --skip-cleanup
 
           # config-path option
-          - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config.js'
+          - npx ember try:each --config-path='../test/fixtures/dummy-ember-try-config.js'
 
           # both ember-try options
-          - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
+          - npx ember try:each --config-path='../test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
 
           # try:ember
-          - ./node_modules/.bin/ember try:ember '> 4.10.0 < 5.2.0'
-          - ./node_modules/.bin/ember try:ember '4.9.0' --config-path='../test/fixtures/dummy-ember-try-config.js'
-          - ./node_modules/.bin/ember try:ember '4.8.3' --skip-cleanup=true
+          - npx ember try:ember '> 4.10.0 < 5.2.0'
+          - npx ember try:ember '4.9.0' --config-path='../test/fixtures/dummy-ember-try-config.js'
+          - npx ember try:ember '4.8.3' --skip-cleanup=true
 
           # try:config
-          - ./node_modules/.bin/ember try:config
-          - ./node_modules/.bin/ember try:config --config-path='../test/fixtures/dummy-ember-try-config.js'
+          - npx ember try:config
+          - npx ember try:config --config-path='../test/fixtures/dummy-ember-try-config.js'
 
           # try:one <scenario>
-          - ./node_modules/.bin/ember try:one default
+          - npx ember try:one default
 
           # custom command
-          - ./node_modules/.bin/ember try:one default --- ember help
+          - npx ember try:one default --- ember help
 
           # skip-cleanup option
-          - ./node_modules/.bin/ember try:one default --skip-cleanup
+          - npx ember try:one default --skip-cleanup
 
           # config-path option
-          - ./node_modules/.bin/ember try:one test1 --config-path='../test/fixtures/dummy-ember-try-config.js'
+          - npx ember try:one test1 --config-path='../test/fixtures/dummy-ember-try-config.js'
 
           # both ember-try options
-          - ./node_modules/.bin/ember try:one test1 --config-path='../test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
+          - npx ember try:one test1 --config-path='../test/fixtures/dummy-ember-try-config.js' --skip-cleanup true
 
           # custom command with options to command
-          - ./node_modules/.bin/ember try:one default --- ember help --silent
+          - npx ember try:one default --- ember help --silent
 
           # custom command mixed with ember try's own option
-          - ./node_modules/.bin/ember try:one default --skip-cleanup --- ember help --silent
+          - npx ember try:one default --skip-cleanup --- ember help --silent
 
           # try:reset
-          - ./node_modules/.bin/ember try:reset
+          - npx ember try:reset
 
           # Environment variables availability
-          - FOO="5" ./node_modules/.bin/ember try:one default --- ./fail-if-no-foo.sh
+          - FOO="5" npx ember try:one default --- ./fail-if-no-foo.sh
 
-          - ./node_modules/.bin/ember try:one default --- FOO=5 ./fail-if-no-foo.sh
+          - npx ember try:one default --- FOO=5 ./fail-if-no-foo.sh
 
           # Custom, compound commands
-          - ./node_modules/.bin/ember try:one default --- 'echo 1 && echo 2'
+          - npx ember try:one default --- 'echo 1 && echo 2'
 
           # Environment variables from config
-          - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config-different-env-vars.js'
+          - npx ember try:each --config-path='../test/fixtures/dummy-ember-try-config-different-env-vars.js'
 
           # fs-extra versions 7.x and above caused a regresion
-          - ./node_modules/.bin/ember try:each --config-path='../test/fixtures/dummy-ember-try-config-fs-extra-scenarios.js'
+          - npx ember try:each --config-path='../test/fixtures/dummy-ember-try-config-fs-extra-scenarios.js'
 
     steps:
       - uses: actions/checkout@v4
@@ -195,7 +195,7 @@ jobs:
       - name: install smoke-test-app deps
         run: npm install
         working-directory: smoke-test-app
-      - run: ./node_modules/.bin/ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-npm-scenarios.js'
+      - run: npx ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-npm-scenarios.js'
         working-directory: smoke-test-app
 
   yarn-smoke-tests:
@@ -227,7 +227,7 @@ jobs:
       - name: install smoke-test-app deps
         run: yarn install
         working-directory: smoke-test-app
-      - run: ./node_modules/.bin/ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-yarn-scenarios.js'
+      - run: npx ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-yarn-scenarios.js'
         working-directory: smoke-test-app
 
   windows-smoke-tests:
@@ -254,5 +254,5 @@ jobs:
       - name: install smoke-test-app deps
         run: npm install
         working-directory: smoke-test-app
-      - run: ./node_modules/.bin/ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-npm-scenarios.js'
+      - run: npx ember try:one test2 --config-path='../test/fixtures/dummy-ember-try-config-with-npm-scenarios.js'
         working-directory: smoke-test-app
