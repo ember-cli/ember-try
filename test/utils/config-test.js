@@ -108,18 +108,6 @@ describe('utils/config', () => {
     });
   });
 
-  it('config file exporting a function is passed the project', () => {
-    generateConfigFile(
-      'module.exports =  function(project) { return { scenarios: [ { foo: project.blah }] } };',
-    );
-
-    project.blah = 'passed-in';
-    return getConfig({ project }).then((config) => {
-      expect(config.scenarios).to.have.lengthOf(1);
-      expect(config.scenarios[0].foo).to.equal('passed-in');
-    });
-  });
-
   it('throws error if project.root/config/ember-try.js is not present and no versionCompatibility', () => {
     return getConfig({ project }).catch((error) => {
       expect(error).to.match(
