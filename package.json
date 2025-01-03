@@ -66,6 +66,7 @@
     "sinon": "^19.0.2",
     "tmp-sync": "^1.1.0"
   },
+  "packageManager": "pnpm@9.15.0",
   "engines": {
     "node": ">= 18"
   },
