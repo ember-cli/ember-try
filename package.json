@@ -50,7 +50,6 @@
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/eslint-parser": "^7.25.9",
-    "@release-it-plugins/lerna-changelog": "^7.0.0",
     "chai": "^5.1.2",
     "chai-as-promised": "^8.0.1",
     "codecov": "^3.8.3",
@@ -62,7 +61,7 @@
     "mocha": "^11.0.1",
     "nyc": "^17.1.0",
     "prettier": "^3.4.2",
-    "release-it": "^17.10.0",
+    "release-plan": "^0.11.0",
     "sinon": "^19.0.2",
     "tmp-sync": "^1.1.0"
   },
@@ -75,23 +74,5 @@
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
-  },
-  "release-it": {
-    "plugins": {
-      "@release-it-plugins/lerna-changelog": {
-        "infile": "CHANGELOG.md",
-        "launchEditor": true
-      }
-    },
-    "git": {
-      "tagName": "v${version}"
-    },
-    "github": {
-      "release": true,
-      "tokenRef": "GITHUB_AUTH"
-    },
-    "npm": {
-      "publish": false
-    }
   }
 }
