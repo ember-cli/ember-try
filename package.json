@@ -29,9 +29,9 @@
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
     "node-test": "mocha test/**/*.js",
-    "node-test-with-coverage": "nyc --reporter lcov npm run-script node-test",
+    "node-test-with-coverage": "nyc --reporter lcov pnpm node-test",
     "start": "ember serve",
-    "test": "npm run-script lint && npm run-script node-test"
+    "test": "pnpm lint && pnpm node-test"
   },
   "dependencies": {
     "chalk": "^4.1.2",
