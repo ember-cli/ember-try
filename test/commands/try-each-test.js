@@ -12,6 +12,8 @@ describe('commands/try-each', () => {
     MockTryEachTask.prototype.run = function () {};
 
     beforeEach(() => {
+      TryEachCommand.project = { root: '' };
+
       TryEachCommand._getConfig = function () {
         return Promise.resolve(mockConfig || { scenarios: [] });
       };
@@ -20,6 +22,8 @@ describe('commands/try-each', () => {
     });
 
     afterEach(() => {
+      delete TryEachCommand.project;
+
       TryEachCommand._TryEachTask = origTryEachTask;
       TryEachCommand._getConfig = origGetConfig;
       mockConfig = null;
