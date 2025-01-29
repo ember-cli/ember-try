@@ -62,7 +62,7 @@
     "eslint-plugin-qunit": "^7.3.4",
     "loader.js": "^4.7.0",
     "prettier": "^2.8.4",
-    "qunit": "^2.19.4",
+    "qunit": "^2.24.1",
     "qunit-dom": "^2.0.0",
     "webpack": "^5.75.0"
   },
