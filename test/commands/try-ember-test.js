@@ -1,56 +1,29 @@
 import { expect } from 'chai';
-import TryEmberCommand from '../../lib/commands/try-ember.js';
-
-const origTryEachTask = TryEmberCommand._TryEachTask;
-const origGetConfig = TryEmberCommand._getConfig;
+import { tryEmber } from '../../lib/commands/try-ember.mjs';
 
 describe('commands/try-ember', () => {
-  describe('#run', () => {
-    let mockConfig;
+  it('passes the correct options to `getConfig`', async () => {
+    let getConfigOptions;
 
-    function MockTryEachTask() {}
-    MockTryEachTask.prototype.run = function () {};
+    await tryEmber({
+      configPath: 'foo/bar/widget.js',
+      cwd: 'foo',
+      ember: '1.13.0',
 
-    beforeEach(() => {
-      TryEmberCommand.project = { root: '' };
+      _getConfig: (options) => {
+        getConfigOptions = options;
 
-      TryEmberCommand._getConfig = function () {
-        return Promise.resolve(mockConfig || { scenarios: [] });
-      };
-
-      TryEmberCommand._TryEachTask = MockTryEachTask;
+        return { scenarios: [{ name: 'default' }] };
+      },
+      _TryEachTask: class {
+        run() {}
+      },
     });
 
-    afterEach(() => {
-      delete TryEmberCommand.project;
-
-      TryEmberCommand._TryEachTask = origTryEachTask;
-      TryEmberCommand._getConfig = origGetConfig;
-      mockConfig = null;
-    });
-
-    it('passes the configPath to _getConfig', () => {
-      let configPath;
-      TryEmberCommand._getConfig = function (options) {
-        configPath = options.configPath;
-
-        return Promise.resolve({ scenarios: [{ name: 'foo' }] });
-      };
-
-      TryEmberCommand.run({ configPath: 'foo/bar/widget.js' }, ['foo']);
-      expect(configPath).to.equal('foo/bar/widget.js');
-    });
-
-    it('passes ember semver statement to _getConfig', () => {
-      let versionCompatibility;
-      TryEmberCommand._getConfig = function (options) {
-        versionCompatibility = options.versionCompatibility;
-
-        return Promise.resolve({ scenarios: [{ name: 'foo' }] });
-      };
-
-      TryEmberCommand.run({}, ['1.13.0']);
-      expect(versionCompatibility).to.eql({ ember: '1.13.0' });
+    expect(getConfigOptions).to.deep.equal({
+      configPath: 'foo/bar/widget.js',
+      cwd: 'foo',
+      versionCompatibility: { ember: '1.13.0' },
     });
   });
 });
