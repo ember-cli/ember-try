@@ -1,5 +1,71 @@
 # Changelog
 
+## Release (2025-03-07)
+
+ember-try 4.0.0 (major)
+
+#### :boom: Breaking Change
+* `ember-try`
+  * [#1037](https://github.com/ember-cli/ember-try/pull/1037) Remove passing an ember-cli `project` instance to the config function ([@bertdeblock](https://github.com/bertdeblock))
+  * [#994](https://github.com/ember-cli/ember-try/pull/994) pnpm: Ignore scripts by default ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+  * [#968](https://github.com/ember-cli/ember-try/pull/968) Update Node support (drop v16, test against v20 and v21) ([@bertdeblock](https://github.com/bertdeblock))
+  * [#965](https://github.com/ember-cli/ember-try/pull/965) Use the system's temp folder for backing up package-manager files ([@bertdeblock](https://github.com/bertdeblock))
+  * [#964](https://github.com/ember-cli/ember-try/pull/964) Drop support for npm v4 ([@bertdeblock](https://github.com/bertdeblock))
+  * [#962](https://github.com/ember-cli/ember-try/pull/962) Stop backing up the `node_modules` folder ([@bertdeblock](https://github.com/bertdeblock))
+
+#### :rocket: Enhancement
+* `ember-try`
+  * [#1025](https://github.com/ember-cli/ember-try/pull/1025) Support a `packageManager` option (instead of `usePnpm` and `useYarn`) ([@bertdeblock](https://github.com/bertdeblock))
+  * [#965](https://github.com/ember-cli/ember-try/pull/965) Use the system's temp folder for backing up package-manager files ([@bertdeblock](https://github.com/bertdeblock))
+
+#### :bug: Bug Fix
+* `ember-try`
+  * [#1024](https://github.com/ember-cli/ember-try/pull/1024) Update all dependencies with non-breaking changes ([@bertdeblock](https://github.com/bertdeblock))
+  * [#966](https://github.com/ember-cli/ember-try/pull/966) Enforce resolution-mode=highest for pnpm versions 8.0.0 to 8.6.* ([@lolmaus](https://github.com/lolmaus))
+  * [#962](https://github.com/ember-cli/ember-try/pull/962) Stop backing up the `node_modules` folder ([@bertdeblock](https://github.com/bertdeblock))
+
+#### :memo: Documentation
+* `ember-try`
+  * [#807](https://github.com/ember-cli/ember-try/pull/807) Use scenario names available in default `addon` blueprint ([@jelhan](https://github.com/jelhan))
+
+#### :house: Internal
+* `ember-try`
+  * [#1088](https://github.com/ember-cli/ember-try/pull/1088) Update release-plan actions, workflows via create-release-plan-setup ([@kategengler](https://github.com/kategengler))
+  * [#1085](https://github.com/ember-cli/ember-try/pull/1085) Update release-plan workflows. ([@kategengler](https://github.com/kategengler))
+  * [#1036](https://github.com/ember-cli/ember-try/pull/1036) Don't use ember-cli `project` instance outside of ember-cli commands ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1048](https://github.com/ember-cli/ember-try/pull/1048) Use `pnpm` for running scripts ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1050](https://github.com/ember-cli/ember-try/pull/1050) use package.json pnpm version for release-plan ([@mansona](https://github.com/mansona))
+  * [#1039](https://github.com/ember-cli/ember-try/pull/1039) Start using release-plan ([@mansona](https://github.com/mansona))
+  * [#1049](https://github.com/ember-cli/ember-try/pull/1049) Pin `pnpm` version ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1038](https://github.com/ember-cli/ember-try/pull/1038) Switch to pnpm ([@mansona](https://github.com/mansona))
+  * [#1035](https://github.com/ember-cli/ember-try/pull/1035) Remove custom `findByName` util ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1034](https://github.com/ember-cli/ember-try/pull/1034) Migrate test suite to ES modules ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1030](https://github.com/ember-cli/ember-try/pull/1030) Remove use of ember-cli `ui` instance ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1029](https://github.com/ember-cli/ember-try/pull/1029) Remove use of `mockery` ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1028](https://github.com/ember-cli/ember-try/pull/1028) Remove some unused files ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1026](https://github.com/ember-cli/ember-try/pull/1026) Use a completely separate adapter for yarn ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1027](https://github.com/ember-cli/ember-try/pull/1027) Update lint setup ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1022](https://github.com/ember-cli/ember-try/pull/1022) Use only one ESLint config file ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1023](https://github.com/ember-cli/ember-try/pull/1023) Use `ember version` command to make test output more readable ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1021](https://github.com/ember-cli/ember-try/pull/1021) Remove use of `rsvp` ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1020](https://github.com/ember-cli/ember-try/pull/1020) Remove use of `core-object` for adapters ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1000](https://github.com/ember-cli/ember-try/pull/1000) Remove use of `core-object` for utils ([@bertdeblock](https://github.com/bertdeblock))
+  * [#999](https://github.com/ember-cli/ember-try/pull/999) Remove use of `core-object` for tasks ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1001](https://github.com/ember-cli/ember-try/pull/1001) Update ESLint config to properly support native classes ([@bertdeblock](https://github.com/bertdeblock))
+  * [#1002](https://github.com/ember-cli/ember-try/pull/1002) Clean up everything related to Bower ([@bertdeblock](https://github.com/bertdeblock))
+  * [#969](https://github.com/ember-cli/ember-try/pull/969) Update development dependencies ([@bertdeblock](https://github.com/bertdeblock))
+  * [#972](https://github.com/ember-cli/ember-try/pull/972) Update branch name and remove Appveyor badge from README -- it is no longer used ([@kategengler](https://github.com/kategengler))
+  * [#971](https://github.com/ember-cli/ember-try/pull/971) Update CodeCov upload ([@kategengler](https://github.com/kategengler))
+  * [#963](https://github.com/ember-cli/ember-try/pull/963) Add test to verify original node modules are installed again ([@bertdeblock](https://github.com/bertdeblock))
+
+#### Committers: 6
+- Andrey Mikhaylov (lolmaus) ([@lolmaus](https://github.com/lolmaus))
+- Bert De Block ([@bertdeblock](https://github.com/bertdeblock))
+- Chris Manson ([@mansona](https://github.com/mansona))
+- Jeldrik Hanschke ([@jelhan](https://github.com/jelhan))
+- Katie Gengler ([@kategengler](https://github.com/kategengler))
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 
 
 ## v3.0.0 (2023-08-16)
