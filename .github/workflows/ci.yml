@@ -25,7 +25,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
@@ -41,7 +41,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: pnpm
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -62,7 +62,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: pnpm
       - name: Install Dependencies
         run: pnpm install --no-lockfile
@@ -147,7 +147,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: pnpm
 
       - name: install deps
@@ -165,7 +165,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [18, 20, 22]
+        node: [22, 24, 26]
 
     name: Smoke Tests (Node v${{ matrix.node }} with npm)
     runs-on: ubuntu-latest
@@ -195,7 +195,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [18, 20, 22]
+        node: [22, 24, 26]
 
     name: Smoke Tests (Node v${{ matrix.node }} with yarn)
     runs-on: ubuntu-latest
@@ -235,7 +235,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: pnpm
 
       - name: install deps
