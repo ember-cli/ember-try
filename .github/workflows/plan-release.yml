@@ -15,37 +15,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  is-this-a-release:
-    name: Is this a release?
+  should-run-release-plan-prepare:
+    name: Should we run release-plan prepare?
     runs-on: ubuntu-latest
     outputs:
-      is-release: ${{ steps.check-release.outputs.is-release }}
+      should-prepare: ${{ steps.should-prepare.outputs.should-prepare }}
     steps:
-      - uses: kategengler/actions/release-plan/check-if-release@v0.0.7
+      - uses: release-plan/actions/should-prepare-release@v1
         with:
           ref: 'main'
-        id: check-release
+        id: should-prepare
 
   create-prepare-release-pr:
     name: Create Prepare Release PR
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: is-this-a-release
+    needs: should-run-release-plan-prepare
     permissions:
       contents: write
       issues: read
       pull-requests: write
-    # only run on push event or workflow dispatch if plan wasn't updated (don't create a release plan when we're releasing)
-    # only run on labeled event if the PR has already been merged
-    if: >
-      needs.is-this-a-release.outputs.is-release != 'release' &&
-      (
-        github.event_name == 'push' ||
-        github.event_name == 'workflow_dispatch' ||
-        (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true)
-      )
+    if: needs.should-run-release-plan-prepare.outputs.should-prepare == 'true'
     steps:
-      - uses: kategengler/actions/release-plan/prepare@v0.0.7
+      - uses: release-plan/actions/prepare@v1
         name: Run release-plan prepare
         with:
           ref: 'main'
@@ -53,11 +45,12 @@ jobs:
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
         id: explanation
 
-      - uses: peter-evans/create-pull-request@v7
+      - uses: peter-evans/create-pull-request@v8
         name: Create Prepare Release PR
         with:
           commit-message: "Prepare Release ${{ steps.explanation.outputs.new-version}} using 'release-plan'"
           labels: 'internal'
+          sign-commits: true
           branch: release-preview
           title: Prepare Release ${{ steps.explanation.outputs.new-version }}
           body: |
