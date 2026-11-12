@@ -1,5 +1,26 @@
 # Changelog
 
+## Release (2026-11-12)
+
+* ember-try 5.0.0 (major)
+
+#### :boom: Breaking Change
+* `ember-try`
+  * [#1110](https://github.com/ember-cli/ember-try/pull/1110) Drop support for Node versions below 22.12 ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+
+#### :rocket: Enhancement
+* `ember-try`
+  * [#1109](https://github.com/ember-cli/ember-try/pull/1109) Write pnpm overrides to pnpm-workspace.yaml on pnpm 11 and later ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+
+#### :house: Internal
+* `ember-try`
+  * [#1113](https://github.com/ember-cli/ember-try/pull/1113) Update release-plan for OIDC ([@NullVoxPopuli](https://github.com/NullVoxPopuli))
+  * [#1112](https://github.com/ember-cli/ember-try/pull/1112) Make the smoke test app pass on Ember 7 ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+
+#### Committers: 2
+- @NullVoxPopuli's reduced-access machine account for AI usage ([@NullVoxPopuli-ai-agent](https://github.com/NullVoxPopuli-ai-agent))
+- [@NullVoxPopuli](https://github.com/NullVoxPopuli)
+
 ## Release (2025-03-07)
 
 ember-try 4.0.0 (major)
