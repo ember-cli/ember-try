@@ -1,10 +1,10 @@
-const smokeTestAppConfig = require('../../smoke-test-app/tests/dummy/config/ember-try');
-
 // `try:ember` adds release, beta, and canary scenarios from `ember-try-config`.
 // These names replace them with scenarios that can build Ember 7.
 const channelScenarioNames = ['ember-release', 'ember-beta', 'ember-canary'];
 
 module.exports = async function () {
+  // required here because mocha loads this file without the smoke app's dependencies
+  const smokeTestAppConfig = require('../../smoke-test-app/tests/dummy/config/ember-try');
   const { scenarios } = await smokeTestAppConfig();
 
   return {
