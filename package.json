@@ -45,7 +45,8 @@
     "rimraf": "^3.0.2",
     "semver": "^7.6.3",
     "temp-dir": "^2.0.0",
-    "walk-sync": "^2.2.0"
+    "walk-sync": "^2.2.0",
+    "yaml": "^2.9.1"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

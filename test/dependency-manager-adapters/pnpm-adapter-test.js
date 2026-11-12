@@ -266,6 +266,168 @@ describe('pnpm Adapter', () => {
     });
   });
 
+  describe('pnpm 11 and later', () => {
+    function mockRunForVersion(version, onInstall = () => {}) {
+      return generateMockRun(
+        [
+          {
+            command: 'pnpm install --no-lockfile --ignore-scripts',
+            async callback() {
+              onInstall();
+            },
+          },
+          {
+            command: 'pnpm --version',
+            async callback() {
+              return { stdout: `${version}\n` };
+            },
+          },
+          {
+            command: 'pnpm config get resolution-mode',
+            async callback() {
+              return { stdout: '\n' };
+            },
+          },
+        ],
+        { allowPassthrough: false },
+      );
+    }
+
+    it('writes overrides to a new `pnpm-workspace.yaml` and removes it on cleanup', async () => {
+      await fs.outputJson('package.json', {
+        devDependencies: { 'ember-cli-babel': '7.0.0' },
+      });
+
+      let steps = [];
+      let adapter = new PnpmAdapter({
+        cwd: tmpdir,
+        run: mockRunForVersion('11.0.0', () => {
+          steps.push(`install, workspace yaml: ${fs.existsSync('pnpm-workspace.yaml')}`);
+        }),
+      });
+
+      await adapter.setup();
+      await adapter.changeToDependencySet({
+        devDependencies: { 'ember-cli-babel': '8.0.0' },
+        pnpm: { overrides: { 'ember-cli-babel': '8.0.0' } },
+      });
+
+      expect(await fs.readJson('package.json')).to.deep.equal({
+        devDependencies: { 'ember-cli-babel': '8.0.0' },
+      });
+      expect(await fs.readFile('pnpm-workspace.yaml', 'utf-8')).to.equal(
+        'overrides:\n  ember-cli-babel: 8.0.0\n',
+      );
+
+      await adapter.cleanup();
+
+      expect(steps).to.deep.equal([
+        'install, workspace yaml: true',
+        'install, workspace yaml: false',
+      ]);
+      expect(await fs.readJson('package.json')).to.deep.equal({
+        devDependencies: { 'ember-cli-babel': '7.0.0' },
+      });
+    });
+
+    it('merges overrides into an existing `pnpm-workspace.yaml` and restores it on cleanup', async () => {
+      let originalYAML = [
+        '# keep this comment',
+        'allowBuilds:',
+        '  core-js: false',
+        'overrides:',
+        '  lodash: 4.0.0',
+        '  ember-cli-babel: 7.0.0',
+        '',
+      ].join('\n');
+
+      await fs.outputJson('package.json', {
+        devDependencies: { 'ember-cli-babel': '7.0.0' },
+      });
+      await fs.outputFile('pnpm-workspace.yaml', originalYAML);
+
+      let adapter = new PnpmAdapter({ cwd: tmpdir, run: mockRunForVersion('12.18.0') });
+
+      await adapter.setup();
+      await adapter.changeToDependencySet({
+        devDependencies: { 'ember-cli-babel': '8.0.0' },
+        pnpm: { overrides: { 'ember-cli-babel': null, 'ember-cli-htmlbars': '7.0.0' } },
+      });
+
+      expect(await fs.readFile('pnpm-workspace.yaml', 'utf-8')).to.equal(
+        [
+          '# keep this comment',
+          'allowBuilds:',
+          '  core-js: false',
+          'overrides:',
+          '  lodash: 4.0.0',
+          '  ember-cli-htmlbars: 7.0.0',
+          '',
+        ].join('\n'),
+      );
+
+      await adapter.cleanup();
+
+      expect(await fs.readFile('pnpm-workspace.yaml', 'utf-8')).to.equal(originalYAML);
+    });
+
+    it('adds the override for a tarball version to `pnpm-workspace.yaml`', async () => {
+      await fs.outputJson('package.json', {
+        devDependencies: { 'ember-source': '5.12.0' },
+      });
+
+      let adapter = new PnpmAdapter({ cwd: tmpdir, run: mockRunForVersion('11.0.0') });
+      let tarball = 'https://s3.amazonaws.com/builds.emberjs.com/release/ember-source.tgz';
+
+      await adapter.setup();
+      await adapter.changeToDependencySet({
+        devDependencies: { 'ember-source': tarball },
+      });
+
+      expect(await fs.readJson('package.json')).to.deep.equal({
+        devDependencies: { 'ember-source': tarball },
+      });
+      expect(await fs.readFile('pnpm-workspace.yaml', 'utf-8')).to.equal(
+        'overrides:\n  ember-source: $ember-source\n',
+      );
+    });
+
+    it('does not create `pnpm-workspace.yaml` without overrides', async () => {
+      await fs.outputJson('package.json', {
+        devDependencies: { 'ember-cli-babel': '7.0.0' },
+      });
+
+      let adapter = new PnpmAdapter({ cwd: tmpdir, run: mockRunForVersion('11.0.0') });
+
+      await adapter.setup();
+      await adapter.changeToDependencySet({
+        devDependencies: { 'ember-cli-babel': '8.0.0' },
+      });
+
+      expect(fs.existsSync('pnpm-workspace.yaml')).to.be.false;
+    });
+
+    it('keeps overrides in `package.json` on pnpm 10', async () => {
+      await fs.outputJson('package.json', {
+        devDependencies: { 'ember-cli-babel': '7.0.0' },
+      });
+
+      let adapter = new PnpmAdapter({ cwd: tmpdir, run: mockRunForVersion('10.34.9') });
+
+      await adapter.setup();
+      await adapter.changeToDependencySet({
+        devDependencies: { 'ember-cli-babel': '8.0.0' },
+        pnpm: { overrides: { 'ember-cli-babel': '8.0.0' } },
+      });
+
+      expect(await fs.readJson('package.json')).to.deep.equal({
+        devDependencies: { 'ember-cli-babel': '8.0.0' },
+        pnpm: { overrides: { 'ember-cli-babel': '8.0.0' } },
+      });
+      expect(fs.existsSync('pnpm-workspace.yaml')).to.be.false;
+    });
+  });
+
   describe('#_packageJSONForDependencySet', () => {
     it('changes specified dependency versions', () => {
       let adapter = new PnpmAdapter({ cwd: tmpdir });
