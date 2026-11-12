@@ -207,6 +207,8 @@ The `name` can be used to try just one scenario using the `ember try:one` comman
 
 If you include `packageManager: 'yarn'` in your `ember-try` config, all npm scenarios will use `yarn` for install with the `--no-lockfile` option. At cleanup, your dependencies will be restored to their prior state.
 
+pnpm 11 and later do not read the `pnpm` field in `package.json`. With these versions, `ember-try` writes the scenario `pnpm.overrides` to the `overrides` setting in `pnpm-workspace.yaml`, and restores that file at cleanup.
+
 ##### Pnpm
 
 If you include `packageManager: 'pnpm'` in your `ember-try` config, all npm scenarios will use `pnpm` for install with the `--no-lockfile` options. At cleanup, your dependencies will be restored to their prior state.
